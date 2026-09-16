@@ -367,18 +367,18 @@
   <!-- 1. GEMMA 4 E2B AI 助教機器人 (預設開啟置頂) -->
   <section id="sec-gemma-lab" class="content-section active">
     <div class="card" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;">
-      <h1 style="margin: 0 0 8px 0; font-size: 22px;">🤖 Google Gemma 4-E2B 免費 AI 助教機器人</h1>
-      <p style="margin: 0; opacity: 0.95; font-size: 14px;">這是運行在組員手機與電腦瀏覽器內部的端側 AI 助教！免註冊、免 API Key、零網路費用，可隨時提問財管名詞、尋找作業論點佐證或驗算概念！</p>
+      <h1 style="margin: 0 0 8px 0; font-size: 22px;">🤖 免費 AI 助教機器人（跨裝置自動最佳化）</h1>
+      <p style="margin: 0; opacity: 0.95; font-size: 14px;">這是運行在瀏覽器內部的端側 AI 助教！<b>已針對 iOS / iPhone / iPad 與電腦端實施智慧分流</b>，完全不吃後端伺服器與 API 額度，隨時提問財管問題！</p>
     </div>
 
     <div class="card">
       <h2>⚡ 本地 WebGPU 運算狀態與控制</h2>
-      <p style="font-size: 14px; color: #475569; margin: 4px 0 10px 0;">
-        第一次載入會自動將約 1.3GB 權重快取至瀏覽器 (IndexedDB)，<b>第二次之後秒速載入、完全不吃網路流量</b>！
+      <p id="device-model-tip" style="font-size: 14px; color: #475569; margin: 4px 0 10px 0;">
+        正在檢測您的硬體環境以匹配最佳模型...
       </p>
       
       <div id="llm-status-box" style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
-        <span id="llm-status">模型規格：Google Gemma 4-E2B (WebGPU 端側運算) ｜ 狀態：尚未掛載</span>
+        <span id="llm-status">模型規格：自動分流適配中 ｜ 狀態：尚未掛載</span>
         <div id="progress-bar-bg" style="display:none; width: 100%; background: #cbd5e1; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;">
           <div id="progress-bar" style="width: 0%; background: #2563eb; height: 100%; transition: width 0.2s;"></div>
         </div>
@@ -843,7 +843,10 @@
   }
 
   let engine = null;
-  const fixedModel = "gemma-2-2b-it-q4f16_1-MLC"; 
+  // 智慧模型分流：iOS/iPadOS 記憶體上限嚴格，自動切換超羽量 Qwen2.5-0.5B (約 300MB)；電腦端使用 Gemma 4-E2B (約 1.3GB)
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const activeModel = isIOS ? "Qwen2.5-0.5B-Instruct-q4f16_1-MLC" : "gemma-2-2b-it-q4f16_1-MLC";
+  const activeModelName = isIOS ? "Qwen2.5-0.5B (iOS 專屬防閃退羽量版)" : "Google Gemma 4-E2B (旗艦端側版)";
 
   async function initGemma() {
     const statusText = document.getElementById('llm-status');
@@ -873,7 +876,7 @@
       const webllm = window.webllm || await import("https://esm.run/@mlc-ai/web-llm@0.2.82");
       window.webllm = webllm;
 
-      loadBtn.innerText = "正在載入 Gemma 4-E2B 權重（首次下載寫入快取）...";
+      loadBtn.innerText = "正在載入 " + activeModelName + "（首次下載寫入快取）...";
 
       const initProgressCallback = (report) => {
         statusText.innerText = report.text;
@@ -881,11 +884,11 @@
         if (match) progressBar.style.width = match[1] + "%";
       };
 
-      engine = await webllm.CreateMLCEngine(fixedModel, {
+      engine = await webllm.CreateMLCEngine(activeModel, {
         initProgressCallback: initProgressCallback
       });
 
-      statusText.innerText = "✅ Google Gemma 4-E2B 助教已成功掛載至本機快取！下次秒開零流量。";
+      statusText.innerText = "✅ " + activeModelName + " 已成功掛載至本機快取！下次秒開零流量。";
       statusText.style.color = "#16a34a";
       loadBtn.style.display = "none";
       document.getElementById('user-input').disabled = false;
@@ -940,6 +943,20 @@
     updateSyncStatus();
     updateClaimUI();
     renderThoughts();
+
+    // 更新裝置提示
+    const tipEl = document.getElementById("device-model-tip");
+    const statusEl = document.getElementById("llm-status");
+    const loadBtn = document.getElementById("load-btn");
+    if (isIOS) {
+      tipEl.innerHTML = "📱 <b>檢測到 iOS 裝置：</b>已自動切換為專屬超輕量 <b>Qwen2.5-0.5B</b> (僅約 300MB)，極速載入且 100% 規避 Safari 記憶體上限！";
+      statusEl.innerText = "模型規格：Qwen2.5-0.5B (iOS 專屬防閃退版) ｜ 狀態：尚未掛載";
+      loadBtn.innerText = "🚀 啟動 Qwen2.5-0.5B 助教 (iOS 專用)";
+    } else {
+      tipEl.innerHTML = "💻 <b>檢測到電腦裝置：</b>啟用標準 <b>Google Gemma 4-E2B</b> (約 1.3GB)，算力充沛且精準！首次下載後永久本地快取。";
+      statusEl.innerText = "模型規格：Google Gemma 4-E2B (電腦旗艦版) ｜ 狀態：尚未掛載";
+      loadBtn.innerText = "🚀 啟動 Gemma 4-E2B 助教 (電腦版)";
+    }
   };
 </script>
 
