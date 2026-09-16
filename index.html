@@ -823,8 +823,31 @@
   }
 
   /* ================= WebLLM 引擎：固定 Gemma 4-E2B ================= */
+  async function clearLLMCache() {
+    try {
+      const dbs = await window.indexedDB.databases();
+      for (const db of dbs) {
+        if (db.name.includes("webllm") || db.name.includes("mlc")) {
+          window.indexedDB.deleteDatabase(db.name);
+        }
+      }
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        for (const k of keys) {
+          if (k.includes("webllm") || k.includes("mlc")) {
+            await caches.delete(k);
+          }
+        }
+      }
+      showToast("已修復並清除快取！正在重新載入...");
+      setTimeout(() => initGemma(), 500);
+    } catch(e) {
+      alert("請手動開啟瀏覽器無痕視窗或清除瀏覽紀錄再試！");
+    }
+  }
+
   let engine = null;
-  const fixedModel = "gemma-2-2b-it-q4f32_1-MLC"; 
+  const fixedModel = "gemma-2-2b-it-q4f16_1-MLC"; 
 
   async function initGemma() {
     const statusText = document.getElementById('llm-status');
@@ -865,8 +888,15 @@
       document.getElementById('user-input').disabled = false;
       document.getElementById('send-btn').disabled = false;
     } catch (err) {
-      statusText.innerText = "載入失敗：" + err.message;
+      console.error(err);
+      if (err.message && err.message.includes("exit(1)")) {
+        statusText.innerHTML = `<span style="color:#dc2626;">❌ 載入異常 (exit 1)：先前的下載可能不完整中斷導致快取損壞。</span>
+        <button class="btn" style="margin-top:6px; font-size:12px; padding:4px 8px;" onclick="clearLLMCache()">🗑️ 一鍵修復：清除損壞快取並重試</button>`;
+      } else {
+        statusText.innerText = "載入失敗：" + err.message;
+      }
       loadBtn.disabled = false;
+      loadBtn.innerText = "🚀 重新啟動 Gemma 4-E2B 助教";
     }
   }
 
