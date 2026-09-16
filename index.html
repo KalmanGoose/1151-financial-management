@@ -1018,21 +1018,9 @@
         if (match) progressBar.style.width = match[1] + "%";
       };
 
-      // 明確指定 appConfig，確保不會因 CDN 網路連線或 CORS 重導向失敗
+      // 使用 WebLLM 官方 0.2.82 內建精準匹配之 prebuiltAppConfig (避免 WASM 符號未定義 LinkError)
       engine = await webllm.CreateMLCEngine(fixedModel, {
-        initProgressCallback: initProgressCallback,
-        appConfig: {
-          useIndexedDBCache: true,
-          model_list: [
-            {
-              model: "https://huggingface.co/mlc-ai/gemma-2-2b-it-q4f16_1-MLC",
-              model_id: "gemma-2-2b-it-q4f16_1-MLC",
-              model_lib: "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_48/gemma-2-2b-it-q4f16_1-ctx4k_cs1k-webgpu.wasm",
-              low_resource_required: true,
-              vram_required_MB: 1400
-            }
-          ]
-        }
+        initProgressCallback: initProgressCallback
       });
 
       statusText.innerText = "✅ Google Gemma 4-E2B 財管助教已成功掛載！下次秒開零流量。";
