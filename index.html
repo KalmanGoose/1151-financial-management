@@ -966,7 +966,7 @@
     </div>
   </section>
 
-    <!-- MARKDOWN VIEWER SECTION -->
+      <!-- MARKDOWN VIEWER SECTION -->
   <section id="sec-md-viewer" class="content-section">
     <div class="card" style="background: linear-gradient(135deg, #334155, #1e293b); color: white;">
       <h1 style="margin: 0 0 8px 0; font-size: 22px;">📄 原始 Markdown 筆記與題綱庫</h1>
@@ -976,7 +976,7 @@
     <div class="card">
       <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
         <button class="btn btn-primary" id="btn-md-1" onclick="loadMarkdownDoc('hw1_collab')">HW1 白話推論大綱</button>
-        <button class="btn" id="btn-md-2" onclick="loadMarkdownDoc('hw1_case')">HW1 課本對照與題目</button>
+        <button class="btn" id="btn-md-2" onclick="loadMarkdownDoc('hw1_case')">HW1 完整史料檔案庫</button>
         <button class="btn" id="btn-md-3" onclick="loadMarkdownDoc('academic_agent')">AI 協同守則協定</button>
         <button class="btn" id="btn-md-4" onclick="loadMarkdownDoc('template')">標準作業公版模板</button>
       </div>
@@ -988,114 +988,82 @@
 
       <pre id="md-raw-display" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; max-height: 520px; overflow: auto; white-space: pre-wrap; word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"></pre>
     </div>
-  </section>
 
-  <!-- 4. HW2 & HW3 SECTION -->
-  <section id="sec-hw2" class="content-section">
-    <div class="card">
-      <h2>📝 HW2 作業專區</h2>
-      <p style="color: var(--text-muted);">本週題目尚未發布。等出題後，資料與背景將同步更新！</p>
-    </div>
-  </section>
-  <section id="sec-hw3" class="content-section">
-    <div class="card">
-      <h2>📝 HW3 作業專區</h2>
-      <p style="color: var(--text-muted);">本週題目尚未發布。等出題後，資料與背景將同步更新！</p>
-    </div>
-  </section>
+    <!-- 原生純文字資料區塊 (Zero JS Syntax Risk) -->
+    <script type="text/markdown" id="raw-md-hw1_collab" data-title="HOMEWORK/HW1/02_AGENT_COLLAB/HW1_COLLAB_FRAMEWORK.md">
+# HW1 作業超白話分析：日月光併購矽品（日矽案）
 
-</main>
+> **白話導讀**：這份文件用最直白、聽得懂的人話，把課本第一章「公司理財四大功能」跟「日矽案」到底在演什麼講清楚，寫作業或跟教授報告時直接照這個邏輯講就對了！
 
-<!-- Safari 友善引導 Modal -->
-<div id="safari-modal" class="modal-overlay" onclick="closeSafariModal(event)">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <h3 style="margin-top: 0; color: var(--primary);">🍎 為什麼 Safari 顯示不支援 WebGPU？</h3>
-    <p style="font-size: 14px; color: #334155; line-height: 1.6;">
-      這是 Apple 的預設限制！蘋果在 Safari 中將 WebGPU 歸類為實驗功能，因此預設關閉。
-    </p>
-    
-    <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
-      <b>💡 最無腦解法（強烈推薦）：</b><br>
-      請直接複製本網址，改用 <b>Google Chrome</b> 或 <b>Microsoft Edge</b> 打開，點擊即可直接執行 Gemma 4-E2B 助教，無需任何設定！
-    </div>
+---
 
-    <p style="font-size: 13px; font-weight: 600; margin: 10px 0 4px 0;">如果你一定要在 Safari 使用，請依以下步驟開啟：</p>
-    <ul style="font-size: 13px; color: #475569; padding-left: 20px; line-height: 1.6; margin: 0;">
-      <li><b>Mac Safari：</b>點左上角 Safari -> 設定 -> 進階 -> 勾選「為網頁開發者顯示功能」-> 上方「開發」選單 -> 功能旗標 (Feature Flags) -> 搜尋並勾選 <b>WebGPU</b>。</li>
-      <li><b>iPhone / iPad：</b>打開「設定」->「Safari」-> 滑到最底「進階」->「功能旗標」-> 找到 <b>WebGPU</b> 並開啟。</li>
-    </ul>
+## 一分鐘搞懂日矽案在幹嘛？（前情提要）
 
-    <button class="btn btn-primary" style="width: 100%; margin-top: 16px; padding: 8px;" onclick="document.getElementById('safari-modal').style.display='none'">我知道了</button>
-  </div>
-</div>
+* **日月光（大哥）**：全球封測第 1 名，手頭很有錢，老闆張虔生股份多、底氣很足。
+* **矽品（二哥）**：全球封測第 3 名，技術很好、很賺錢，但**老闆林文伯手上的股票不到 5%**，外國投資機構（外資）反而佔了快 60%。
+* **發生了什麼事？**：
+  2015 年，日月光突然端出白花花的銀子（溢價 34%，等於本來市價 30 幾塊，他出 45 塊跟你買），直接跟市場上的股東買矽品股票。
+  矽品老闆嚇壞了覺得這是「敵意併購」，急著找鴻海、找中國紫光來幫忙擋。
+  但外資股東只想著：「日月光出高價買我股票不好嗎？你找別人來亂印股票，我的獲利不就被稀釋了？」最後外資把矽品老闆找的幫手通通否決掉。
+  吵了兩三年，最後兩邊坐下來講和，成立一家「日月光投資控股公司」，大家當平起平坐的兄弟公司，一起賺全球的錢。
 
-<div id="toast">操作成功！</div>
+---
 
-<script>
-  /* 導航切換邏輯 */
-  function switchSection(el, targetId) {
-    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-    document.querySelectorAll('.dropdown-sub-item').forEach(e => e.classList.remove('active'));
-    document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active'));
-    
-    if (el) el.classList.add('active');
-    const sec = document.getElementById('sec-' + targetId);
-    if(sec) sec.classList.add('active');
-  }
+## 課本第一章「四大財務功能」白話對照表
 
-  function toggleHwDropdown() {
-    const menu = document.getElementById('hw-dropdown-menu');
-    const arrow = document.getElementById('hw-arrow');
-    menu.classList.toggle('show');
-    arrow.classList.toggle('open');
-  }
+把課本表 1-1 的四大功能，用人話套進日矽案：
 
-  function switchHw(hwId) {
-    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-    document.querySelectorAll('.dropdown-sub-item').forEach(e => e.classList.remove('active'));
-    document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active'));
+| 課本四功能 | 課本在講啥（超白話） | 日月光在幹嘛？（進攻方） | 矽品在幹嘛？（防守方） | 報告可以這樣寫（精華重點） |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. 資金的投資**<br>*(找會賺錢的案子)* | 公司手上有錢，要拿去買新機器、蓋新廠，還是直接買別人的公司？ | **「買現成的比自己蓋更快！」**<br>自己蓋新廠買機台很貴又怕產能過剩，直接花錢買下矽品，現成訂單、產能跟人才一次打包。 | **「評估自己硬幹會不會賠死」**<br>台積電自己也在搶封裝生意，大陸又在低價競爭，矽品若自己一直燒大錢蓋廠，風險極高。 | 併購就是一種**大型投資決策**。與其兩家互相削價流血競爭，不如合併擴大市佔率（合併後吃下全球近 30% 市佔）。 |
+| **2. 資金的募集**<br>*(找錢與借錢的技巧)* | 公司要花大錢時，錢要從哪裡來？要跟銀行借（負債），還是多印股票找新股東（權益）？ | **「跟銀行借大錢＋換股票」**<br>日月光跟銀行辦了幾百億聯貸（借錢），最後再用控股公司的股票換矽品股票，把借錢跟自備款的比例抓得很剛好。 | **「想亂印股票稀釋對手，被外資罵翻」**<br>矽品老闆想發行新股票給鴻海跟紫光，目的是把日月光的持股比重沖淡，但這會讓原本股東手上的股票變不值錢。 | 借錢（負債）太重會怕倒閉，亂印股票（增資）現有股東又會抗議。找錢的手段會直接影響股東利益。 |
+| **3. 資金的管理**<br>*(每天的錢怎麼管)* | 顧好每天買原料、發薪水的短期現金（週轉金），同時兼顧幾年後要投資的大錢。 | **「機台調著用，不用兩邊重複買」**<br>兩家變成一家人之後，機台可以互相支援，不用為了接單各自買一堆昂貴設備，把資金浪費在重複投資上。 | **「不用再被大客戶逼著放寬賒帳」**<br>以前兩家為了搶聯發科、高通的訂單，只能比誰可以更晚收錢（放寬應收帳款天期）。合作後不用再自相殘殺，現金收得回來。 | 解決兩大廠惡性競爭，可以大幅改善現金流、縮短應收帳款天期，短期手頭現金更靈活。 |
+| **4. 股利的分配**<br>*(賺的錢怎麼分)* | 公司賺了錢，要發現金紅利分給股東，還是留在公司繼續擴廠？ | **「投控掛牌後，既給甜頭又留錢研發」**<br>成立投控後，日月光維持每年穩穩發放現金股利，同時留夠資金去研發先進封裝技術。 | **「平常分太多紅利的雙面刃」**<br>矽品以前因為每年都大方發現金股利，吸引了一堆外資買股票（近 60%）。結果出事時，這群外資只看誰出的價格好，根本不挺經營團隊。 | 股利政策決定了「誰是你的股東」。矽品股東大多是追求報酬的外資，這也成了日後被敵意收購的最大破口。 |
 
-    const subItem = document.getElementById('sub-' + hwId);
-    if (subItem) subItem.classList.add('active');
-    document.getElementById('nav-hw-parent').classList.add('active');
-    
-    const sec = document.getElementById('sec-' + hwId);
-    if(sec) sec.classList.add('active');
-  }
+---
 
-  function switchHwMobile(hwId) {
-    if(!hwId) return;
-    if (hwId === 'md-viewer') {
-      switchSection(document.getElementById('nav-md-viewer'), 'md-viewer');
-    } else {
-      switchHw(hwId);
-    }
-  }
+## 核心爭議白話聊：股東財富最大化 vs. 代理問題
 
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.innerText = msg;
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 2000);
-  }
+這題是教授最愛問的重點！到底什麼是「代理問題」？
 
-  function showSafariModal() {
-    document.getElementById('safari-modal').style.display = 'flex';
-  }
-  function closeSafariModal(e) {
-    document.getElementById('safari-modal').style.display = 'none';
-  }
+1. **老闆（經理人）vs. 股東（出資人）的矛盾**：
+   * 照理說，經理人受雇於股東，目標應該是**「讓股東賺最多錢（股東財富最大化）」**。
+   * **矽品的問題在於**：董事長跟管理階層持股加起來**不到 5%**，大部分都是外國投資基金（60%）。
+   * 日月光出每股 45 元（溢價 34%，等於白白送股東三成以上的獲利），外資股東當然超級想賣！
+   * 但矽品老闆不想失去經營權、不想位置被搶，於是找鴻海換股、找中國紫光入股，想用增資來稀釋日月光。
+   * **這就是最典型的「代理問題」**：經理人為了保住自己的官位和權力，選擇損害廣大股東的荷包（因為增資換股會稀釋每股盈餘與配息）。
 
-  
-  /* ================= 原始 Markdown 檢視器資料庫 ================= */
-  const MD_DOCS = {
-    hw1_collab: {
-      title: "HOMEWORK/HW1/02_AGENT_COLLAB/HW1_COLLAB_FRAMEWORK.md",
-      content: "# HW1 \u4f5c\u696d\u8d85\u767d\u8a71\u5206\u6790\uff1a\u65e5\u6708\u5149\u4f75\u8cfc\u77fd\u54c1\uff08\u65e5\u77fd\u6848\uff09\n\n> **\u767d\u8a71\u5c0e\u8b80**\uff1a\u9019\u4efd\u6587\u4ef6\u7528\u6700\u76f4\u767d\u3001\u807d\u5f97\u61c2\u7684\u4eba\u8a71\uff0c\u628a\u8ab2\u672c\u7b2c\u4e00\u7ae0\u300c\u516c\u53f8\u7406\u8ca1\u56db\u5927\u529f\u80fd\u300d\u8ddf\u300c\u65e5\u77fd\u6848\u300d\u5230\u5e95\u5728\u6f14\u4ec0\u9ebc\u8b1b\u6e05\u695a\uff0c\u5beb\u4f5c\u696d\u6216\u8ddf\u6559\u6388\u5831\u544a\u6642\u76f4\u63a5\u7167\u9019\u500b\u908f\u8f2f\u8b1b\u5c31\u5c0d\u4e86\uff01\n\n---\n\n## \u4e00\u5206\u9418\u641e\u61c2\u65e5\u77fd\u6848\u5728\u5e79\u561b\uff1f\uff08\u524d\u60c5\u63d0\u8981\uff09\n\n* **\u65e5\u6708\u5149\uff08\u5927\u54e5\uff09**\uff1a\u5168\u7403\u5c01\u6e2c\u7b2c 1 \u540d\uff0c\u624b\u982d\u5f88\u6709\u9322\uff0c\u8001\u95c6\u5f35\u8654\u751f\u80a1\u4efd\u591a\u3001\u5e95\u6c23\u5f88\u8db3\u3002\n* **\u77fd\u54c1\uff08\u4e8c\u54e5\uff09**\uff1a\u5168\u7403\u5c01\u6e2c\u7b2c 3 \u540d\uff0c\u6280\u8853\u5f88\u597d\u3001\u5f88\u8cfa\u9322\uff0c\u4f46**\u8001\u95c6\u6797\u6587\u4f2f\u624b\u4e0a\u7684\u80a1\u7968\u4e0d\u5230 5%**\uff0c\u5916\u570b\u6295\u8cc7\u6a5f\u69cb\uff08\u5916\u8cc7\uff09\u53cd\u800c\u4f54\u4e86\u5feb 60%\u3002\n* **\u767c\u751f\u4e86\u4ec0\u9ebc\u4e8b\uff1f**\uff1a\n  2015 \u5e74\uff0c\u65e5\u6708\u5149\u7a81\u7136\u7aef\u51fa\u767d\u82b1\u82b1\u7684\u9280\u5b50\uff08\u6ea2\u50f9 34%\uff0c\u7b49\u65bc\u672c\u4f86\u5e02\u50f9 30 \u5e7e\u584a\uff0c\u4ed6\u51fa 45 \u584a\u8ddf\u4f60\u8cb7\uff09\uff0c\u76f4\u63a5\u8ddf\u5e02\u5834\u4e0a\u7684\u80a1\u6771\u8cb7\u77fd\u54c1\u80a1\u7968\u3002\n  \u77fd\u54c1\u8001\u95c6\u5687\u58de\u4e86\u89ba\u5f97\u9019\u662f\u300c\u6575\u610f\u4f75\u8cfc\u300d\uff0c\u6025\u8457\u627e\u9d3b\u6d77\u3001\u627e\u4e2d\u570b\u7d2b\u5149\u4f86\u5e6b\u5fd9\u64cb\u3002\n  \u4f46\u5916\u8cc7\u80a1\u6771\u53ea\u60f3\u8457\uff1a\u300c\u65e5\u6708\u5149\u51fa\u9ad8\u50f9\u8cb7\u6211\u80a1\u7968\u4e0d\u597d\u55ce\uff1f\u4f60\u627e\u5225\u4eba\u4f86\u4e82\u5370\u80a1\u7968\uff0c\u6211\u7684\u7372\u5229\u4e0d\u5c31\u88ab\u7a00\u91cb\u4e86\uff1f\u300d\u6700\u5f8c\u5916\u8cc7\u628a\u77fd\u54c1\u8001\u95c6\u627e\u7684\u5e6b\u624b\u901a\u901a\u5426\u6c7a\u6389\u3002\n  \u5435\u4e86\u5169\u4e09\u5e74\uff0c\u6700\u5f8c\u5169\u908a\u5750\u4e0b\u4f86\u8b1b\u548c\uff0c\u6210\u7acb\u4e00\u5bb6\u300c\u65e5\u6708\u5149\u6295\u8cc7\u63a7\u80a1\u516c\u53f8\u300d\uff0c\u5927\u5bb6\u7576\u5e73\u8d77\u5e73\u5750\u7684\u5144\u5f1f\u516c\u53f8\uff0c\u4e00\u8d77\u8cfa\u5168\u7403\u7684\u9322\u3002\n\n---\n\n## \u8ab2\u672c\u7b2c\u4e00\u7ae0\u300c\u56db\u5927\u8ca1\u52d9\u529f\u80fd\u300d\u767d\u8a71\u5c0d\u7167\u8868\n\n\u628a\u8ab2\u672c\u8868 1-1 \u7684\u56db\u5927\u529f\u80fd\uff0c\u7528\u4eba\u8a71\u5957\u9032\u65e5\u77fd\u6848\uff1a\n\n| \u8ab2\u672c\u56db\u529f\u80fd | \u8ab2\u672c\u5728\u8b1b\u5565\uff08\u8d85\u767d\u8a71\uff09 | \u65e5\u6708\u5149\u5728\u5e79\u561b\uff1f\uff08\u9032\u653b\u65b9\uff09 | \u77fd\u54c1\u5728\u5e79\u561b\uff1f\uff08\u9632\u5b88\u65b9\uff09 | \u5831\u544a\u53ef\u4ee5\u9019\u6a23\u5beb\uff08\u7cbe\u83ef\u91cd\u9ede\uff09 |\n| :--- | :--- | :--- | :--- | :--- |\n| **1. \u8cc7\u91d1\u7684\u6295\u8cc7**<br>*(\u627e\u6703\u8cfa\u9322\u7684\u6848\u5b50)* | \u516c\u53f8\u624b\u4e0a\u6709\u9322\uff0c\u8981\u62ff\u53bb\u8cb7\u65b0\u6a5f\u5668\u3001\u84cb\u65b0\u5ee0\uff0c\u9084\u662f\u76f4\u63a5\u8cb7\u5225\u4eba\u7684\u516c\u53f8\uff1f | **\u300c\u8cb7\u73fe\u6210\u7684\u6bd4\u81ea\u5df1\u84cb\u66f4\u5feb\uff01\u300d**<br>\u81ea\u5df1\u84cb\u65b0\u5ee0\u8cb7\u6a5f\u53f0\u5f88\u8cb4\u53c8\u6015\u7522\u80fd\u904e\u5269\uff0c\u76f4\u63a5\u82b1\u9322\u8cb7\u4e0b\u77fd\u54c1\uff0c\u73fe\u6210\u8a02\u55ae\u3001\u7522\u80fd\u8ddf\u4eba\u624d\u4e00\u6b21\u6253\u5305\u3002 | **\u300c\u8a55\u4f30\u81ea\u5df1\u786c\u5e79\u6703\u4e0d\u6703\u8ce0\u6b7b\u300d**<br>\u53f0\u7a4d\u96fb\u81ea\u5df1\u4e5f\u5728\u6436\u5c01\u88dd\u751f\u610f\uff0c\u5927\u9678\u53c8\u5728\u4f4e\u50f9\u7af6\u722d\uff0c\u77fd\u54c1\u82e5\u81ea\u5df1\u4e00\u76f4\u71d2\u5927\u9322\u84cb\u5ee0\uff0c\u98a8\u96aa\u6975\u9ad8\u3002 | \u4f75\u8cfc\u5c31\u662f\u4e00\u7a2e**\u5927\u578b\u6295\u8cc7\u6c7a\u7b56**\u3002\u8207\u5176\u5169\u5bb6\u4e92\u76f8\u524a\u50f9\u6d41\u8840\u7af6\u722d\uff0c\u4e0d\u5982\u5408\u4f75\u64f4\u5927\u5e02\u4f54\u7387\uff08\u5408\u4f75\u5f8c\u5403\u4e0b\u5168\u7403\u8fd1 30% \u5e02\u4f54\uff09\u3002 |\n| **2. \u8cc7\u91d1\u7684\u52df\u96c6**<br>*(\u627e\u9322\u8207\u501f\u9322\u7684\u6280\u5de7)* | \u516c\u53f8\u8981\u82b1\u5927\u9322\u6642\uff0c\u9322\u8981\u5f9e\u54ea\u88e1\u4f86\uff1f\u8981\u8ddf\u9280\u884c\u501f\uff08\u8ca0\u50b5\uff09\uff0c\u9084\u662f\u591a\u5370\u80a1\u7968\u627e\u65b0\u80a1\u6771\uff08\u6b0a\u76ca\uff09\uff1f | **\u300c\u8ddf\u9280\u884c\u501f\u5927\u9322\uff0b\u63db\u80a1\u7968\u300d**<br>\u65e5\u6708\u5149\u8ddf\u9280\u884c\u8fa6\u4e86\u5e7e\u767e\u5104\u806f\u8cb8\uff08\u501f\u9322\uff09\uff0c\u6700\u5f8c\u518d\u7528\u63a7\u80a1\u516c\u53f8\u7684\u80a1\u7968\u63db\u77fd\u54c1\u80a1\u7968\uff0c\u628a\u501f\u9322\u8ddf\u81ea\u5099\u6b3e\u7684\u6bd4\u4f8b\u6293\u5f97\u5f88\u525b\u597d\u3002 | **\u300c\u60f3\u4e82\u5370\u80a1\u7968\u7a00\u91cb\u5c0d\u624b\uff0c\u88ab\u5916\u8cc7\u7f75\u7ffb\u300d**<br>\u77fd\u54c1\u8001\u95c6\u60f3\u767c\u884c\u65b0\u80a1\u7968\u7d66\u9d3b\u6d77\u8ddf\u7d2b\u5149\uff0c\u76ee\u7684\u662f\u628a\u65e5\u6708\u5149\u7684\u6301\u80a1\u6bd4\u91cd\u6c96\u6de1\uff0c\u4f46\u9019\u6703\u8b93\u539f\u672c\u80a1\u6771\u624b\u4e0a\u7684\u80a1\u7968\u8b8a\u4e0d\u503c\u9322\u3002 | \u501f\u9322\uff08\u8ca0\u50b5\uff09\u592a\u91cd\u6703\u6015\u5012\u9589\uff0c\u4e82\u5370\u80a1\u7968\uff08\u589e\u8cc7\uff09\u73fe\u6709\u80a1\u6771\u53c8\u6703\u6297\u8b70\u3002\u627e\u9322\u7684\u624b\u6bb5\u6703\u76f4\u63a5\u5f71\u97ff\u80a1\u6771\u5229\u76ca\u3002 |\n| **3. \u8cc7\u91d1\u7684\u7ba1\u7406**<br>*(\u6bcf\u5929\u7684\u9322\u600e\u9ebc\u7ba1)* | \u9867\u597d\u6bcf\u5929\u8cb7\u539f\u6599\u3001\u767c\u85aa\u6c34\u7684\u77ed\u671f\u73fe\u91d1\uff08\u9031\u8f49\u91d1\uff09\uff0c\u540c\u6642\u517c\u9867\u5e7e\u5e74\u5f8c\u8981\u6295\u8cc7\u7684\u5927\u9322\u3002 | **\u300c\u6a5f\u53f0\u8abf\u8457\u7528\uff0c\u4e0d\u7528\u5169\u908a\u91cd\u8907\u8cb7\u300d**<br>\u5169\u5bb6\u8b8a\u6210\u4e00\u5bb6\u4eba\u4e4b\u5f8c\uff0c\u6a5f\u53f0\u53ef\u4ee5\u4e92\u76f8\u652f\u63f4\uff0c\u4e0d\u7528\u70ba\u4e86\u63a5\u55ae\u5404\u81ea\u8cb7\u4e00\u5806\u6602\u8cb4\u8a2d\u5099\uff0c\u628a\u8cc7\u91d1\u6d6a\u8cbb\u5728\u91cd\u8907\u6295\u8cc7\u4e0a\u3002 | **\u300c\u4e0d\u7528\u518d\u88ab\u5927\u5ba2\u6236\u903c\u8457\u653e\u5bec\u8cd2\u5e33\u300d**<br>\u4ee5\u524d\u5169\u5bb6\u70ba\u4e86\u6436\u806f\u767c\u79d1\u3001\u9ad8\u901a\u7684\u8a02\u55ae\uff0c\u53ea\u80fd\u6bd4\u8ab0\u53ef\u4ee5\u66f4\u665a\u6536\u9322\uff08\u653e\u5bec\u61c9\u6536\u5e33\u6b3e\u5929\u671f\uff09\u3002\u5408\u4f5c\u5f8c\u4e0d\u7528\u518d\u81ea\u76f8\u6b98\u6bba\uff0c\u73fe\u91d1\u6536\u5f97\u56de\u4f86\u3002 | \u89e3\u6c7a\u5169\u5927\u5ee0\u60e1\u6027\u7af6\u722d\uff0c\u53ef\u4ee5\u5927\u5e45\u6539\u5584\u73fe\u91d1\u6d41\u3001\u7e2e\u77ed\u61c9\u6536\u5e33\u6b3e\u5929\u671f\uff0c\u77ed\u671f\u624b\u982d\u73fe\u91d1\u66f4\u9748\u6d3b\u3002 |\n| **4. \u80a1\u5229\u7684\u5206\u914d**<br>*(\u8cfa\u7684\u9322\u600e\u9ebc\u5206)* | \u516c\u53f8\u8cfa\u4e86\u9322\uff0c\u8981\u767c\u73fe\u91d1\u7d05\u5229\u5206\u7d66\u80a1\u6771\uff0c\u9084\u662f\u7559\u5728\u516c\u53f8\u7e7c\u7e8c\u64f4\u5ee0\uff1f | **\u300c\u6295\u63a7\u639b\u724c\u5f8c\uff0c\u65e2\u7d66\u751c\u982d\u53c8\u7559\u9322\u7814\u767c\u300d**<br>\u6210\u7acb\u6295\u63a7\u5f8c\uff0c\u65e5\u6708\u5149\u7dad\u6301\u6bcf\u5e74\u7a69\u7a69\u767c\u653e\u73fe\u91d1\u80a1\u5229\uff0c\u540c\u6642\u7559\u5920\u8cc7\u91d1\u53bb\u7814\u767c\u5148\u9032\u5c01\u88dd\u6280\u8853\u3002 | **\u300c\u5e73\u5e38\u5206\u592a\u591a\u7d05\u5229\u7684\u96d9\u9762\u5203\u300d**<br>\u77fd\u54c1\u4ee5\u524d\u56e0\u70ba\u6bcf\u5e74\u90fd\u5927\u65b9\u767c\u73fe\u91d1\u80a1\u5229\uff0c\u5438\u5f15\u4e86\u4e00\u5806\u5916\u8cc7\u8cb7\u80a1\u7968\uff08\u8fd1 60%\uff09\u3002\u7d50\u679c\u51fa\u4e8b\u6642\uff0c\u9019\u7fa4\u5916\u8cc7\u53ea\u770b\u8ab0\u51fa\u7684\u50f9\u683c\u597d\uff0c\u6839\u672c\u4e0d\u633a\u7d93\u71df\u5718\u968a\u3002 | \u80a1\u5229\u653f\u7b56\u6c7a\u5b9a\u4e86\u300c\u8ab0\u662f\u4f60\u7684\u80a1\u6771\u300d\u3002\u77fd\u54c1\u80a1\u6771\u5927\u591a\u662f\u8ffd\u6c42\u5831\u916c\u7684\u5916\u8cc7\uff0c\u9019\u4e5f\u6210\u4e86\u65e5\u5f8c\u88ab\u6575\u610f\u6536\u8cfc\u7684\u6700\u5927\u7834\u53e3\u3002 |\n\n---\n\n## \u6838\u5fc3\u722d\u8b70\u767d\u8a71\u804a\uff1a\u80a1\u6771\u8ca1\u5bcc\u6700\u5927\u5316 vs. \u4ee3\u7406\u554f\u984c\n\n\u9019\u984c\u662f\u6559\u6388\u6700\u611b\u554f\u7684\u91cd\u9ede\uff01\u5230\u5e95\u4ec0\u9ebc\u662f\u300c\u4ee3\u7406\u554f\u984c\u300d\uff1f\n\n1. **\u8001\u95c6\uff08\u7d93\u7406\u4eba\uff09vs. \u80a1\u6771\uff08\u51fa\u8cc7\u4eba\uff09\u7684\u77db\u76fe**\uff1a\n   * \u7167\u7406\u8aaa\uff0c\u7d93\u7406\u4eba\u53d7\u96c7\u65bc\u80a1\u6771\uff0c\u76ee\u6a19\u61c9\u8a72\u662f**\u300c\u8b93\u80a1\u6771\u8cfa\u6700\u591a\u9322\uff08\u80a1\u6771\u8ca1\u5bcc\u6700\u5927\u5316\uff09\u300d**\u3002\n   * **\u77fd\u54c1\u7684\u554f\u984c\u5728\u65bc**\uff1a\u8463\u4e8b\u9577\u8ddf\u7ba1\u7406\u968e\u5c64\u6301\u80a1\u52a0\u8d77\u4f86**\u4e0d\u5230 5%**\uff0c\u5927\u90e8\u5206\u90fd\u662f\u5916\u570b\u6295\u8cc7\u57fa\u91d1\uff0860%\uff09\u3002\n   * \u65e5\u6708\u5149\u51fa\u6bcf\u80a1 45 \u5143\uff08\u6ea2\u50f9 34%\uff0c\u7b49\u65bc\u767d\u767d\u9001\u80a1\u6771\u4e09\u6210\u4ee5\u4e0a\u7684\u7372\u5229\uff09\uff0c\u5916\u8cc7\u80a1\u6771\u7576\u7136\u8d85\u7d1a\u60f3\u8ce3\uff01\n   * \u4f46\u77fd\u54c1\u8001\u95c6\u4e0d\u60f3\u5931\u53bb\u7d93\u71df\u6b0a\u3001\u4e0d\u60f3\u4f4d\u7f6e\u88ab\u6436\uff0c\u65bc\u662f\u627e\u9d3b\u6d77\u63db\u80a1\u3001\u627e\u4e2d\u570b\u7d2b\u5149\u5165\u80a1\uff0c\u60f3\u7528\u589e\u8cc7\u4f86\u7a00\u91cb\u65e5\u6708\u5149\u3002\n   * **\u9019\u5c31\u662f\u6700\u5178\u578b\u7684\u300c\u4ee3\u7406\u554f\u984c\u300d**\uff1a\u7d93\u7406\u4eba\u70ba\u4e86\u4fdd\u4f4f\u81ea\u5df1\u7684\u5b98\u4f4d\u548c\u6b0a\u529b\uff0c\u9078\u64c7\u640d\u5bb3\u5ee3\u5927\u80a1\u6771\u7684\u8377\u5305\uff08\u56e0\u70ba\u589e\u8cc7\u63db\u80a1\u6703\u7a00\u91cb\u6bcf\u80a1\u76c8\u9918\u8207\u914d\u606f\uff09\u3002\n\n2. **\u5916\u8cc7\u70ba\u4ec0\u9ebc\u9020\u53cd\uff1f**\uff1a\n   * \u5916\u8cc7\u4e0d\u662f\u7b28\u86cb\uff0c\u5916\u8cc7\u76f4\u63a5\u5728\u80a1\u6771\u6703\u4e0a\u6295\u7968\u300c\u5426\u6c7a\u300d\u9d3b\u6d77\u6848\u3002\u5916\u8cc7\u7684\u908f\u8f2f\u5f88\u7c21\u55ae\uff1a**\u300c\u6211\u5011\u8981\u7684\u662f\u8377\u5305\u8cfa\u98fd\uff0c\u4e0d\u662f\u5e6b\u4f60\u4fdd\u4f4f\u8463\u4e8b\u9577\u5bf6\u5ea7\uff01\u300d**\n\n3. **\u6700\u5f8c\u600e\u9ebc\u6536\u5c3e\u7684\uff1f**\uff1a\n   * \u5169\u908a\u767c\u73fe\u786c\u6253\u4e0b\u53bb\u53ea\u6703\u5169\u6557\u4ff1\u50b7\uff08\u793e\u6703\u8f3f\u8ad6\u53cd\u5f48\u4e2d\u8cc7\u7d2b\u5149\u3001\u6253\u5b98\u53f8\u53c8\u8017\u640d\u516c\u53f8\uff09\u3002\n   * \u6700\u5f8c\u60f3\u51fa\u300c\u5144\u5f1f\u63a7\u80a1\u300d\u5999\u62db\uff1a\u6210\u7acb\u4e00\u5bb6\u65e5\u6708\u5149\u6295\u63a7\uff0c\u77fd\u54c1\u548c\u65e5\u6708\u5149\u5e73\u8d77\u5e73\u5750\uff0c\u77fd\u54c1\u8001\u95c6\u7e7c\u7e8c\u7ba1\u77fd\u54c1\uff0c\u65e5\u6708\u5149\u638c\u8235\u96c6\u5718\u65b9\u5411\uff0c\u80a1\u6771\u6bcf\u80a1\u62ff\u73fe\u91d1 51 \u584a\u9000\u5834\u6216\u63db\u6295\u63a7\u80a1\u7968\uff0c\u7686\u5927\u6b61\u559c\u3002\n\n---\n\n## \u5beb\u4f5c\u696d\u6642\u53ef\u4ee5\u5e36\u5165\u7684\u500b\u4eba\u89c0\u9ede\uff08\u4e8c\u9078\u4e00\u601d\u8003\uff09\n\n\u5728\u4f60\u7684\u4f5c\u696d\u7d50\u8ad6\uff08\u500b\u4eba\u53cd\u601d\uff09\u88e1\uff0c\u5beb\u9019\u5169\u9ede\u6703\u975e\u5e38\u6709\u4eae\u9ede\uff1a\n\n* **\u89c0\u9ede A\uff08\u5f9e\u80a1\u6771\u89d2\u5ea6\u51fa\u767c\uff09**\uff1a\n  \u300c\u5982\u679c\u6211\u662f\u5916\u8cc7\u80a1\u6771\uff0c\u6211\u4e00\u5b9a\u652f\u6301\u65e5\u6708\u5149\u4f75\u8cfc\u3002\u56e0\u70ba\u516c\u53f8\u5b58\u5728\u7684\u672c\u8cea\u5c31\u662f\u66ff\u80a1\u6771\u5275\u9020\u6700\u5927\u5229\u76ca\u3002\u7d93\u71df\u5718\u968a\u6301\u80a1\u9023 5% \u90fd\u4e0d\u5230\uff0c\u537b\u60f3\u72a7\u7272\u5927\u773e\u80a1\u6771\u7684\u7372\u5229\u53bb\u4fdd\u885b\u81ea\u5df1\u7684\u7d93\u71df\u6b0a\uff0c\u9019\u5c31\u662f\u6559\u79d1\u66f8\u4e0a\u5beb\u7684\u7d93\u7406\u4eba\u9053\u5fb7\u98a8\u96aa\u8207\u4ee3\u7406\u554f\u984c\u3002\u300d\n* **\u89c0\u9ede B\uff08\u5f9e\u7522\u696d\u8207\u9577\u671f\u7d93\u71df\u89d2\u5ea6\u51fa\u767c\uff09**\uff1a\n  \u300c\u77fd\u54c1\u8001\u95c6\u7684\u53cd\u6297\u96d6\u7136\u6709\u79c1\u5fc3\uff0c\u4f46\u4e5f\u4fdd\u8b77\u4e86\u53f0\u7063\u7522\u696d\u4e0d\u88ab\u55ae\u4e00\u5be1\u5360\u901a\u5403\u3002\u5982\u679c\u7576\u6642\u76f4\u63a5\u88ab\u65e5\u6708\u5149\u5403\u4e7e\u62b9\u6de8\uff0c\u54e1\u5de5\u8ddf\u5ba2\u6236\uff08\u5982\u806f\u767c\u79d1\uff09\u53ef\u80fd\u6703\u6297\u8b70\u751a\u81f3\u62bd\u55ae\u3002\u6700\u5f8c\u59a5\u5354\u6210\u300e\u5144\u5f1f\u63a7\u80a1\u300f\uff0c\u65e2\u517c\u9867\u4e86\u80a1\u6771\u62ff\u9322\uff0c\u53c8\u7559\u4f4f\u77fd\u54c1\u7684\u7d93\u71df\u4eba\u624d\uff0c\u5176\u5be6\u662f\u6bd4\u786c\u78b0\u786c\u66f4\u597d\u7684\u7d50\u5c40\u3002\u300d\n\n---\n\n## \u9644\u9304\uff1aAI \u63ed\u9732\u8868\uff08\u4ea4\u4f5c\u696d\u6642\u53ef\u9644\u5728\u6700\u5f8c\uff09\n\n| \u9805\u76ee | \u5167\u5bb9 |\n| :--- | :--- |\n| **\u4f7f\u7528\u5de5\u5177** | Google Gemini (Antigravity \u5354\u540c) |\n| **\u5354\u540c\u7bc4\u570d** | \u5354\u52a9\u7528\u767d\u8a71\u62c6\u89e3\u8ab2\u672c Chapter 1 \u56db\u5927\u529f\u80fd\u3001\u68b3\u7406\u65e5\u77fd\u6848\u653b\u9632\u6642\u5e8f\u8207\u4ee3\u7406\u554f\u984c\u8108\u7d61\u3002 |\n| **\u500b\u4eba\u7522\u51fa** | \u6b63\u6587\u8ad6\u8ff0\u5b9a\u7a3f\u3001\u500b\u4eba\u89c0\u9ede\u6311\u9078\u8207\u6392\u7248\u5747\u7531\u672c\u4eba\u89aa\u81ea\u64b0\u5beb\u8207\u5be9\u67e5\u3002 |\n"
-    },
-    hw1_case: {
-      title: "HOMEWORK/HW1/01_PROMPT/HW1_REQUIREMENT_AND_CASE.md",
-      content: "# 🏛️ 日矽案全景背景史料庫與實證數據檔案館 (ASE-SPIL Case Archive)
+2. **外資為什麼造反？**：
+   * 外資不是笨蛋，外資直接在股東會上投票「否決」鴻海案。外資的邏輯很簡單：**「我們要的是荷包賺飽，不是幫你保住董事長寶座！」**
+
+3. **最後怎麼收尾的？**：
+   * 兩邊發現硬打下去只會兩敗俱傷（社會輿論反彈中資紫光、打官司又耗損公司）。
+   * 最後想出「兄弟控股」妙招：成立一家日月光投控，矽品和日月光平起平坐，矽品老闆繼續管矽品，日月光掌舵集團方向，股東每股拿現金 51 塊退場或換投控股票，皆大歡喜。
+
+---
+
+## 寫作業時可以帶入的個人觀點（二選一思考）
+
+在你的作業結論（個人反思）裡，寫這兩點會非常有亮點：
+
+* **觀點 A（從股東角度出發）**：
+  「如果我是外資股東，我一定支持日月光併購。因為公司存在的本質就是替股東創造最大利益。經營團隊持股連 5% 都不到，卻想犧牲大眾股東的獲利去保衛自己的經營權，這就是教科書上寫的經理人道德風險與代理問題。」
+* **觀點 B（從產業與長期經營角度出發）**：
+  「矽品老闆的反抗雖然有私心，但也保護了台灣產業不被單一寡占通吃。如果當時直接被日月光吃乾抹淨，員工跟客戶（如聯發科）可能會抗議甚至抽單。最後妥協成『兄弟控股』，既兼顧了股東拿錢，又留住矽品的經營人才，其實是比硬碰硬更好的結局。」
+
+---
+
+## 附錄：AI 揭露表（交作業時可附在最後）
+
+| 項目 | 內容 |
+| :--- | :--- |
+| **使用工具** | Google Gemini (Antigravity 協同) |
+| **協同範圍** | 協助用白話拆解課本 Chapter 1 四大功能、梳理日矽案攻防時序與代理問題脈絡。 |
+| **個人產出** | 正文論述定稿、個人觀點挑選與排版均由本人親自撰寫與審查。 |
+
+    </script>
+    <script type="text/markdown" id="raw-md-hw1_case" data-title="HOMEWORK/HW1/01_PROMPT/HW1_REQUIREMENT_AND_CASE.md">
+# 🏛️ 日矽案全景背景史料庫與實證數據檔案館 (ASE-SPIL Case Archive)
 
 > **本檔案庫定位**：財務管理 (115-1) 個案研究客觀史料庫。完整收錄 2014–2018 年日月光與矽品真實財報數據、全球半導體外部三大巨浪、四幕攻防戰全景史料、關鍵當事人語錄與六大公司治理制度漏洞。
 > **研究提醒**：本檔案庫不代寫標準答案，旨在提供充足的客觀史料拼圖與研究線索，供組員自由查閱並推導出屬於自己的獨立報告觀點。
@@ -1206,44 +1174,180 @@
 | **3. 資金的管理**<br>*(Working Capital Management)* | 平衡短期流動性與長期資本支出、現金轉換循環（CCC）、應收帳款與授信政策、產能稼動率調配。 | 封測雙雄過去為了爭奪聯發科、高通等大客戶，在付款天期與代工報價上競相讓利；共組投控後終止惡性削價，設備與備品採購議價權顯著提升。 | **思考線索**：<br>• 兄弟公司平行運作下，如何兼顧中國商務部的獨立採購限制與集團資金調度？<br>• 淡旺季時機台跨廠支援，如何提升營運資金與存貨周轉效率？ |
 | **4. 股利的分配**<br>*(Dividend Policy)* | 股利信號假說、顧客效果（Clientele Effect）、盈餘保留擴產 vs 現金回饋股東之權衡。 | 矽品歷年 80%～90% 超高現金股利配發吸引了大量追求短期收益的外資；成立日月光投控後，兼顧長期技術研發資本支出與穩健現金配息政策。 | **思考線索**：<br>• 矽品過去超高配息政策，是否反而造成「保留盈餘過少、經理人持股過低」之併購引信？<br>• 外資股東支持日月光收購，是因為看重短期溢價回報，還是看好長期控股價值？ |
 | **核心目標：股東財富最大化 vs 代理問題**<br>*(Agency Conflict)* | 委託人-代理人衝突、管理層防禦假說（Managerial Entrenchment）、經理人自利與股東利益之偏離。 | 林文伯經營團隊持股僅 4.68%，在面臨 34% 現金溢價收購時，主張維護員工與台灣產業自主，發動換股與私募防禦；外資則主張獲利退場，引發經理人代理衝突爭議。 | **思考線索**：<br>• 林文伯的抵抗是「經理人自私保位」？還是「具遠見保護公司長期價值」？<br>• 當多數外資追求短期每股 45 元溢價，誰才真正代表企業的長期永續？ |
-"
-    },
-    academic_agent: {
-      title: "ACADEMIC_AGENT.md",
-      content: "# Role: \u8ca1\u52d9\u7ba1\u7406\u8207\u5546\u7ba1\u5b78\u8853\u5354\u540c Agent\n\n## \u6838\u5fc3\u4efb\u52d9\n\u5354\u52a9\u4f7f\u7528\u8005\u62c6\u89e3\u4f5c\u696d\u984c\u76ee\u3001\u68b3\u7406\u7406\u8ad6\u67b6\u69cb\uff08\u5982\u516c\u53f8\u7406\u8ca1\u3001\u6295\u8cc7\u6c7a\u7b56\u3001\u8cc7\u672c\u7d50\u69cb\u3001\u80a1\u5229\u653f\u7b56\uff09\u3001\u6574\u7406\u80cc\u666f\u8cc7\u6599\u8207\u8de8\u500b\u6848\u6bd4\u8f03\u3002\n\n## \u5354\u540c\u5de5\u4f5c\u5b88\u5247\n1. **\u7981\u6b62\u7d14\u4ee3\u5beb**\uff1a\u512a\u5148\u63d0\u4f9b\u300c\u7d50\u69cb\u5927\u7db1\u300d\u3001\u300c\u8ad6\u9ede\u4f50\u8b49\u77e9\u9663\u300d\u3001\u300c\u95dc\u9375\u516c\u5f0f\u63a8\u5c0e\u300d\u8207\u300c\u53cd\u5411\u601d\u8003\u63d0\u554f\u300d\uff0c\u5f15\u5c0e\u4f7f\u7528\u8005\u5efa\u7acb\u81ea\u5df1\u7684\u89c0\u9ede\u3002\n2. **\u56b4\u683c\u5c0d\u9f4a\u8ab2\u672c\u8207\u7406\u8ad6**\uff1a\u6240\u6709\u5206\u6790\u9700\u5c0d\u61c9\u6307\u5b9a\u7ae0\u7bc0\u4e4b\u6838\u5fc3\u6982\u5ff5\uff08\u4f8b\u5982\uff1aWACC\u3001NPV/IRR\u3001\u8cc7\u672c\u9810\u7b97\u3001\u4ee3\u7406\u554f\u984c\u3001\u4fe1\u865f\u7406\u8ad6\u3001CAPM\u3001MM \u5b9a\u7406\u7b49\uff09\u3002\n3. **\u900f\u660e\u5ea6\u8ffd\u8e64**\uff1a\u6bcf\u6b21\u7522\u51fa\u91cd\u8981\u8ad6\u9ede\u6642\uff0c\u7c21\u77ed\u6a19\u8a3b\u63a8\u5c0e\u908f\u8f2f\u3001\u5f15\u8ff0\u4f86\u6e90\u8207\u5efa\u8b70\u4eba\u5de5\u9a57\u8b49\u8655\uff08\u5982\u6578\u64da\u3001\u6cd5\u898f\u3001\u7279\u5b9a\u6b77\u53f2\u5e74\u4efd\uff09\u3002\n4. **\u751f\u6210\u63ed\u9732\u5143\u8cc7\u6599**\uff1a\u5728\u4efb\u52d9\u5b8c\u6210\u6216\u544a\u4e00\u6bb5\u843d\u6642\uff0c\u4f9d\u64da\u672c\u6b21\u5be6\u969b\u4e92\u52d5\u7522\u51fa\u4e00\u4efd\u6a19\u6e96\u300cAI \u4f7f\u7528\u6b77\u7a0b\u81ea\u4e3b\u63ed\u9732\u8868\u300d\u8349\u7a3f\uff0c\u65b9\u4fbf\u4f7f\u7528\u8005\u76f4\u63a5\u8cbc\u81f3\u9644\u9304\u3002\n"
-    },
-    template: {
-      title: "ASSIGNMENT_TEMPLATE.md",
-      content: "# \u8ab2\u7a0b\u540d\u7a31\uff1a\u8ca1\u52d9\u7ba1\u7406\n## \u4f5c\u696d\u540d\u7a31\uff1a[\u4f5c\u696d\u4e3b\u984c\uff0c\u4f8b\u5982\uff1a\u65e5\u6708\u5149\u8cfc\u4f75\u77fd\u54c1\u4e4b\u8ca1\u7ba1\u610f\u6db5\u5206\u6790]\n**\u5b78\u751f\u59d3\u540d\uff1a** [\u59d3\u540d]  \n**\u5b78\u865f\uff1a** [\u5b78\u865f]  \n**\u7e73\u4ea4\u65e5\u671f\uff1a** 2026-XX-XX\n\n---\n\n### \u4e00\u3001 \u6838\u5fc3\u8ad6\u9ede\u8207\u5206\u6790\n\uff08\u5728\u6b64\u64b0\u5beb\u4f60\u7684\u4f5c\u696d\u6b63\u6587\uff1a\u6e05\u695a\u9673\u8ff0\u80cc\u666f\u3001\u6838\u5fc3\u554f\u984c\u8207\u4e3b\u8981\u8ad6\u9ede\uff09\n\n### \u4e8c\u3001 \u7406\u8ad6\u8207\u500b\u6848\u5c0d\u7167\n\uff08\u5c0d\u7167\u8ca1\u52d9\u7ba1\u7406\u6307\u5b9a\u7ae0\u7bc0\u7406\u8ad6\uff0c\u5982\u8cc7\u672c\u9810\u7b97\u3001\u4ee3\u7406\u554f\u984c\u3001\u516c\u53f8\u6cbb\u7406\u3001\u8cc7\u672c\u7d50\u69cb\u7b49\uff0c\u53ef\u642d\u914d\u8868\u683c\u6216\u67b6\u69cb\u5716\u8aaa\u660e\uff09\n\n### \u4e09\u3001 \u7d50\u8ad6\u8207\u500b\u4eba\u53cd\u601d\n\uff08\u63d0\u51fa\u500b\u4eba\u7684\u6d1e\u5bdf\u3001\u6279\u5224\u6027\u601d\u8003\u6216\u7ba1\u7406\u610f\u6db5\u7e3d\u7d50\uff09\n\n---\n\n## \u9644\u9304\uff1aAI \u751f\u6210\u5de5\u5177\u4f7f\u7528\u6b77\u7a0b\u81ea\u4e3b\u63ed\u9732 (AI Transparency Disclosure)\n\n| \u63ed\u9732\u9805\u76ee | \u8aaa\u660e\u8207\u8a18\u9304 |\n| :--- | :--- |\n| **\u4f7f\u7528\u5de5\u5177\u8207\u6a21\u578b** | [\u4f8b\u5982\uff1aGoogle Gemini / Claude 3.5 Sonnet / ChatGPT \u7b49] |\n| **\u5354\u540c\u7bc4\u570d\u8207\u74b0\u7bc0** | [ ] \u984c\u610f\u7406\u89e3\u8207\u7d50\u69cb\u62c6\u89e3 <br> [ ] \u6b77\u53f2\u80cc\u666f\u8cc7\u6599\u5f59\u6574 <br> [ ] \u8ab2\u672c\u7ae0\u7bc0\u7406\u8ad6\u5c0d\u9f4a <br> [ ] \u8a9e\u53e5\u6f64\u98fe\u8207\u6392\u7248\u512a\u5316 <br> [ ] \u7368\u7acb\u89c0\u9ede\u5f62\u6210\uff08\u7531\u672c\u4eba\u5b8c\u6210\uff09 |\n| **\u95dc\u9375\u63d0\u793a\u8a5e\uff08Prompt\uff09\u7bc4\u4f8b** | 1. \"\u6574\u7406\u65e5\u6708\u5149\u6536\u8cfc\u77fd\u54c1\u6642\u9593\u8ef8\u8207\u53cd\u58df\u65b7\u6cd5\u5be9\u67e5\u722d\u9ede...\"<br>2. \"\u8acb\u5c07\u65e5\u77fd\u6848\u5c0d\u7167\u81f3\u516c\u53f8\u7406\u8ca1\u56db\u5927\u529f\u80fd\uff08\u8cc7\u91d1\u6295\u8cc7\u3001\u7c4c\u63aa\u3001\u7ba1\u7406\u3001\u80a1\u5229\uff09...\" |\n| **\u67e5\u8b49\u8207\u4e8b\u5be6\u6821\u6838\u8a18\u9304** | \u5df2\u4eba\u5de5\u6838\u5c0d\uff1a\u516c\u958b\u6536\u8cfc\u80a1\u6b0a\u6bd4\u4f8b\uff0824.99%\uff09\u3001\u6295\u63a7\u6210\u7acb\u6642\u9593\uff082018/04\uff09\u53ca\u6559\u79d1\u66f8\u7b2c\u4e00\u7ae0\u7406\u8ad6\u5b9a\u7fa9\u3002 |\n| **\u81ea\u4e3b\u8072\u660e** | \u672c\u4f5c\u696d\u7531\u672c\u4eba\u4e3b\u5c0e\u601d\u8003\u3001\u8ad6\u8ff0\u5b9a\u7a3f\u8207\u4e8b\u5be6\u67e5\u6838\uff1bAI \u50c5\u4f5c\u70ba\u6587\u737b\u6aa2\u7d22\u3001\u601d\u8def\u6fc0\u76ea\u8207\u8f14\u52a9\u6392\u7248\u5de5\u5177\u3002 |\n"
-    }
-  };
 
+    </script>
+    <script type="text/markdown" id="raw-md-academic_agent" data-title="ACADEMIC_AGENT.md">
+# Role: 財務管理與商管學術協同 Agent
+
+## 核心任務
+協助使用者拆解作業題目、梳理理論架構（如公司理財、投資決策、資本結構、股利政策）、整理背景資料與跨個案比較。
+
+## 協同工作守則
+1. **禁止純代寫**：優先提供「結構大綱」、「論點佐證矩陣」、「關鍵公式推導」與「反向思考提問」，引導使用者建立自己的觀點。
+2. **嚴格對齊課本與理論**：所有分析需對應指定章節之核心概念（例如：WACC、NPV/IRR、資本預算、代理問題、信號理論、CAPM、MM 定理等）。
+3. **透明度追蹤**：每次產出重要論點時，簡短標註推導邏輯、引述來源與建議人工驗證處（如數據、法規、特定歷史年份）。
+4. **生成揭露元資料**：在任務完成或告一段落時，依據本次實際互動產出一份標準「AI 使用歷程自主揭露表」草稿，方便使用者直接貼至附錄。
+
+    </script>
+    <script type="text/markdown" id="raw-md-template" data-title="ASSIGNMENT_TEMPLATE.md">
+# 課程名稱：財務管理
+## 作業名稱：[作業主題，例如：日月光購併矽品之財管意涵分析]
+**學生姓名：** [姓名]  
+**學號：** [學號]  
+**繳交日期：** 2026-XX-XX
+
+---
+
+### 一、 核心論點與分析
+（在此撰寫你的作業正文：清楚陳述背景、核心問題與主要論點）
+
+### 二、 理論與個案對照
+（對照財務管理指定章節理論，如資本預算、代理問題、公司治理、資本結構等，可搭配表格或架構圖說明）
+
+### 三、 結論與個人反思
+（提出個人的洞察、批判性思考或管理意涵總結）
+
+---
+
+## 附錄：AI 生成工具使用歷程自主揭露 (AI Transparency Disclosure)
+
+| 揭露項目 | 說明與記錄 |
+| :--- | :--- |
+| **使用工具與模型** | [例如：Google Gemini / Claude 3.5 Sonnet / ChatGPT 等] |
+| **協同範圍與環節** | [ ] 題意理解與結構拆解 <br> [ ] 歷史背景資料彙整 <br> [ ] 課本章節理論對齊 <br> [ ] 語句潤飾與排版優化 <br> [ ] 獨立觀點形成（由本人完成） |
+| **關鍵提示詞（Prompt）範例** | 1. "整理日月光收購矽品時間軸與反壟斷法審查爭點..."<br>2. "請將日矽案對照至公司理財四大功能（資金投資、籌措、管理、股利）..." |
+| **查證與事實校核記錄** | 已人工核對：公開收購股權比例（24.99%）、投控成立時間（2018/04）及教科書第一章理論定義。 |
+| **自主聲明** | 本作業由本人主導思考、論述定稿與事實查核；AI 僅作為文獻檢索、思路激盪與輔助排版工具。 |
+
+    </script>
+  </section>
+
+  <!-- 4. HW2 & HW3 SECTION -->
+  <section id="sec-hw2" class="content-section">
+    <div class="card">
+      <h2>📝 HW2 作業專區</h2>
+      <p style="color: var(--text-muted);">本週題目尚未發布。等出題後，資料與背景將同步更新！</p>
+    </div>
+  </section>
+  <section id="sec-hw3" class="content-section">
+    <div class="card">
+      <h2>📝 HW3 作業專區</h2>
+      <p style="color: var(--text-muted);">本週題目尚未發布。等出題後，資料與背景將同步更新！</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Safari 友善引導 Modal -->
+<div id="safari-modal" class="modal-overlay" onclick="closeSafariModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <h3 style="margin-top: 0; color: var(--primary);">🍎 為什麼 Safari 顯示不支援 WebGPU？</h3>
+    <p style="font-size: 14px; color: #334155; line-height: 1.6;">
+      這是 Apple 的預設限制！蘋果在 Safari 中將 WebGPU 歸類為實驗功能，因此預設關閉。
+    </p>
+    
+    <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
+      <b>💡 最無腦解法（強烈推薦）：</b><br>
+      請直接複製本網址，改用 <b>Google Chrome</b> 或 <b>Microsoft Edge</b> 打開，點擊即可直接執行 Gemma 4-E2B 助教，無需任何設定！
+    </div>
+
+    <p style="font-size: 13px; font-weight: 600; margin: 10px 0 4px 0;">如果你一定要在 Safari 使用，請依以下步驟開啟：</p>
+    <ul style="font-size: 13px; color: #475569; padding-left: 20px; line-height: 1.6; margin: 0;">
+      <li><b>Mac Safari：</b>點左上角 Safari -> 設定 -> 進階 -> 勾選「為網頁開發者顯示功能」-> 上方「開發」選單 -> 功能旗標 (Feature Flags) -> 搜尋並勾選 <b>WebGPU</b>。</li>
+      <li><b>iPhone / iPad：</b>打開「設定」->「Safari」-> 滑到最底「進階」->「功能旗標」-> 找到 <b>WebGPU</b> 並開啟。</li>
+    </ul>
+
+    <button class="btn btn-primary" style="width: 100%; margin-top: 16px; padding: 8px;" onclick="document.getElementById('safari-modal').style.display='none'">我知道了</button>
+  </div>
+</div>
+
+<div id="toast">操作成功！</div>
+
+<script>
+  /* 導航切換邏輯 */
+  function switchSection(el, targetId) {
+    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.dropdown-sub-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active'));
+    
+    if (el) el.classList.add('active');
+    const sec = document.getElementById('sec-' + targetId);
+    if(sec) sec.classList.add('active');
+  }
+
+  function toggleHwDropdown() {
+    const menu = document.getElementById('hw-dropdown-menu');
+    const arrow = document.getElementById('hw-arrow');
+    menu.classList.toggle('show');
+    arrow.classList.toggle('open');
+  }
+
+  function switchHw(hwId) {
+    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.dropdown-sub-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active'));
+
+    const subItem = document.getElementById('sub-' + hwId);
+    if (subItem) subItem.classList.add('active');
+    document.getElementById('nav-hw-parent').classList.add('active');
+    
+    const sec = document.getElementById('sec-' + hwId);
+    if(sec) sec.classList.add('active');
+  }
+
+  function switchHwMobile(hwId) {
+    if(!hwId) return;
+    if (hwId === 'md-viewer') {
+      switchSection(document.getElementById('nav-md-viewer'), 'md-viewer');
+    } else {
+      switchHw(hwId);
+    }
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+  }
+
+  function showSafariModal() {
+    document.getElementById('safari-modal').style.display = 'flex';
+  }
+  function closeSafariModal(e) {
+    document.getElementById('safari-modal').style.display = 'none';
+  }
+
+  
+  /* ================= 原始 Markdown 檢視器邏輯 (極簡原生 DOM 讀取) ================= */
   let currentMdKey = "hw1_collab";
 
   function loadMarkdownDoc(key) {
     currentMdKey = key;
     ["btn-md-1", "btn-md-2", "btn-md-3", "btn-md-4"].forEach(function(id) {
-      var b = document.getElementById(id);
+      const b = document.getElementById(id);
       if (b) b.classList.remove("btn-primary");
     });
+    const btnMap = { hw1_collab: "btn-md-1", hw1_case: "btn-md-2", academic_agent: "btn-md-3", template: "btn-md-4" };
+    if (btnMap[key]) {
+      const activeBtn = document.getElementById(btnMap[key]);
+      if (activeBtn) activeBtn.classList.add("btn-primary");
+    }
 
-    if (key === "hw1_collab") document.getElementById("btn-md-1").classList.add("btn-primary");
-    if (key === "hw1_case") document.getElementById("btn-md-2").classList.add("btn-primary");
-    if (key === "academic_agent") document.getElementById("btn-md-3").classList.add("btn-primary");
-    if (key === "template") document.getElementById("btn-md-4").classList.add("btn-primary");
-
-    var doc = MD_DOCS[key];
-    if (doc) {
-      document.getElementById("md-current-title").innerText = doc.title;
-      document.getElementById("md-raw-display").innerText = doc.content;
+    const el = document.getElementById("raw-md-" + key);
+    if (el) {
+      document.getElementById("md-current-title").textContent = el.getAttribute("data-title") || key;
+      document.getElementById("md-raw-display").textContent = el.textContent.trim();
     }
   }
 
   function copyCurrentMarkdown() {
-    var doc = MD_DOCS[currentMdKey];
-    if (doc && doc.content) {
-      navigator.clipboard.writeText(doc.content).then(function() {
+    const text = document.getElementById("md-raw-display").textContent;
+    if (text) {
+      navigator.clipboard.writeText(text).then(function() {
         showToast("已複製整份 Markdown 原始碼！");
+      }).catch(function() {
+        showToast("複製失敗，請手動選取複製");
       });
     }
   }
@@ -1317,8 +1421,7 @@
           const thoughts = (data && data.thoughts) ? data.thoughts : [];
           localStorage.setItem("my_saved_thoughts", JSON.stringify(thoughts));
           renderThoughts();
-    loadMarkdownDoc('hw1_collab');
-          if (!silent) showToast("✅ 已同步最新小組討論進度！");
+    if (!silent) showToast("✅ 已同步最新小組討論進度！");
         }
       }
     } catch(e) {
@@ -1401,8 +1504,6 @@
     list.unshift(record);
     localStorage.setItem('my_saved_thoughts', JSON.stringify(list));
     renderThoughts();
-    loadMarkdownDoc('hw1_collab');
-    
     showToast("觀點草稿已保存！");
 
     postToSheet({ type: "thought", ...record });
