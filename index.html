@@ -363,21 +363,35 @@
 
 <main id="main">
 
-  <!-- 1. GEMMA 4 E2B AI 助教機器人 (預設開啟置頂) -->
+  <!-- 1. GEMMA 4 E2B AI 助教機器人 (電腦/平板專用) -->
   <section id="sec-gemma-lab" class="content-section">
     <div class="card" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;">
-      <h1 style="margin: 0 0 8px 0; font-size: 22px;">🤖 免費 AI 助教機器人（跨裝置自動最佳化）</h1>
-      <p style="margin: 0; opacity: 0.95; font-size: 14px;">這是運行在瀏覽器內部的端側 AI 助教！<b>已針對 iOS / iPhone / iPad 與電腦端實施智慧分流</b>，完全不吃後端伺服器與 API 額度，隨時提問財管問題！</p>
+      <h1 style="margin: 0 0 8px 0; font-size: 22px;">🤖 財務管理專屬 AI 助教（Gemma 4-E2B 本地端側）</h1>
+      <p style="margin: 0; opacity: 0.95; font-size: 14px;">📚 <b>已內建課程知識庫：</b>本模型已注入本學期財務管理核心理論與 HW1 日矽案完整脈絡，強制使用<b>繁體中文（台灣）</b>回答。專門協助你把晦澀資料轉成人話、解釋專有名詞，並輔助生成個人觀點！</p>
     </div>
 
-    <div class="card">
+    <!-- 手機端禁用告示 -->
+    <div id="mobile-warning-card" class="card" style="display:none; background: #fffbeb; border-color: #fde68a;">
+      <div style="display:flex; gap:12px; align-items:center;">
+        <span style="font-size: 28px;">📱</span>
+        <div>
+          <b style="color: #b45309; font-size: 15px;">手機端硬體限制提醒</b>
+          <p style="margin: 4px 0 0 0; font-size: 13px; color: #92400e; line-height: 1.5;">
+            因手機瀏覽器受限於系統安全沙盒與嚴格記憶體保護，本端側大模型<b>僅開放於電腦（Mac / PC）或 iPad 平板設備</b>流暢執行。<br>
+            請改用電腦或平板瀏覽器開啟本頁面，即可體驗秒級推論！
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="desktop-ai-container" class="card">
       <h2>⚡ 本地 WebGPU 運算狀態與控制</h2>
       <p id="device-model-tip" style="font-size: 14px; color: #475569; margin: 4px 0 10px 0;">
-        正在檢測您的硬體環境以匹配最佳模型...
+        💻 設備支援良好！已鎖定使用 <b>Google Gemma 4-E2B</b> 旗艦端側模型（約 1.3GB），首次載入寫入快取後，永久秒開零流量。
       </p>
       
       <div id="llm-status-box" style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
-        <span id="llm-status">模型規格：自動分流適配中 ｜ 狀態：尚未掛載</span>
+        <span id="llm-status">模型規格：Google Gemma 4-E2B (財管特化版) ｜ 狀態：尚未掛載</span>
         <div id="progress-bar-bg" style="display:none; width: 100%; background: #cbd5e1; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;">
           <div id="progress-bar" style="width: 0%; background: #2563eb; height: 100%; transition: width 0.2s;"></div>
         </div>
@@ -385,20 +399,29 @@
       
       <div style="display: flex; gap: 8px; margin-bottom: 15px;">
         <button id="load-btn" class="btn btn-primary" style="flex: 1; padding: 10px; font-size: 14px;" onclick="initGemma()">
-          🚀 啟動 Gemma 4-E2B 助教
+          🚀 啟動 Gemma 4-E2B 助教 (電腦/平板版)
         </button>
         <button class="btn" style="padding: 10px 14px; font-size: 14px;" onclick="showSafariModal()">
           🍎 Safari 開啟教學
         </button>
       </div>
 
+      <!-- 快速提問快捷膠囊 -->
+      <div style="margin-bottom: 10px;">
+        <span style="font-size: 12px; font-weight: 600; color: #64748b; margin-right: 6px;">💡 一鍵快捷提問：</span>
+        <button class="btn" style="font-size: 12px; padding: 3px 8px; margin: 2px;" onclick="quickPrompt('"'請用最白話的方式，幫我解釋日矽案中的「代理問題」是什麼？'"')">🗣️ 白話解釋代理問題</button>
+        <button class="btn" style="font-size: 12px; padding: 3px 8px; margin: 2px;" onclick="quickPrompt('"'請將日矽案對照到課本第一章的四大財務功能，條列重點說明。'"')">📊 四大財務功能歸納</button>
+        <button class="btn" style="font-size: 12px; padding: 3px 8px; margin: 2px;" onclick="quickPrompt('"'我想從「外資股東」角度寫 HW1 作業個人反思，請給我 3 個犀利的論點建議。'"')">✍️ 外資觀點反思輔助</button>
+        <button class="btn" style="font-size: 12px; padding: 3px 8px; margin: 2px;" onclick="quickPrompt('"'為什麼日月光和矽品最後合組「平行兄弟控股公司」是最佳解？有什麼優缺點？'"')">🤝 平行控股深度分析</button>
+      </div>
+
       <!-- 聊天區塊 -->
       <div id="chat-box">
-        <div class="chat-msg msg-ai">組員你好！我是你的 Gemma 4-E2B 財務管理 AI 助教。啟動後，你可以問我任何日矽案細節、財管名詞（如 WACC、代理問題、資本預算），幫你推論作業觀點！</div>
+        <div class="chat-msg msg-ai">同學你好！我是專屬 115-1 財務管理的 Gemma 助教。我已讀取並吸收了 HW1 日矽案的全部資料庫與課本第一章理論，一律以<b>繁體中文</b>為你解答。你可以把看不懂的資料貼給我「轉成人話」，或點擊上方快捷按鈕獲取心得寫作靈感！</div>
       </div>
       
       <div style="display: flex; gap: 8px;">
-        <input type="text" id="user-input" placeholder="問問 Gemma 助教（例：為什麼外資反對鴻海換股案？）..." style="flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;" disabled>
+        <input type="text" id="user-input" placeholder="輸入問題（或把課本文字貼上來轉成人話）..." style="flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;" disabled>
         <button id="send-btn" class="btn btn-primary" style="width: 80px;" onclick="sendMessage()" disabled>發送</button>
       </div>
     </div>
@@ -842,10 +865,28 @@
   }
 
   let engine = null;
-  // 智慧模型分流：iOS/iPadOS 記憶體上限嚴格，自動切換超羽量 Qwen2.5-0.5B (約 300MB)；電腦端使用 Gemma 4-E2B (約 1.3GB)
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  const activeModel = isIOS ? "Qwen2.5-0.5B-Instruct-q4f16_1-MLC" : "gemma-2-2b-it-q4f16_1-MLC";
-  const activeModelName = isIOS ? "Qwen2.5-0.5B (iOS 專屬防閃退羽量版)" : "Google Gemma 4-E2B (旗艦端側版)";
+  // 手機端 (iPhone / Android Phone) 判定
+  const isMobilePhone = /iPhone|iPod|Android.*Mobile/i.test(navigator.userAgent);
+  const fixedModel = "gemma-2-2b-it-q4f16_1-MLC";
+
+  // 財管專屬 RAG 系統提示詞（System Prompt），注入繁中規範與日矽案知識庫
+  const FINANCE_SYSTEM_PROMPT = `你是一位專業且極具耐心的「115-1 財務管理課程 AI 助教」。
+【核心規範】：
+1. 一律使用「繁體中文（台灣慣用語）」回答，語氣專業、生動、親切且易懂。
+2. 你的核心任務是：把晦澀難懂的財務管理理論或商業個案資料「翻譯成大一/大二學生聽得懂的人話」，並引導學生撰寫深入的批判性作業心得。
+
+【已內建背景知識庫 (HW1 日月光併購矽品案)】：
+- 收購方：日月光（全球第1，市佔18~19%），董事長張虔生，董監持股集中。
+- 目標方：矽品（全球第3，市佔9~10%），董事長林文伯，董監持股<5%，外資佔比近60%。
+- 歷程：2015年日月光以每股45元(溢價34%)發動非合意收購取得24.99%；矽品反制先找鴻海換股增資被外資否決，後找紫光568億私募引發國安爭議破局；2016破冰會談；2018成立「日月光投資控股(3711.TW)」以兄弟平行控股模式各持獨立地位。
+- 課本四大功能對照：
+  1. 資金投資：買現成產能勝過自行重複投資高階封裝機台。
+  2. 資金募集：銀行聯貸與控股換股平衡槓桿；矽品想增資被外資痛批稀釋每股價值。
+  3. 資金管理：停止自殘式殺價與放寬賒帳帳期，機台互相支援改善現金流。
+  4. 股利分配：矽品高配息吸引60%外資，但在敵意收購時外資以利益為先倒戈挺日月光。
+- 代理問題：經理人持股過低(<5%)，為了保衛自身經營權而阻擋對股東有利的高溢價收購，損害全體股東利益。
+
+請依據學生的提問，以繁體中文深入淺出地解答。`;
 
   async function initGemma() {
     const statusText = document.getElementById('llm-status');
@@ -853,6 +894,11 @@
     const progressBg = document.getElementById('progress-bar-bg');
     const progressBar = document.getElementById('progress-bar');
     
+    if (isMobilePhone) {
+      alert("📱 抱歉！因手機硬體限制，AI 助教大模型僅支援在電腦（Mac/PC）或 iPad 平板設備上執行！");
+      return;
+    }
+
     if (!navigator.gpu) {
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       if (isSafari) {
@@ -875,7 +921,7 @@
       const webllm = window.webllm || await import("https://esm.run/@mlc-ai/web-llm@0.2.82");
       window.webllm = webllm;
 
-      loadBtn.innerText = "正在載入 " + activeModelName + "（首次下載寫入快取）...";
+      loadBtn.innerText = "正在載入 Gemma 4-E2B 助教權重（首次下載寫入快取）...";
 
       const initProgressCallback = (report) => {
         statusText.innerText = report.text;
@@ -883,11 +929,11 @@
         if (match) progressBar.style.width = match[1] + "%";
       };
 
-      engine = await webllm.CreateMLCEngine(activeModel, {
+      engine = await webllm.CreateMLCEngine(fixedModel, {
         initProgressCallback: initProgressCallback
       });
 
-      statusText.innerText = "✅ " + activeModelName + " 已成功掛載至本機快取！下次秒開零流量。";
+      statusText.innerText = "✅ Google Gemma 4-E2B 財管助教已成功掛載！下次秒開零流量。";
       statusText.style.color = "#16a34a";
       loadBtn.style.display = "none";
       document.getElementById('user-input').disabled = false;
@@ -902,6 +948,16 @@
       }
       loadBtn.disabled = false;
       loadBtn.innerText = "🚀 重新啟動 Gemma 4-E2B 助教";
+    }
+  }
+
+  function quickPrompt(text) {
+    const input = document.getElementById("user-input");
+    input.value = text;
+    if (engine) {
+      sendMessage();
+    } else {
+      showToast("請先點擊上方按鈕啟動 Gemma 助教！");
     }
   }
 
@@ -923,7 +979,11 @@
 
     try {
       const chunks = await engine.chat.completions.create({
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          { role: "system", content: FINANCE_SYSTEM_PROMPT },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.6,
         stream: true
       });
 
@@ -956,18 +1016,19 @@
     updateClaimUI();
     renderThoughts();
 
-    // 更新裝置提示
-    const tipEl = document.getElementById("device-model-tip");
-    const statusEl = document.getElementById("llm-status");
-    const loadBtn = document.getElementById("load-btn");
-    if (isIOS) {
-      tipEl.innerHTML = "📱 <b>檢測到 iOS 裝置：</b>已自動切換為專屬超輕量 <b>Qwen2.5-0.5B</b> (僅約 300MB)，極速載入且 100% 規避 Safari 記憶體上限！";
-      statusEl.innerText = "模型規格：Qwen2.5-0.5B (iOS 專屬防閃退版) ｜ 狀態：尚未掛載";
-      loadBtn.innerText = "🚀 啟動 Qwen2.5-0.5B 助教 (iOS 專用)";
-    } else {
-      tipEl.innerHTML = "💻 <b>檢測到電腦裝置：</b>啟用標準 <b>Google Gemma 4-E2B</b> (約 1.3GB)，算力充沛且精準！首次下載後永久本地快取。";
-      statusEl.innerText = "模型規格：Google Gemma 4-E2B (電腦旗艦版) ｜ 狀態：尚未掛載";
-      loadBtn.innerText = "🚀 啟動 Gemma 4-E2B 助教 (電腦版)";
+    // 裝置硬體狀態判定
+    if (isMobilePhone) {
+      const warnCard = document.getElementById("mobile-warning-card");
+      if (warnCard) warnCard.style.display = "block";
+      const deskContainer = document.getElementById("desktop-ai-container");
+      if (deskContainer) deskContainer.style.opacity = "0.6";
+      const loadBtn = document.getElementById("load-btn");
+      if (loadBtn) {
+        loadBtn.disabled = true;
+        loadBtn.innerText = "📱 手機硬體受限，請使用電腦或 iPad 開啟";
+      }
+      const statusEl = document.getElementById("llm-status");
+      if (statusEl) statusEl.innerText = "狀態：手機端受限（請使用電腦 / iPad）";
     }
   };
 </script>
