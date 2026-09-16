@@ -434,99 +434,172 @@
     </div>
   </section>
 
-  <!-- 2. HOME SECTION -->
+    <!-- 2. HOME SECTION -->
   <section id="sec-home" class="content-section active">
-    <div class="card">
-      <h1 style="margin: 0 0 8px 0; font-size: 22px; color: var(--primary);">👋 115-1 財務管理小組知識庫</h1>
-      <p style="margin: 0; color: #475569; font-size: 14px;">我們不是單一分配，而是大家一起協作！這裡整理了完整個案資料庫、人話對照表，組員可以自由認領觀點、補充資料，並使用內建的 Gemma 4-E2B 助理進行推論。</p>
+    <div class="card" style="background: linear-gradient(135deg, #1e3a8a, #0284c7); color: white;">
+      <h1 style="margin: 0 0 8px 0; font-size: 22px; color: #ffffff;">👋 115-1 財務管理小組協作與知識庫</h1>
+      <p style="margin: 0; opacity: 0.95; font-size: 14px; line-height: 1.5;">
+        我們不是單一分配，而是大家一起協作！下方提供<b>「觀點認領抽屜」</b>與<b>「HW 作業速查抽屜」</b>，組員可自由收合瀏覽、認領題目，並同步最新討論觀點。
+      </p>
     </div>
 
-    <!-- 雲端試算表狀態欄 (已內建官方 Webhook) -->
-    <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
+    <!-- 雲端試算表連線狀態欄 -->
+    <div class="card" style="background: #f0fdf4; border-color: #bbf7d0; padding: 10px 16px; margin-bottom: 14px;">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
         <span style="font-size: 13px; color: #166534; font-weight: 500;">
           ☁️ <b>小組試算表雲端同步：</b> <span id="sync-status"><span style="color:#16a34a;">🟢 已自動連線至小組試算表</span></span>
         </span>
         <div style="display: flex; gap: 6px;">
-          <button class="btn" style="font-size: 12px; padding: 4px 10px;" onclick="syncFromCloud()">🔄 立即從雲端拉取最新認領與留言</button>
+          <button class="btn" style="font-size: 12px; padding: 4px 10px;" onclick="syncFromCloud()">🔄 立即從雲端拉取最新進度</button>
           <button class="btn" style="font-size: 12px; padding: 4px 8px; color: #64748b;" onclick="promptSheetApi()">⚙️</button>
         </div>
       </div>
     </div>
 
-    <div class="card">
-      <h2>📌 HW1 觀點自由認領與進度登記看板</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">大家自行輸入姓名點「登記認領」，資料會同步到雲端試算表與本地：</p>
+    <!-- 【收合抽屜 1】：觀點自由認領看板 -->
+    <details id="drawer-claim-board" open class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px;">
+      <summary style="padding: 14px 18px; cursor: pointer; background: #f8fafc; font-size: 15px; font-weight: 700; color: #1e3a8a; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; user-select: none;">
+        <span>📋 組員觀點自由認領看板（點擊展開 / 收合抽屜）</span>
+        <span id="claim-summary-badge" class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">載入認領狀態中...</span>
+      </summary>
       
-      <div id="claim-list">
-        <div class="claim-card" id="card-role-1">
-          <div class="claim-header">
-            <div>
-              <span class="badge">視角 1</span>
-              <b>外資與股東利益視角（深入：代理問題）</b>
-              <span id="label-role-1" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+      <div style="padding: 16px 18px;">
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">大家自行輸入姓名點「登記認領」，資料會同步到雲端試算表與其他組員裝置：</p>
+        
+        <div id="claim-list">
+          <div class="claim-card" id="card-role-1">
+            <div class="claim-header">
+              <div>
+                <span class="badge">視角 1</span>
+                <b>外資與股東利益視角（深入：代理問題）</b>
+                <span id="label-role-1" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+              </div>
+              <div>
+                <input type="text" class="claim-user-input" id="name-role-1" placeholder="輸入組員名字">
+                <button class="btn" onclick="saveClaim('role-1')">登記認領</button>
+              </div>
             </div>
-            <div>
-              <input type="text" class="claim-user-input" id="name-role-1" placeholder="輸入組員名字">
-              <button class="btn" onclick="saveClaim('role-1')">登記認領</button>
-            </div>
+            <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討經理人持股不到 5% 卻阻擋 34% 高溢價收購，是否違背「股東財富最大化」。</p>
           </div>
-          <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討經理人持股不到 5% 卻阻擋 34% 高溢價收購，是否違背「股東財富最大化」。</p>
-        </div>
 
-        <div class="claim-card" id="card-role-2">
-          <div class="claim-header">
-            <div>
-              <span class="badge">視角 2</span>
-              <b>矽品經營團隊與員工視角（深入：公司自主）</b>
-              <span id="label-role-2" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+          <div class="claim-card" id="card-role-2">
+            <div class="claim-header">
+              <div>
+                <span class="badge">視角 2</span>
+                <b>矽品經營團隊與員工視角（深入：公司自主）</b>
+                <span id="label-role-2" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+              </div>
+              <div>
+                <input type="text" class="claim-user-input" id="name-role-2" placeholder="輸入組員名字">
+                <button class="btn" onclick="saveClaim('role-2')">登記認領</button>
+              </div>
             </div>
-            <div>
-              <input type="text" class="claim-user-input" id="name-role-2" placeholder="輸入組員名字">
-              <button class="btn" onclick="saveClaim('role-2')">登記認領</button>
-            </div>
+            <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討非合意併購若硬幹可能引發核心工程師跳槽與客戶轉單，防守為談判贏得空間。</p>
           </div>
-          <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討非合意併購若硬幹可能引發核心工程師跳槽與客戶轉單，防守為談判贏得空間。</p>
-        </div>
 
-        <div class="claim-card" id="card-role-3">
-          <div class="claim-header">
-            <div>
-              <span class="badge">視角 3</span>
-              <b>半導體產業格局視角（深入：資本競賽）</b>
-              <span id="label-role-3" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+          <div class="claim-card" id="card-role-3">
+            <div class="claim-header">
+              <div>
+                <span class="badge">視角 3</span>
+                <b>半導體產業格局視角（深入：資本競賽）</b>
+                <span id="label-role-3" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+              </div>
+              <div>
+                <input type="text" class="claim-user-input" id="name-role-3" placeholder="輸入組員名字">
+                <button class="btn" onclick="saveClaim('role-3')">登記認領</button>
+              </div>
             </div>
-            <div>
-              <input type="text" class="claim-user-input" id="name-role-3" placeholder="輸入組員名字">
-              <button class="btn" onclick="saveClaim('role-3')">登記認領</button>
-            </div>
+            <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討面對台積電 InFO 跨界與中國紅色供應鏈，雙雄避免重複資本支出、整合產能的必要性。</p>
           </div>
-          <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討面對台積電 InFO 跨界與中國紅色供應鏈，雙雄避免重複資本支出、整合產能的必要性。</p>
-        </div>
 
-        <div class="claim-card" id="card-role-4">
-          <div class="claim-header">
-            <div>
-              <span class="badge">視角 4</span>
-              <b>控股交易架構視角（深入：制度創新）</b>
-              <span id="label-role-4" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+          <div class="claim-card" id="card-role-4">
+            <div class="claim-header">
+              <div>
+                <span class="badge">視角 4</span>
+                <b>控股交易架構視角（深入：制度創新）</b>
+                <span id="label-role-4" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
+              </div>
+              <div>
+                <input type="text" class="claim-user-input" id="name-role-4" placeholder="輸入組員名字">
+                <button class="btn" onclick="saveClaim('role-4')">登記認領</button>
+              </div>
             </div>
-            <div>
-              <input type="text" class="claim-user-input" id="name-role-4" placeholder="輸入組員名字">
-              <button class="btn" onclick="saveClaim('role-4')">登記認領</button>
+            <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討打破傳統併吞框架的「平行兄弟控股」模式，如何通過反壟斷審查並保護企業尊嚴。</p>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 【收合抽屜 2】：學期作業 (HW) 快速速查與精華導覽抽屜 -->
+    <div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px;">
+      <div style="padding: 14px 18px; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 15px; font-weight: 700; color: #0284c7;">📚 學期作業 (HW) 速查抽屜</span>
+        <div style="display: flex; gap: 6px;">
+          <button class="btn" style="font-size: 12px; padding: 4px 8px;" onclick="toggleHomeHw('home-hw1-details')">切換 HW1 展開/收合</button>
+          <button class="btn btn-primary" style="font-size: 12px; padding: 4px 10px;" onclick="switchHw('hw1')">👉 前往 HW1 完整專區</button>
+        </div>
+      </div>
+
+      <div style="padding: 16px 18px;">
+        <!-- HW1 抽屜 -->
+        <details id="home-hw1-details" open style="background: white; border: 1px solid var(--border); margin-bottom: 10px;">
+          <summary style="font-size: 14px; font-weight: 600; color: #1e3a8a; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+            <span>📖 HW1：日矽案全景背景史料與課本四大功能</span>
+            <span class="badge badge-success">已發布</span>
+          </summary>
+          <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
+            <p style="margin-top: 4px;">本週題目聚焦於<b>日月光併購矽品案（日矽案）</b>對照課本第一章四大財務功能（資金投資、資金募集、資金管理、股利分配）與代理問題。</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 10px 0;">
+              <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 3px solid #1e3a8a; border-radius: 6px; padding: 10px;">
+                <b style="color: #1e3a8a;">🏢 雙雄對決真實數據</b>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">日月光市佔 18.6% vs 矽品 9.8%；矽品毛利率 26.8% 高於日月光 17.7%；矽品董監持股僅 4.68% 成為敵意收購破口。</p>
+              </div>
+              <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 3px solid #0284c7; border-radius: 6px; padding: 10px;">
+                <b style="color: #0284c7;">⚔️ 四幕攻防戰全史實</b>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">突襲收購 24.99% 規避審查 → 鴻海白衣騎士被外資否決 → 紫光 568 億引爆國安 → 君悅破冰共組控股公司。</p>
+              </div>
+              <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 3px solid #16a34a; border-radius: 6px; padding: 10px;">
+                <b style="color: #16a34a;">🎯 課本第一章核心探討</b>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">探討經理人代理問題、併購綜效 vs 溢價風險、增資換股對既有股東權益之稀釋代價。</p>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 12px; color: var(--text-muted);">已收錄 2014-2015 財報、三大產業巨浪、六大法規制度專題</span>
+              <button class="btn btn-primary" style="font-size: 13px;" onclick="switchHw('hw1')">🔍 前往 HW1 完整專區查看全部史料與提綱 →</button>
             </div>
           </div>
-          <p style="margin: 4px 0; font-size: 13px; color: var(--text-muted);">探討打破傳統併吞框架的「平行兄弟控股」模式，如何通過反壟斷審查並保護企業尊嚴。</p>
-        </div>
+        </details>
+
+        <!-- HW2 抽屜 -->
+        <details style="background: #f8fafc; border: 1px solid var(--border); margin-bottom: 10px;">
+          <summary style="font-size: 14px; font-weight: 600; color: #64748b; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+            <span>📝 HW2：第 2 週作業專區</span>
+            <span class="badge" style="background:#e2e8f0; color:#64748b;">待發布</span>
+          </summary>
+          <div style="padding-top: 10px; font-size: 13px; color: var(--text-muted);">
+            本週題目尚未發布。等出題後，資料與背景將同步更新！亦可點選側邊欄直達 HW2 專屬頁面。
+          </div>
+        </details>
+
+        <!-- HW3 抽屜 -->
+        <details style="background: #f8fafc; border: 1px solid var(--border);">
+          <summary style="font-size: 14px; font-weight: 600; color: #64748b; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+            <span>📝 HW3：第 3 週作業專區</span>
+            <span class="badge" style="background:#e2e8f0; color:#64748b;">待發布</span>
+          </summary>
+          <div style="padding-top: 10px; font-size: 13px; color: var(--text-muted);">
+            本週題目尚未發布。等出題後，資料與背景將同步更新！亦可點選側邊欄直達 HW3 專屬頁面。
+          </div>
+        </details>
       </div>
     </div>
 
     <!-- 首頁即時小組討論與觀點動態牆 -->
     <div class="card">
-      <h2>
-        <span>💬 小組成員觀點與討論即時動態牆</span>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+        <h2 style="margin: 0; font-size: 17px;">💬 小組成員觀點與討論即時動態牆</h2>
         <span id="live-indicator" style="font-size: 12px; font-weight: normal; color: #16a34a;">🟢 即時監聽中 (背景節能模式)</span>
-      </h2>
+      </div>
       <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 10px 0;">
         無需手動開 Excel！任何人登記認領或留下心得觀點，所有組員開啟網頁即時呈現於此：
       </p>
@@ -1295,6 +1368,11 @@
     if(sec) sec.classList.add('active');
   }
 
+  function toggleHomeHw(id) {
+    const el = document.getElementById(id);
+    if (el) el.open = !el.open;
+  }
+
   function switchHwMobile(hwId) {
     if(!hwId) return;
     if (hwId === 'md-viewer') {
@@ -1468,12 +1546,14 @@
   }
 
   function updateClaimUI() {
+    let claimedCount = 0;
     ['role-1', 'role-2', 'role-3', 'role-4'].forEach(id => {
       const saved = localStorage.getItem('claim_' + id);
       const card = document.getElementById('card-' + id);
       const input = document.getElementById('name-' + id);
       const label = document.getElementById('label-' + id);
       if (saved) {
+        claimedCount++;
         input.value = saved;
         if (card) card.classList.add('claimed');
         if (label) {
@@ -1481,7 +1561,6 @@
           label.style.display = 'inline-block';
         }
       } else {
-        // 若雲端已被重置/刪除，將畫面徹底重置回未認領的乾淨狀態
         if (input) input.value = "";
         if (card) card.classList.remove('claimed');
         if (label) {
@@ -1490,6 +1569,21 @@
         }
       }
     });
+
+    const summaryBadge = document.getElementById('claim-summary-badge');
+    if (summaryBadge) {
+      summaryBadge.textContent = `已認領 ${claimedCount} / 4 視角`;
+      if (claimedCount === 4) {
+        summaryBadge.style.background = "#dcfce7";
+        summaryBadge.style.color = "#15803d";
+      } else if (claimedCount > 0) {
+        summaryBadge.style.background = "#e0e7ff";
+        summaryBadge.style.color = "#3730a3";
+      } else {
+        summaryBadge.style.background = "#f1f5f9";
+        summaryBadge.style.color = "#64748b";
+      }
+    }
   }
 
   /* 個人觀點留言與保存邏輯 */
