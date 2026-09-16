@@ -848,7 +848,11 @@
 
   function switchHwMobile(hwId) {
     if(!hwId) return;
-    switchHw(hwId);
+    if (hwId === 'md-viewer') {
+      switchSection(document.getElementById('nav-md-viewer'), 'md-viewer');
+    } else {
+      switchHw(hwId);
+    }
   }
 
   function showToast(msg) {
