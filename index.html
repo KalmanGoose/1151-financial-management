@@ -323,16 +323,15 @@
 <nav id="sidebar">
   <div class="brand">📊 115-1 財管</div>
   
-  <div class="nav-group">核心 AI</div>
-  <!-- Gemma 4 E2B 免費 AI 助教置頂於第一位 -->
-  <a class="nav-item active" id="nav-ai" onclick="switchSection(this, 'gemma-lab')">
-    <span>🤖 免費 AI 助教機器人 (Gemma 4-E2B)</span>
-    <span class="badge badge-ai">置頂</span>
+  <div class="nav-group">總覽</div>
+  <a class="nav-item active" id="nav-home" onclick="switchSection(this, 'home')">
+    <span>🏠 首頁與分工池</span>
   </a>
 
-  <div class="nav-group">導覽與看板</div>
-  <a class="nav-item" id="nav-home" onclick="switchSection(this, 'home')">
-    <span>🏠 首頁與分工池</span>
+  <div class="nav-group">AI 輔助</div>
+  <a class="nav-item" id="nav-ai" onclick="switchSection(this, 'gemma-lab')">
+    <span>🤖 AI 助教機器人</span>
+    <span class="badge badge-ai">端側</span>
   </a>
 
   <div class="nav-group">學期作業</div>
@@ -365,7 +364,7 @@
 <main id="main">
 
   <!-- 1. GEMMA 4 E2B AI 助教機器人 (預設開啟置頂) -->
-  <section id="sec-gemma-lab" class="content-section active">
+  <section id="sec-gemma-lab" class="content-section">
     <div class="card" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;">
       <h1 style="margin: 0 0 8px 0; font-size: 22px;">🤖 免費 AI 助教機器人（跨裝置自動最佳化）</h1>
       <p style="margin: 0; opacity: 0.95; font-size: 14px;">這是運行在瀏覽器內部的端側 AI 助教！<b>已針對 iOS / iPhone / iPad 與電腦端實施智慧分流</b>，完全不吃後端伺服器與 API 額度，隨時提問財管問題！</p>
@@ -406,7 +405,7 @@
   </section>
 
   <!-- 2. HOME SECTION -->
-  <section id="sec-home" class="content-section">
+  <section id="sec-home" class="content-section active">
     <div class="card">
       <h1 style="margin: 0 0 8px 0; font-size: 22px; color: var(--primary);">👋 115-1 財務管理小組知識庫</h1>
       <p style="margin: 0; color: #475569; font-size: 14px;">我們不是單一分配，而是大家一起協作！這裡整理了完整個案資料庫、人話對照表，組員可以自由認領觀點、補充資料，並使用內建的 Gemma 4-E2B 助理進行推論。</p>
@@ -940,6 +939,19 @@
   }
 
   window.onload = function() {
+    // 手機頂部橫向選單自動滑動提示 (Scroll Peek)
+    if (window.innerWidth <= 768) {
+      setTimeout(function() {
+        var nav = document.getElementById("sidebar");
+        if (nav && nav.scrollWidth > nav.clientWidth) {
+          nav.scrollTo({ left: 140, behavior: "smooth" });
+          setTimeout(function() {
+            nav.scrollTo({ left: 0, behavior: "smooth" });
+          }, 700);
+        }
+      }, 600);
+    }
+
     updateSyncStatus();
     updateClaimUI();
     renderThoughts();
