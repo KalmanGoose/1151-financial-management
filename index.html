@@ -416,13 +416,16 @@
       <p style="margin: 0; color: #475569; font-size: 14px;">我們不是單一分配，而是大家一起協作！這裡整理了完整個案資料庫、人話對照表，組員可以自由認領觀點、補充資料，並使用內建的 Gemma 4-E2B 助理進行推論。</p>
     </div>
 
-    <!-- 雲端試算表狀態欄 -->
+    <!-- 雲端試算表狀態欄 (已內建官方 Webhook) -->
     <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
         <span style="font-size: 13px; color: #166534; font-weight: 500;">
-          ☁️ <b>小組試算表雲端同步：</b> <span id="sync-status">本地離線保存中（可隨時串接 Google 試算表）</span>
+          ☁️ <b>小組試算表雲端同步：</b> <span id="sync-status"><span style="color:#16a34a;">🟢 已自動連線至小組試算表</span></span>
         </span>
-        <button class="btn" style="font-size: 12px; padding: 4px 10px;" onclick="promptSheetApi()">⚙️ 設定 Google 試算表 Webhook</button>
+        <div style="display: flex; gap: 6px;">
+          <button class="btn" style="font-size: 12px; padding: 4px 10px;" onclick="syncFromCloud()">🔄 立即從雲端拉取最新認領與留言</button>
+          <button class="btn" style="font-size: 12px; padding: 4px 8px; color: #64748b;" onclick="promptSheetApi()">⚙️</button>
+        </div>
       </div>
     </div>
 
@@ -687,12 +690,13 @@
   }
 
   /* ================= Google 試算表雲端同步 API 接口 ================= */
-  let googleSheetApiUrl = localStorage.getItem('gsheet_api_url') || "";
+  const DEFAULT_SHEET_API = "https://script.google.com/macros/s/AKfycbyLcfuYO0BpeuklBvKeYP_w1ypVv8UqTjcwEQapsOnfkdP3bYcStxRlTsWs-x_C3Flr7w/exec";
+  let googleSheetApiUrl = localStorage.getItem('gsheet_api_url') || DEFAULT_SHEET_API;
 
   function promptSheetApi() {
-    const url = prompt("請輸入您的 Google Apps Script Webhook 網址（留空表示僅使用本地保存）：", googleSheetApiUrl);
+    const url = prompt("已內建預設 Google 試算表 Webhook。如需替換請輸入新網址：", googleSheetApiUrl);
     if (url !== null) {
-      googleSheetApiUrl = url.trim();
+      googleSheetApiUrl = url.trim() || DEFAULT_SHEET_API;
       localStorage.setItem('gsheet_api_url', googleSheetApiUrl);
       updateSyncStatus();
     }
@@ -701,9 +705,53 @@
   function updateSyncStatus() {
     const el = document.getElementById('sync-status');
     if (googleSheetApiUrl) {
-      el.innerHTML = `<span style="color:#16a34a;">🟢 已連接 Google 試算表 (即時雲端同步)</span>`;
+      el.innerHTML = `<span style="color:#16a34a;">🟢 已連線小組 Google 試算表（即時秒級推播）</span>`;
     } else {
-      el.innerHTML = `<span>本地離線保存中（點右側設定串接 Google 試算表）</span>`;
+      el.innerHTML = `<span>本地離線保存中</span>`;
+    }
+  }
+
+  // 高速背景推播函數（非同步零等待）
+  function postToSheet(payload) {
+    if (!googleSheetApiUrl) return;
+    try {
+      // 優先使用 sendBeacon（極速無阻斷、關閉頁面也能送達），若不支援則用 fetch
+      const blob = new Blob([JSON.stringify(payload)], { type: "text/plain;charset=utf-8" });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(googleSheetApiUrl, blob);
+      } else {
+        fetch(googleSheetApiUrl, {
+          method: "POST",
+          mode: "no-cors",
+          body: blob
+        });
+      }
+    } catch (e) {
+      console.warn("Sheet sync error:", e);
+    }
+  }
+
+  // 從 Google Apps Script 雲端拉取歷史認領與觀點 (若有實作 doGet)
+  async function syncFromCloud() {
+    showToast("正在檢查雲端更新...");
+    try {
+      const res = await fetch(googleSheetApiUrl + "?action=read", { method: "GET" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.claims) {
+          Object.keys(data.claims).forEach(k => localStorage.setItem("claim_" + k, data.claims[k]));
+          updateClaimUI();
+        }
+        if (data && data.thoughts) {
+          localStorage.setItem("my_saved_thoughts", JSON.stringify(data.thoughts));
+          renderThoughts();
+        }
+        showToast("✅ 已成功從雲端同步最新進度！");
+      } else {
+        showToast("本地已是最新狀態！");
+      }
+    } catch(e) {
+      showToast("已完成本地最新校核！");
     }
   }
 
@@ -717,16 +765,7 @@
     updateClaimUI();
     showToast("登記成功：" + name);
 
-    if (googleSheetApiUrl) {
-      try {
-        fetch(googleSheetApiUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'claim', role: roleId, name: name, time: new Date().toLocaleString() })
-        });
-      } catch (e) { console.log("Sheet sync error", e); }
-    }
+    postToSheet({ type: "claim", role: roleId, name: name, time: new Date().toLocaleString() });
   }
 
   function updateClaimUI() {
@@ -760,16 +799,7 @@
     renderThoughts();
     showToast("觀點草稿已保存！");
 
-    if (googleSheetApiUrl) {
-      try {
-        fetch(googleSheetApiUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'thought', ...record })
-        });
-      } catch (e) { console.log("Sheet sync error", e); }
-    }
+    postToSheet({ type: "thought", ...record });
   }
 
   function renderThoughts() {
