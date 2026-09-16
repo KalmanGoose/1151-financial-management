@@ -538,70 +538,181 @@
       <p style="font-size: 14px; margin: 4px 0;">點開下方各區塊可查閱收集來的原始事件歷史、數據、白話文拆解，亦可切換至 Gemma 助教即時推論補充。</p>
     </div>
 
+    <!-- 1. 核心實體基礎資料 (Entity Profiles) -->
     <details open>
-      <summary>⚡ 30 秒白話懶人包：日矽案到底在演什麼？</summary>
-      <div style="padding-top: 10px; font-size: 14px;">
-        <p><b>👑 日月光（進攻方）：</b>全球封測老大，手頭很多錢。2015 年開價每股 45 元（送 34% 溢價）直接突襲收購矽品。</p>
-        <p><b>🛡️ 矽品（防守方）：</b>很會賺錢，但經營層股票不到 5%，近 60% 都是外資。急著找鴻海換股、紫光私募印股票擋，被重視獲利的外資股東投票封殺。</p>
-        <p><b>🤝 大和解：</b>吵了三年，最後合組「日月光投資控股公司」，兩家變成平起平坐的兄弟公司，外資拿錢退場、矽品老闆繼續管矽品，一起對抗台積電與紅色供應鏈。</p>
+      <summary>🏢 1. 核心實體基礎資料 (Entity Profiles)</summary>
+      <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 6px;">
+          <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #1e3a8a; border-radius: 8px; padding: 12px;">
+            <b style="color: #1e3a8a; font-size: 15px;">👑 收購方：日月光半導體 (ASE Group)</b>
+            <ul style="margin: 6px 0 0 0; padding-left: 18px;">
+              <li><b>創辦人與核心層：</b>張虔生（董事長）、張洪本、吳田玉（營運長）</li>
+              <li><b>總部據點：</b>台灣高雄楠梓</li>
+              <li><b>2015 市佔地位：</b>全球第 1 大委外封裝測試廠（OSAT），全球市佔約 18%～19%</li>
+              <li><b>主要客戶：</b>Apple、Qualcomm、MediaTek、Broadcom、NVIDIA 等</li>
+              <li><b>股權結構：</b>董監持股相對集中，具備大型集團資本調度能力與多樣融資管道</li>
+            </ul>
+          </div>
+          <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #0284c7; border-radius: 8px; padding: 12px;">
+            <b style="color: #0284c7; font-size: 15px;">🛡️ 目標方：矽品精密 (SPIL)</b>
+            <ul style="margin: 6px 0 0 0; padding-left: 18px;">
+              <li><b>核心決策者：</b>林文伯（董事長）、蔡祺文（總經理）</li>
+              <li><b>總部據點：</b>台灣台中潭子</li>
+              <li><b>2015 市佔地位：</b>全球第 3 大委外封裝測試廠，市佔率約 9%～10%（美商 Amkor 為第 2）</li>
+              <li><b>主要客戶：</b>MediaTek、Qualcomm、Broadcom、NVIDIA、HiSilicon 等（與日月光重疊度極高）</li>
+              <li><b>股權結構致命傷：</b><b>董監與管理層持股合計低於 5%</b>，外資機構法人持股接近 60%（日後敵意收購關鍵破口）</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </details>
 
+    <!-- 2. 產業背景與外部環境變數 -->
+    <details>
+      <summary>🌐 2. 產業背景與外部環境變數 (Macro & Industry Landscape)</summary>
+      <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <ul>
+          <li><b>終端市場增長趨緩：</b>2015 年全球智慧型手機進入高原期，晶片封測價格戰加劇，毛利率受壓。</li>
+          <li><b>高階先進封裝資本競賽：</b>SiP（系統級封裝）、Fan-out、2.5D/3D IC 機台資本支出（CapEx）暴增，中小型廠難以單獨負擔高昂研發與折舊成本。</li>
+          <li><b>晶圓代工龍頭跨界威脅：</b>台積電（TSMC）以 InFO 封裝跨界拿下 Apple A10 訂單，垂直向下壓縮傳統 OSAT 廠高階獲利空間。</li>
+          <li><b>中國紅色供應鏈崛起：</b>中國大基金扶持江蘇長電（JCET）收購星科金朋（STATS ChipPAC）升至全球第 4，紫光集團四處獵鷹入股台灣半導體鏈。</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 3. 事件演進完整時間軸歷程 -->
     <details open>
-      <summary>📊 課本第一章「四大財務功能」白話對照表</summary>
+      <summary>📅 3. 事件演進完整歷程時間軸 (Timeline of Events)</summary>
+      <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <ul style="padding-left: 20px;">
+          <li><b>2015-08-21｜第一波非合意突襲：</b>日月光宣布以每股 45 元（溢價 34%）公開收購矽品 5%～25% 股權，定調為「純財務投資，不介入營運」。</li>
+          <li><b>2015-08-28｜矽品董事會反擊：</b>矽品經營層判定為敵意併購，公開呼籲全體股東拒絕應賣。</li>
+          <li><b>2015-09-00｜白衣騎士防禦（鴻海結盟）：</b>矽品與鴻海簽署意向書，規劃換股增資讓鴻海取得矽品約 21% 股權，意圖大幅稀釋日月光持股比重。</li>
+          <li><b>2015-09-22｜首階段達標：</b>日月光完成公開收購，成功取得矽品 24.99% 股權，坐穩第一大股東。</li>
+          <li><b>2015-10-15｜股東臨時會否決鴻海案：</b>外資機構評估換股將大幅稀釋現有股東權益與股利，投票反對矽品增資發行新股案，鴻海策略結盟告吹。</li>
+          <li><b>2015-12-11｜矽品引進中國紫光私募：</b>矽品擬以每股 55 元私募增資，讓紫光集團持股 24.9%（總價 568 億新台幣），試圖反制日月光。</li>
+          <li><b>2015-12-底｜日月光加碼與國安爭議爆發：</b>紫光入股案引起技術外流、社會輿論與立法院嚴厲批判；日月光順勢宣布發動第 2 次公開收購，目標將持股拉高至 49.71%。</li>
+          <li><b>2016-03-00｜紫光案破局與法規僵局：</b>因台灣公平會審查尚未終結，日月光第 2 次公開收購暫停；矽品同步終止紫光私募案。</li>
+          <li><b>2016-05-26｜破冰和解（控股架構共識）：</b>張虔生與林文伯破冰會談，達成合意組建「日月光投資控股公司」協議，放棄直接整併，改採平行架構。</li>
+          <li><b>2016-11 至 2017-11｜各國反壟斷審查過關：</b>先後獲台灣公平會、美國 FTC 無條件核准；中國商務部以「附帶限制性條件（24 個月內維持獨立經營與獨立定價）」核准。</li>
+          <li><b>2018-04-30｜正式掛牌上市：</b>原日月光與矽品股票自台股終止上市；新設「日月光投資控股股份有限公司（3711.TW / ASX.US）」掛牌。</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 4. 併購交易架構與治理機制 -->
+    <details>
+      <summary>⚖️ 4. 併購交易架構與治理機制 (Deal Structure & Governance)</summary>
+      <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <ul>
+          <li><b>運作模式：</b>平行兄弟公司架構（Dual-operating Holding Structure）。</li>
+          <li><b>股份轉換比例與代價：</b>
+            <ul>
+              <li>日月光普通股 1 股換發日月光投控普通股 0.5 股。</li>
+              <li>矽品普通股 1 股換發現金 51.2 元（後續依除息調整至每股約 50.8 元收購剩餘流通股份）。</li>
+            </ul>
+          </li>
+          <li><b>董事會與營運治理：</b>
+            <ul>
+              <li>日月光張虔生出任投控董事長。</li>
+              <li>矽品林文伯、蔡祺文進入投控董事會，雙方保留既有公司法人地位、商標、廠區及原有管理技術團隊。</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 5. 綜效機制 (Synergy Breakdown) -->
+    <details>
+      <summary>📈 5. 綜效機制 (Synergy Breakdown：V_ASEH &gt; V_ASE + V_SPIL)</summary>
+      <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <ul>
+          <li><b>營運綜效 (Operating Synergy)：</b>
+            <ul>
+              <li><b>規模經濟：</b>合併後全球 OSAT 市佔率近 30%，大幅拉開與競爭對手差距。</li>
+              <li><b>研發與產能優化：</b>集中兩廠資本支出於先進封裝（Fan-out、SiP、2.5D/3D），避免同一製程重複開模建廠。</li>
+              <li><b>議價權提升：</b>對上游載板、導線架、半導體設備商具備更強採購定價權；終止兩大廠於高通、聯發科訂單上的惡性殺價。</li>
+            </ul>
+          </li>
+          <li><b>財務綜效 (Financial Synergy)：</b>
+            <ul>
+              <li><b>融資成本降低：</b>利用控股集團更高等級之信用評等與現金流量，降低加權平均資本成本（WACC）。</li>
+              <li><b>債務容受力提升：</b>擴大聯貸（Syndicated Loan）額度，增加跨國產能佈局（如應對地緣政治之東南亞擴產）的資金槓桿優勢。</li>
+            </ul>
+          </li>
+          <li><b>管理綜效 (Managerial Synergy)：</b>化解原先敵意收購帶來的營運不確定性，整合雙方全球專利池與客戶維護網絡。</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 6. 合併優缺點與社會經濟影響 -->
+    <details>
+      <summary>🏛️ 6. 合併優缺點與社會法制影響 (Pros, Cons & Economic Impact)</summary>
+      <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+          <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px;">
+            <b style="color: #15803d;">✅ 優勢評估：</b>
+            <ol style="margin: 4px 0 0 0; padding-left: 18px;">
+              <li>強化台灣在半導體後端（Back-end）之全球定價與供應鏈話語權。</li>
+              <li>控股架構保障員工就業，平息基層員工對惡意整併之裁員疑慮。</li>
+              <li>終結紅色資本（紫光）直接涉入台灣核心封測晶片鏈的國安風險。</li>
+            </ol>
+          </div>
+          <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; padding: 10px;">
+            <b style="color: #be123c;">⚠️ 劣勢與挑戰：</b>
+            <ol style="margin: 4px 0 0 0; padding-left: 18px;">
+              <li>平行運作架構導致後台組織精簡效益未完全釋放，管理重疊成本短期依舊存在。</li>
+              <li>部分國際客戶為分散供應鏈風險，策略性將二線訂單轉移予 Amkor 或長電科技。</li>
+              <li>面臨多國法規機構限制性條款約束（如中國限制 24 個月內獨立定價）。</li>
+            </ol>
+          </div>
+        </div>
+        <p style="margin: 10px 0 0 0;">
+          <b>📜 社會與法制經濟影響：</b>確立台灣半導體前端台積電與後端日月光投控之雙聚落生態壁壘；同時凸顯台灣欠缺成熟毒藥丸（Poison Pill）防禦手段、審計委員會角色界定、董監持股過低漏洞，直接催化後續《公司法》與《企業併購法》修法。
+        </p>
+      </div>
+    </details>
+
+    <!-- 7. 財管教科書導論架構對照表 (Chapter 1) -->
+    <details open>
+      <summary>📊 7. 課本第一章「四大財務功能與代理問題」深度對照表 (Textbook Mapping)</summary>
       <div class="table-responsive">
         <table>
           <thead>
             <tr>
-              <th>財務維度</th>
-              <th>課本定義（白話）</th>
-              <th>日月光具體做法</th>
-              <th>矽品具體做法</th>
+              <th style="width: 20%;">課本核心維度</th>
+              <th style="width: 35%;">課本概念定義</th>
+              <th style="width: 45%;">日矽案具體實務對照（可直接引用進作業）</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><b>1. 資金的投資</b></td>
-              <td>買現成比自己蓋快</td>
-              <td>花錢收購矽品，不用重複花幾百億買機台，直接買下現成產能與頂級客戶。</td>
-              <td>評估單獨對抗台積電先進封裝與中國長電，獨立投資 CapEx 風險過高。</td>
+              <td><b>資金的投資</b><br><span class="badge">Capital Investment</span></td>
+              <td>追求具獲利性方案，尋求最佳購併成長機會以達成企業成長。</td>
+              <td>日月光以「外部收購」代替自行擴產，直接納入矽品頂尖產能與技術團隊，規避重複投資高階封裝機台帶來的產能過剩風險。</td>
             </tr>
             <tr>
-              <td><b>2. 資金的募集</b></td>
-              <td>銀行借錢 vs 亂印股票</td>
-              <td>向銀行聯貸數百億＋控股換股，妥善調配負債與權益比率。</td>
-              <td>想印新股票給鴻海跟紫光來稀釋對手，被外資痛罵稀釋舊股東每股價值。</td>
+              <td><b>資金的募集</b><br><span class="badge">Capital Financing</span></td>
+              <td>尋求低成本穩定資金，維持最佳資本結構（自有 vs. 外來資金搭配）。</td>
+              <td>日月光運用百億聯貸案搭配現金與股份轉換，調動高額槓桿同時控制財務危機成本，展現跨國大型融資調度能力。</td>
             </tr>
             <tr>
-              <td><b>3. 資金的管理</b></td>
-              <td>停止自殘、機台互調</td>
-              <td>兩家機台與原物料互通，降低流動資金壓力與重複開模浪費。</td>
-              <td>終止與日月光搶訂單比誰賒帳久（放寬帳期）的惡性競爭，現金流改善。</td>
+              <td><b>資金的管理</b><br><span class="badge">Working Capital</span></td>
+              <td>平衡短期營運資金與中長期資本支出，維持營運穩定性與成長動能。</td>
+              <td>解決兩廠競相拉長應收帳款天期之惡性競爭；依據全球淡旺季跨廠調配封測機台，提升短期週轉與資本運用效率。</td>
             </tr>
             <tr>
-              <td><b>4. 股利的分配</b></td>
-              <td>高配息的雙面刃</td>
-              <td>投控成立後，維持穩健發放股利同時保留足額現金研發先進製程。</td>
-              <td>過去年年高配息吸引 60% 外資，但在收購戰中外資只挺出高價者，反噬經營層。</td>
+              <td><b>股利的分配</b><br><span class="badge">Dividend Policy</span></td>
+              <td>適當分配盈餘予股東並保留成長資金，平衡股東利益與再投資需求。</td>
+              <td>矽品過去的高配息吸引外資持股（近 60%）；外資反對鴻海稀釋換股案以捍衛股利價值；投控成立後確立長期穩健配息與保留盈餘擴充先進製程之平衡。</td>
+            </tr>
+            <tr>
+              <td><b>目標：股東財富最大化</b><br><span class="badge">Agency Problem</span></td>
+              <td>企業經營者受託管理公司，應以全體股東財富極大化為依歸。</td>
+              <td>矽品董監持股不足 5%，初期以換股增資保衛經營權引發市場對「代理問題」之檢視；最終藉由共組投控兼顧股東投資回報與經營團隊價值。</td>
             </tr>
           </tbody>
         </table>
-      </div>
-    </details>
-
-    <details>
-      <summary>📖 完整事件歷史時間軸與核心數據資料庫（點擊展開）</summary>
-      <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
-        <ul>
-          <li><b>2015-08-21</b>：日月光宣布以每股 45 元（溢價 34%）非合意公開收購矽品 5%～25% 股權，定調為「純財務投資」。</li>
-          <li><b>2015-08-28</b>：矽品經營層判定為敵意併購，林文伯公開呼籲股東拒賣。</li>
-          <li><b>2015-09-00</b>：矽品找白衣騎士鴻海結盟，擬換股增資讓鴻海持股 21%，試圖稀釋日月光。</li>
-          <li><b>2015-09-22</b>：日月光完成收購，成功拿下矽品 24.99% 股權，成為最大股東。</li>
-          <li><b>2015-10-15</b>：股東臨時會外資集體反對，否決鴻海換股增資案。</li>
-          <li><b>2015-12-11</b>：矽品找中國紫光擬以每股 55 元私募增資（總價 568 億新台幣），持股 24.9%，引爆國安輿論爭議。</li>
-          <li><b>2016-05-26</b>：張虔生與林文伯破冰會談，達成合意組建「日月光投資控股公司」，放棄直接消滅併吞。</li>
-          <li><b>2018-04-30</b>：原日月光與矽品下市，新設「日月光投控（3711.TW）」掛牌上市，矽品每股拿 51.2 元現金退場，雙方平起平坐。</li>
-        </ul>
       </div>
     </details>
 
