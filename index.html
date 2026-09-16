@@ -334,12 +334,6 @@
     <span class="badge badge-ai">端側</span>
   </a>
 
-  <div class="nav-group">原始筆記</div>
-  <a class="nav-item" id="nav-md-viewer" onclick="switchSection(this, 'md-viewer')">
-    <span>📄 原始 Markdown 檢視器</span>
-    <span class="badge" style="background:#f1f5f9; color:#475569;">MD</span>
-  </a>
-
   <div class="nav-group">學期作業</div>
   
   <!-- 電腦版下拉式選單 -->
@@ -361,11 +355,17 @@
   <!-- 手機版快速切換 HW 的下拉選擇器 -->
   <select class="mobile-hw-select" onchange="switchHwMobile(this.value)">
     <option value="" disabled selected>📂 切換頁面 / 作業...</option>
-    <option value="md-viewer">📄 原始 Markdown 檢視器</option>
     <option value="hw1">HW1 日矽案資料庫</option>
     <option value="hw2">HW2 (待發布)</option>
     <option value="hw3">HW3 (待發布)</option>
+    <option value="md-viewer">📄 原始 Markdown 檢視器</option>
   </select>
+
+  <div class="nav-group">原始筆記</div>
+  <a class="nav-item" id="nav-md-viewer" onclick="switchSection(this, 'md-viewer')">
+    <span>📄 原始 Markdown 檢視器</span>
+    <span class="badge" style="background:#f1f5f9; color:#475569;">MD</span>
+  </a>
 </nav>
 
 <main id="main">
@@ -1813,15 +1813,16 @@
   }
 
   window.onload = function() {
-    // 手機頂部橫向選單自動滑動提示 (Scroll Peek)
+    // 手機頂部橫向選單自動滑動導覽 (展示到最後一格再滑回)
     if (window.innerWidth <= 768) {
       setTimeout(function() {
         var nav = document.getElementById("sidebar");
         if (nav && nav.scrollWidth > nav.clientWidth) {
-          nav.scrollTo({ left: 140, behavior: "smooth" });
+          var maxScroll = nav.scrollWidth - nav.clientWidth;
+          nav.scrollTo({ left: maxScroll, behavior: "smooth" });
           setTimeout(function() {
             nav.scrollTo({ left: 0, behavior: "smooth" });
-          }, 700);
+          }, 1100);
         }
       }, 600);
     }
