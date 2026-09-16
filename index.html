@@ -5,11 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>115-1 財務管理｜小組知識庫與協同平台</title>
 
-<!-- WebLLM CDN (鎖定無 dispose 漏洞之穩定版 0.2.82) -->
-<script type="module">
-  import * as webllm from "https://esm.run/@mlc-ai/web-llm@0.2.82";
-  window.webllm = webllm;
-</script>
+<!-- WebLLM Module Loaded Dynamically -->
 
 <style>
   :root {
@@ -869,8 +865,15 @@
 
     try {
       loadBtn.disabled = true;
-      loadBtn.innerText = "正在載入 Gemma 4-E2B（首次下載並寫入快取）...";
+      loadBtn.innerText = "正在連線 AI 引擎模組...";
       progressBg.style.display = "block";
+      statusText.innerText = "正在載入 WebLLM 執行環境...";
+
+      // 動態載入 WebLLM 模組，避免競態未就緒問題
+      const webllm = window.webllm || await import("https://esm.run/@mlc-ai/web-llm@0.2.82");
+      window.webllm = webllm;
+
+      loadBtn.innerText = "正在載入 Gemma 4-E2B 權重（首次下載寫入快取）...";
 
       const initProgressCallback = (report) => {
         statusText.innerText = report.text;
@@ -878,7 +881,7 @@
         if (match) progressBar.style.width = match[1] + "%";
       };
 
-      engine = await window.webllm.CreateMLCEngine(fixedModel, {
+      engine = await webllm.CreateMLCEngine(fixedModel, {
         initProgressCallback: initProgressCallback
       });
 
