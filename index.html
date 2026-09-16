@@ -929,8 +929,21 @@
         if (match) progressBar.style.width = match[1] + "%";
       };
 
+      // 明確指定 appConfig，確保不會因 CDN 網路連線或 CORS 重導向失敗
       engine = await webllm.CreateMLCEngine(fixedModel, {
-        initProgressCallback: initProgressCallback
+        initProgressCallback: initProgressCallback,
+        appConfig: {
+          useIndexedDBCache: true,
+          model_list: [
+            {
+              model: "https://huggingface.co/mlc-ai/gemma-2-2b-it-q4f16_1-MLC",
+              model_id: "gemma-2-2b-it-q4f16_1-MLC",
+              model_lib: "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_48/gemma-2-2b-it-q4f16_1-ctx4k_cs1k-webgpu.wasm",
+              low_resource_required: true,
+              vram_required_MB: 1400
+            }
+          ]
+        }
       });
 
       statusText.innerText = "✅ Google Gemma 4-E2B 財管助教已成功掛載！下次秒開零流量。";
@@ -944,7 +957,9 @@
         statusText.innerHTML = `<span style="color:#dc2626;">❌ 載入異常 (exit 1)：先前的下載可能不完整中斷導致快取損壞。</span>
         <button class="btn" style="margin-top:6px; font-size:12px; padding:4px 8px;" onclick="clearLLMCache()">🗑️ 一鍵修復：清除損壞快取並重試</button>`;
       } else {
-        statusText.innerText = "載入失敗：" + err.message;
+        statusText.innerHTML = `<span style="color:#dc2626;">載入失敗：${err.message}</span>
+        <div style="font-size:12px; color:#64748b; margin-top:4px;">💡 若為 Hugging Face 網路暫時連線異常，請再點擊一次重試，或點擊右下方按鈕修復快取。</div>
+        <button class="btn" style="margin-top:6px; font-size:12px; padding:4px 8px;" onclick="clearLLMCache()">🗑️ 清除快取並重試</button>`;
       }
       loadBtn.disabled = false;
       loadBtn.innerText = "🚀 重新啟動 Gemma 4-E2B 助教";
