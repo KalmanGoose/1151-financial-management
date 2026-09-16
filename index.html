@@ -98,7 +98,6 @@
     box-shadow: var(--shadow);
   }
   h2 { margin-top: 0; color: var(--primary); font-size: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-  h3 { color: #0f172a; font-size: 16px; margin: 16px 0 8px 0; }
   
   /* 表格 */
   .table-responsive {
@@ -113,10 +112,8 @@
   th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
   th { background: #f8fafc; color: var(--primary); font-weight: 600; }
   
-  /* 標籤 */
   .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: #e0f2fe; color: #0369a1; }
-  .badge-warn { background: #fef3c7; color: #b45309; }
-  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-success { background: #dcfce7; color: #15803d; }
 
   /* 自由認領卡片 */
   .claim-card {
@@ -127,8 +124,9 @@
     margin-bottom: 14px;
     position: relative;
     border-left: 5px solid #cbd5e1;
+    transition: all 0.2s;
   }
-  .claim-card.claimed { border-left-color: #10b981; }
+  .claim-card.claimed { border-left-color: #10b981; background: #f0fdf4; }
   .claim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
   .claim-user-input {
     padding: 5px 10px;
@@ -171,7 +169,6 @@
     resize: vertical;
   }
 
-  /* 原始資料折疊 */
   details {
     background: #f8fafc;
     border: 1px solid var(--border);
@@ -198,6 +195,26 @@
   .chat-msg { margin-bottom: 8px; padding: 8px 12px; border-radius: 8px; max-width: 85%; font-size: 14px; line-height: 1.4; }
   .msg-user { background: #3b82f6; color: white; margin-left: auto; }
   .msg-ai { background: #e2e8f0; color: #1e293b; margin-right: auto; }
+
+  /* 提示彈窗 Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-content {
+    background: white;
+    max-width: 520px;
+    width: 100%;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+  }
 
   /* Toast */
   #toast {
@@ -259,17 +276,27 @@
       <p style="margin: 0; opacity: 0.9; font-size: 14px;">我們不是單一分配，而是大家一起協作！這裡整理了完整個案資料庫、人話對照表，組員可以自由認領觀點、補充資料，並使用內建的端側 Gemma 4 E2B 模型輔助推論。</p>
     </div>
 
+    <!-- 雲端試算表狀態欄 -->
+    <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 13px; color: #166534; font-weight: 500;">
+          ☁️ <b>小組試算表雲端同步：</b> <span id="sync-status">本地離線保存中（可隨時串接 Google 試算表）</span>
+        </span>
+        <button class="btn" style="font-size: 12px; padding: 4px 10px;" onclick="promptSheetApi()">⚙️ 設定 Google 試算表 Webhook</button>
+      </div>
+    </div>
+
     <div class="card">
       <h2>📌 HW1 觀點自由認領與進度登記看板</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">大家自行輸入姓名點「登記認領」，資料會保存在此瀏覽器（後續將支援小組雲端同步）：</p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">大家自行輸入姓名點「登記認領」，資料會同步到雲端試算表與本地：</p>
       
       <div id="claim-list">
-        <!-- 認領項目由 JS 動態渲染或靜態掛載 -->
         <div class="claim-card" id="card-role-1">
           <div class="claim-header">
             <div>
               <span class="badge">視角 1</span>
               <b>外資與股東利益視角（深入：代理問題）</b>
+              <span id="label-role-1" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
             </div>
             <div>
               <input type="text" class="claim-user-input" id="name-role-1" placeholder="輸入組員名字">
@@ -284,6 +311,7 @@
             <div>
               <span class="badge">視角 2</span>
               <b>矽品經營團隊與員工視角（深入：公司自主）</b>
+              <span id="label-role-2" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
             </div>
             <div>
               <input type="text" class="claim-user-input" id="name-role-2" placeholder="輸入組員名字">
@@ -298,6 +326,7 @@
             <div>
               <span class="badge">視角 3</span>
               <b>半導體產業格局視角（深入：資本競賽）</b>
+              <span id="label-role-3" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
             </div>
             <div>
               <input type="text" class="claim-user-input" id="name-role-3" placeholder="輸入組員名字">
@@ -312,6 +341,7 @@
             <div>
               <span class="badge">視角 4</span>
               <b>控股交易架構視角（深入：制度創新）</b>
+              <span id="label-role-4" class="badge badge-success" style="display:none; margin-left: 6px;">已認領</span>
             </div>
             <div>
               <input type="text" class="claim-user-input" id="name-role-4" placeholder="輸入組員名字">
@@ -384,7 +414,7 @@
       </div>
     </details>
 
-    <!-- 折疊 3：完整事件時間軸與深度數據（備用研究庫） -->
+    <!-- 折疊 3：完整事件時間軸與深度數據 -->
     <details>
       <summary>📖 完整事件歷史時間軸與核心數據資料庫（點擊展開）</summary>
       <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
@@ -404,15 +434,23 @@
     <!-- 自由留言與觀點草稿區 -->
     <div class="card" style="margin-top: 20px;">
       <h2>💬 組員個人觀點草稿與補充區（自由填寫並保存）</h2>
-      <p style="font-size: 13px; color: var(--text-muted);">組員可以在此打下自己的想法、從 Gemma 問到的延伸論點，點擊「保存草稿」後本機將自動紀錄：</p>
+      <p style="font-size: 13px; color: var(--text-muted);">組員可以在此打下自己的想法、從 Gemma 問到的延伸論點，點擊「保存觀點」後將同步記錄：</p>
       
       <div class="user-comment-box">
-        <label style="font-size: 13px; font-weight: 600;">我是組員：</label>
-        <input type="text" id="my-name" placeholder="輸入你的名字" style="padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; margin-bottom: 8px;">
-        <textarea id="my-thought" placeholder="在此貼上或寫下你的反思觀點（例如：對代理問題的看法、對平行控股的評價...）"></textarea>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <input type="text" id="my-name" placeholder="輸入你的名字" style="padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; width: 150px;">
+          <select id="my-topic" style="padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px;">
+            <option value="HW1 視角 1 (外資代理問題)">視角 1 (外資代理問題)</option>
+            <option value="HW1 視角 2 (矽品經營團隊)">視角 2 (矽品經營團隊)</option>
+            <option value="HW1 視角 3 (產業資本競賽)">視角 3 (產業資本競賽)</option>
+            <option value="HW1 視角 4 (控股制度創新)">視角 4 (控股制度創新)</option>
+            <option value="一般資料補充">一般資料補充</option>
+          </select>
+        </div>
+        <textarea id="my-thought" placeholder="在此貼上或寫下你的反思觀點（例如：我認為林文伯的反抗是必要的...）"></textarea>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-          <button class="btn btn-primary" onclick="saveMyThought()">💾 保存個人觀點至本機</button>
-          <button class="btn" onclick="copyThought()">📋 複製我的這段文字</button>
+          <button class="btn btn-primary" onclick="saveMyThought()">💾 保存觀點（同步雲端與本地）</button>
+          <button class="btn" onclick="copyThought()">📋 複製我的文字</button>
         </div>
       </div>
       <div id="saved-thoughts-list" style="margin-top: 14px;"></div>
@@ -433,13 +471,13 @@
     </div>
   </section>
 
-  <!-- GEMMA WEB LAB (固定使用 Gemma 4 E2B) -->
+  <!-- GEMMA WEB LAB -->
   <section id="sec-gemma-lab" class="content-section">
     <div class="card">
       <h2>🤖 Google Gemma 4 E2B 端側 AI 輔助助理</h2>
       <p style="font-size: 14px; color: #475569;">
-        ⚡ <b>固定配置：</b>採用最新的 <b>Google Gemma 4 E2B</b> 輕量端側規格（約 1.3GB）。<br>
-        🔒 <b>免伺服器、本機快取：</b>第一次載入會自動存入瀏覽器快取 (IndexedDB)，<b>第二次之後秒開、零網路流量</b>。組員可自由提問財管名詞、補充資料或推論思考！
+        ⚡ <b>固定配置：</b>採用最新 <b>Google Gemma 4 E2B</b> 輕量端側規格（約 1.3GB）。<br>
+        🔒 <b>免伺服器、本機快取：</b>第一次載入會自動存入瀏覽器快取 (IndexedDB)，<b>第二次之後秒開、零網路流量</b>。
       </p>
       
       <div id="llm-status-box" style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
@@ -449,9 +487,14 @@
         </div>
       </div>
       
-      <button id="load-btn" class="btn btn-primary" style="width: 100%; padding: 10px; font-size: 14px; margin-bottom: 15px;" onclick="initGemma()">
-        🚀 載入 Gemma 4 E2B 至本地快取（第一次需下載，之後秒開）
-      </button>
+      <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+        <button id="load-btn" class="btn btn-primary" style="flex: 1; padding: 10px; font-size: 14px;" onclick="initGemma()">
+          🚀 載入 Gemma 4 E2B 至本地快取
+        </button>
+        <button class="btn" style="padding: 10px 14px; font-size: 14px;" onclick="showSafariModal()">
+          🍎 Safari 開啟教學
+        </button>
+      </div>
 
       <!-- 聊天區塊 -->
       <div id="chat-box">
@@ -466,6 +509,29 @@
   </section>
 
 </main>
+
+<!-- Safari 友善引導 Modal -->
+<div id="safari-modal" class="modal-overlay" onclick="closeSafariModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <h3 style="margin-top: 0; color: var(--primary);">🍎 為什麼 Safari 顯示不支援 WebGPU？</h3>
+    <p style="font-size: 14px; color: #334155; line-height: 1.6;">
+      這是 Apple 的預設限制！蘋果在 Safari 中將 WebGPU 歸類為實驗功能，因此預設關閉。
+    </p>
+    
+    <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
+      <b>💡 最無腦解法（強烈推薦）：</b><br>
+      請直接複製本網址，改用 <b>Google Chrome</b> 或 <b>Microsoft Edge</b> 打開，點擊即可直接執行 Gemma，無需任何設定！
+    </div>
+
+    <p style="font-size: 13px; font-weight: 600; margin: 10px 0 4px 0;">如果你一定要在 Safari 使用，請依以下步驟開啟：</p>
+    <ul style="font-size: 13px; color: #475569; padding-left: 20px; line-height: 1.6; margin: 0;">
+      <li><b>Mac Safari：</b>點左上角 Safari -> 設定 -> 進階 -> 勾選「為網頁開發者顯示功能」-> 上方「開發」選單 -> 功能旗標 (Feature Flags) -> 搜尋並勾選 <b>WebGPU</b>。</li>
+      <li><b>iPhone / iPad：</b>打開「設定」->「Safari」-> 滑到最底「進階」->「功能旗標」-> 找到 <b>WebGPU</b> 並開啟。</li>
+    </ul>
+
+    <button class="btn btn-primary" style="width: 100%; margin-top: 16px; padding: 8px;" onclick="document.getElementById('safari-modal').style.display='none'">我知道了</button>
+  </div>
+</div>
 
 <div id="toast">操作成功！</div>
 
@@ -486,13 +552,55 @@
     setTimeout(() => { toast.style.display = 'none'; }, 2000);
   }
 
+  function showSafariModal() {
+    document.getElementById('safari-modal').style.display = 'flex';
+  }
+  function closeSafariModal(e) {
+    document.getElementById('safari-modal').style.display = 'none';
+  }
+
+  /* ================= Google 試算表雲端同步 API 接口 ================= */
+  let googleSheetApiUrl = localStorage.getItem('gsheet_api_url') || "";
+
+  function promptSheetApi() {
+    const url = prompt("請輸入您的 Google Apps Script Webhook 網址（留空表示僅使用本地保存）：", googleSheetApiUrl);
+    if (url !== null) {
+      googleSheetApiUrl = url.trim();
+      localStorage.setItem('gsheet_api_url', googleSheetApiUrl);
+      updateSyncStatus();
+    }
+  }
+
+  function updateSyncStatus() {
+    const el = document.getElementById('sync-status');
+    if (googleSheetApiUrl) {
+      el.innerHTML = `<span style="color:#16a34a;">🟢 已連接 Google 試算表 (即時雲端同步)</span>`;
+    } else {
+      el.innerHTML = `<span>本地離線保存中（點右側設定串接 Google 試算表）</span>`;
+    }
+  }
+
   /* 自由認領看板邏輯 */
-  function saveClaim(roleId) {
-    const name = document.getElementById('name-' + roleId).value.trim();
+  async function saveClaim(roleId) {
+    const nameInput = document.getElementById('name-' + roleId);
+    const name = nameInput.value.trim();
     if(!name) { alert("請輸入組員名字！"); return; }
+    
     localStorage.setItem('claim_' + roleId, name);
     updateClaimUI();
     showToast("登記成功：" + name);
+
+    // 同步到 Google 試算表
+    if (googleSheetApiUrl) {
+      try {
+        fetch(googleSheetApiUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'claim', role: roleId, name: name, time: new Date().toLocaleString() })
+        });
+      } catch (e) { console.log("Sheet sync error", e); }
+    }
   }
 
   function updateClaimUI() {
@@ -500,9 +608,14 @@
       const saved = localStorage.getItem('claim_' + id);
       const card = document.getElementById('card-' + id);
       const input = document.getElementById('name-' + id);
+      const label = document.getElementById('label-' + id);
       if(saved) {
         input.value = saved;
         card.classList.add('claimed');
+        if (label) {
+          label.innerText = `已由 ${saved} 認領`;
+          label.style.display = 'inline-block';
+        }
       }
     });
   }
@@ -510,14 +623,28 @@
   /* 個人觀點留言與保存邏輯 */
   function saveMyThought() {
     const name = document.getElementById('my-name').value.trim();
+    const topic = document.getElementById('my-topic').value;
     const thought = document.getElementById('my-thought').value.trim();
     if(!name || !thought) { alert("請填寫名字與觀點內容！"); return; }
     
+    const record = { name, topic, thought, time: new Date().toLocaleString() };
     const list = JSON.parse(localStorage.getItem('my_saved_thoughts') || '[]');
-    list.unshift({ name, thought, time: new Date().toLocaleDateString() });
+    list.unshift(record);
     localStorage.setItem('my_saved_thoughts', JSON.stringify(list));
     renderThoughts();
     showToast("觀點草稿已保存！");
+
+    // 同步到 Google 試算表
+    if (googleSheetApiUrl) {
+      try {
+        fetch(googleSheetApiUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'thought', ...record })
+        });
+      } catch (e) { console.log("Sheet sync error", e); }
+    }
   }
 
   function renderThoughts() {
@@ -527,9 +654,9 @@
     container.innerHTML = '<h4 style="margin: 10px 0 6px 0;">已保存的觀點筆記：</h4>' + list.map(item => `
       <div style="background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 8px;">
         <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
-          <b>${item.name}</b> <span>${item.time}</span>
+          <b>${item.name} (${item.topic || '觀點'})</b> <span>${item.time}</span>
         </div>
-        <p style="margin: 6px 0 0 0; font-size: 13px; color: #334155;">${item.thought}</p>
+        <p style="margin: 6px 0 0 0; font-size: 13px; color: #334155; white-space: pre-wrap;">${item.thought}</p>
       </div>
     `).join('');
   }
@@ -542,7 +669,6 @@
 
   /* ================= WebLLM 引擎：固定 Gemma 4 E2B ================= */
   let engine = null;
-  // 固定使用最新 Google Gemma 4 E2B / 2B 輕量量化版（約 1.3GB，最流暢）
   const fixedModel = "gemma-2-2b-it-q4f32_1-MLC"; 
 
   async function initGemma() {
@@ -551,8 +677,15 @@
     const progressBg = document.getElementById('progress-bar-bg');
     const progressBar = document.getElementById('progress-bar');
     
+    // 檢查 WebGPU 支援與 Safari 友善引導
     if (!navigator.gpu) {
-      statusText.innerText = "❌ 裝置/瀏覽器不支援 WebGPU。建議使用 Chrome 最新版本。";
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      if (isSafari) {
+        showSafariModal();
+        statusText.innerText = "🍎 Safari 尚未開啟 WebGPU 功能，請點擊「Safari 開啟教學」或改用 Chrome。";
+      } else {
+        statusText.innerText = "❌ 裝置/瀏覽器不支援 WebGPU。建議使用 Google Chrome 最新版本。";
+      }
       statusText.style.color = "#dc2626";
       return;
     }
@@ -616,8 +749,8 @@
     }
   }
 
-  // 初始化載入保存的認領與草稿
   window.onload = function() {
+    updateSyncStatus();
     updateClaimUI();
     renderThoughts();
   };
