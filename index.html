@@ -513,6 +513,22 @@
         </div>
       </div>
     </div>
+
+    <!-- 首頁即時小組討論與觀點動態牆 -->
+    <div class="card">
+      <h2>
+        <span>💬 小組成員觀點與討論即時動態牆</span>
+        <span id="live-indicator" style="font-size: 12px; font-weight: normal; color: #16a34a;">🟢 即時監聽中 (背景節能模式)</span>
+      </h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 10px 0;">
+        無需手動開 Excel！任何人登記認領或留下心得觀點，所有組員開啟網頁即時呈現於此：
+      </p>
+      <div id="home-thoughts-stream">
+        <div style="text-align: center; color: #94a3b8; font-size: 13px; padding: 16px;">
+          正在同步雲端討論進度...
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- 3. HW1 SECTION -->
@@ -749,29 +765,59 @@
     }
   }
 
-  // 從 Google Apps Script 雲端拉取歷史認領與觀點 (若有實作 doGet)
-  async function syncFromCloud() {
-    showToast("正在檢查雲端更新...");
+  let lastSyncHash = "";
+
+  // 智慧無感同步（支援背景靜默拉取）
+  async function syncFromCloud(silent = true) {
+    if (!silent) showToast("正在檢查雲端更新...");
     try {
       const res = await fetch(googleSheetApiUrl + "?action=read", { method: "GET" });
       if (res.ok) {
         const data = await res.json();
-        if (data && data.claims) {
-          Object.keys(data.claims).forEach(k => localStorage.setItem("claim_" + k, data.claims[k]));
-          updateClaimUI();
+        const curHash = JSON.stringify(data);
+        if (curHash !== lastSyncHash) {
+          lastSyncHash = curHash;
+          if (data && data.claims) {
+            Object.keys(data.claims).forEach(k => localStorage.setItem("claim_" + k, data.claims[k]));
+            updateClaimUI(); startSmartPolling();
+          }
+          if (data && data.thoughts) {
+            localStorage.setItem("my_saved_thoughts", JSON.stringify(data.thoughts));
+            renderThoughts();
+    startSmartPolling(); startSmartPolling();
+          }
+          if (!silent) showToast("✅ 已同步最新小組討論進度！");
         }
-        if (data && data.thoughts) {
-          localStorage.setItem("my_saved_thoughts", JSON.stringify(data.thoughts));
-          renderThoughts();
-        }
-        showToast("✅ 已成功從雲端同步最新進度！");
-      } else {
-        showToast("本地已是最新狀態！");
       }
     } catch(e) {
-      showToast("已完成本地最新校核！");
+      if (!silent) showToast("已切換為本地快照模式");
     }
   }
+
+  // 智慧節能輪詢控制器 (Smart Visibility Poller)
+  let pollTimer = null;
+  function startSmartPolling() {
+    // 立即靜默拉取一次
+    syncFromCloud(true);
+    // 僅在視窗活躍時，每 15 秒輕量檢查一次（只傳數百位元組，完全不耗電與效能）
+    clearInterval(pollTimer);
+    pollTimer = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        syncFromCloud(true);
+      }
+    }, 15000);
+  }
+
+  // 當使用者在手機鎖定螢幕或切換 App 時完全停止；切回網頁時瞬間刷新
+  document.addEventListener("visibilitychange", () => {
+    const indicator = document.getElementById("live-indicator");
+    if (document.visibilityState === "visible") {
+      if (indicator) indicator.innerHTML = "🟢 即時連線中";
+      syncFromCloud(true);
+    } else {
+      if (indicator) indicator.innerHTML = "💤 休眠省電中";
+    }
+  });
 
   /* 自由認領看板邏輯 */
   async function saveClaim(roleId) {
@@ -780,7 +826,7 @@
     if(!name) { alert("請輸入組員名字！"); return; }
     
     localStorage.setItem('claim_' + roleId, name);
-    updateClaimUI();
+    updateClaimUI(); startSmartPolling();
     showToast("登記成功：" + name);
 
     postToSheet({ type: "claim", role: roleId, name: name, time: new Date().toLocaleString() });
@@ -815,6 +861,7 @@
     list.unshift(record);
     localStorage.setItem('my_saved_thoughts', JSON.stringify(list));
     renderThoughts();
+    startSmartPolling(); startSmartPolling();
     showToast("觀點草稿已保存！");
 
     postToSheet({ type: "thought", ...record });
@@ -822,16 +869,44 @@
 
   function renderThoughts() {
     const list = JSON.parse(localStorage.getItem('my_saved_thoughts') || '[]');
+    
+    // 渲染 HW1 頁面內部清單
     const container = document.getElementById('saved-thoughts-list');
-    if(!list.length) { container.innerHTML = ''; return; }
-    container.innerHTML = '<h4 style="margin: 10px 0 6px 0;">已保存的觀點筆記：</h4>' + list.map(item => `
-      <div style="background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 8px;">
-        <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
-          <b>${item.name} (${item.topic || '觀點'})</b> <span>${item.time}</span>
-        </div>
-        <p style="margin: 6px 0 0 0; font-size: 13px; color: #334155; white-space: pre-wrap;">${item.thought}</p>
-      </div>
-    `).join('');
+    if (container) {
+      if (!list.length) {
+        container.innerHTML = '<p style="font-size:13px; color:#94a3b8;">尚無觀點紀錄，組員可在上方輸入後點擊保存！</p>';
+      } else {
+        container.innerHTML = '<h4 style="margin: 10px 0 6px 0;">已保存的觀點筆記：</h4>' + list.map(item => `
+          <div style="background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
+              <b>${item.name} (${item.topic || '觀點'})</b> <span>${item.time}</span>
+            </div>
+            <p style="margin: 6px 0 0 0; font-size: 13px; color: #334155; white-space: pre-wrap;">${item.thought}</p>
+          </div>
+        `).join('');
+      }
+    }
+
+    // 渲染首頁「即時小組討論與觀點動態牆」
+    const homeStream = document.getElementById('home-thoughts-stream');
+    if (homeStream) {
+      if (!list.length) {
+        homeStream.innerHTML = '<p style="font-size:13px; color:#94a3b8; text-align:center; padding:12px;">目前小組尚無留言，歡迎組員前往 HW1 頁面寫下心得觀點！</p>';
+      } else {
+        homeStream.innerHTML = list.map(item => `
+          <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 4px solid var(--primary-light); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom: 6px;">
+              <div>
+                <b style="color:var(--primary); font-size:14px;">${item.name}</b>
+                <span class="badge" style="margin-left: 6px;">${item.topic || '觀點分享'}</span>
+              </div>
+              <span style="color:var(--text-muted);">${item.time}</span>
+            </div>
+            <div style="font-size: 13px; color: #334155; line-height: 1.5; white-space: pre-wrap;">${item.thought}</div>
+          </div>
+        `).join('');
+      }
+    }
   }
 
   function copyThought() {
@@ -1028,8 +1103,9 @@
     }
 
     updateSyncStatus();
-    updateClaimUI();
+    updateClaimUI(); startSmartPolling();
     renderThoughts();
+    startSmartPolling(); startSmartPolling();
 
     // 裝置硬體狀態判定
     if (isMobilePhone) {
