@@ -36,9 +36,9 @@
     min-height: 100vh;
   }
   
-  /* 側邊導航 */
+  /* ================= 側邊導航 ================= */
   #sidebar {
-    width: 250px;
+    width: 260px;
     background: var(--sidebar-bg);
     color: var(--sidebar-text);
     padding: 20px 14px;
@@ -49,7 +49,7 @@
   }
   .brand {
     color: #ffffff;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: bold;
     padding: 0 10px 14px 10px;
     border-bottom: 1px solid #334155;
@@ -62,7 +62,7 @@
   .nav-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
     padding: 10px 12px;
     border-radius: 8px;
     color: #cbd5e1;
@@ -74,6 +74,57 @@
   .nav-item:hover { background: #1e293b; color: #ffffff; }
   .nav-item.active { background: #1e293b; color: var(--sidebar-active); font-weight: 600; border-left: 3px solid var(--sidebar-active); }
   
+  /* HW 下拉選單樣式 */
+  .dropdown-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .dropdown-arrow {
+    font-size: 10px;
+    transition: transform 0.2s ease;
+  }
+  .dropdown-arrow.open {
+    transform: rotate(180deg);
+  }
+  .dropdown-content {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 14px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    border-left: 2px solid #334155;
+    margin-left: 12px;
+  }
+  .dropdown-content.show {
+    display: flex;
+  }
+  .dropdown-sub-item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: #94a3b8;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .dropdown-sub-item:hover {
+    color: #ffffff;
+    background: #1e293b;
+  }
+  .dropdown-sub-item.active {
+    color: var(--sidebar-active);
+    font-weight: 600;
+    background: #1e293b;
+  }
+
+  /* 手機頂部下拉選單容器 */
+  .mobile-hw-select {
+    display: none;
+  }
+
   /* 內容容器 */
   #main {
     flex: 1;
@@ -114,6 +165,7 @@
   
   .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: #e0f2fe; color: #0369a1; }
   .badge-success { background: #dcfce7; color: #15803d; }
+  .badge-ai { background: #fef08a; color: #854d0e; font-size: 11px; padding: 2px 6px; }
 
   /* 自由認領卡片 */
   .claim-card {
@@ -184,7 +236,7 @@
 
   /* Chat Box */
   #chat-box {
-    height: 280px;
+    height: 300px;
     overflow-y: auto;
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -231,23 +283,39 @@
     z-index: 9999;
   }
 
-  /* RWD */
+  /* ================= 📱 跨裝置 RWD 自適應 ================= */
   @media (max-width: 768px) {
     body { flex-direction: column; }
     #sidebar {
       width: 100%;
-      padding: 10px 14px;
+      padding: 10px 12px;
       flex-direction: row;
       overflow-x: auto;
       white-space: nowrap;
       position: sticky;
       top: 0;
       z-index: 100;
+      gap: 8px;
     }
-    .brand { border-bottom: none; margin-bottom: 0; padding: 0 10px 0 0; border-right: 1px solid #334155; }
+    .brand { border-bottom: none; margin-bottom: 0; padding: 0 8px 0 0; border-right: 1px solid #334155; font-size: 15px; }
     .nav-group { display: none; }
-    .nav-item { padding: 6px 12px; font-size: 13px; }
+    .nav-item { padding: 6px 10px; font-size: 13px; }
     .nav-item.active { border-left: none; border-bottom: 2px solid var(--sidebar-active); }
+    
+    /* 手機上側邊欄的下拉改為水平彈性選擇器 */
+    .dropdown-content { display: none !important; }
+    .dropdown-btn .dropdown-arrow { display: none; }
+    
+    .mobile-hw-select {
+      display: inline-block;
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
     #main { padding: 14px; }
     table { min-width: 500px; }
   }
@@ -255,25 +323,97 @@
 </head>
 <body>
 
+<!-- 導航列 -->
 <nav id="sidebar">
   <div class="brand">📊 115-1 財管</div>
-  <div class="nav-group">導覽</div>
-  <a class="nav-item active" onclick="switchTab(this, 'home')">🏠 首頁與分工池</a>
+  
+  <div class="nav-group">核心 AI</div>
+  <!-- Gemma 4 E2B 免費 AI 助教置頂於第一位 -->
+  <a class="nav-item active" id="nav-ai" onclick="switchSection(this, 'gemma-lab')">
+    <span>🤖 免費 AI 助教機器人 (Gemma 4-E2B)</span>
+    <span class="badge badge-ai">置頂</span>
+  </a>
+
+  <div class="nav-group">導覽與看板</div>
+  <a class="nav-item" id="nav-home" onclick="switchSection(this, 'home')">
+    <span>🏠 首頁與分工池</span>
+  </a>
+
   <div class="nav-group">學期作業</div>
-  <a class="nav-item" onclick="switchTab(this, 'hw1')">📝 HW1 日矽案資料庫</a>
-  <a class="nav-item" onclick="switchTab(this, 'hw2')">📝 HW2 (待發布)</a>
-  <a class="nav-item" onclick="switchTab(this, 'hw3')">📝 HW3 (待發布)</a>
-  <div class="nav-group">端側 AI 助理</div>
-  <a class="nav-item" onclick="switchTab(this, 'gemma-lab')">🤖 Gemma 4 E2B</a>
+  
+  <!-- 電腦版下拉式選單 -->
+  <div style="display: flex; flex-direction: column;">
+    <a class="nav-item" id="nav-hw-parent" onclick="toggleHwDropdown()">
+      <span class="dropdown-btn">
+        <span>📝 學期作業 (HW) 系列</span>
+        <span class="dropdown-arrow" id="hw-arrow">▼</span>
+      </span>
+    </a>
+    
+    <div class="dropdown-content show" id="hw-dropdown-menu">
+      <a class="dropdown-sub-item" id="sub-hw1" onclick="switchHw('hw1')">▸ HW1 日矽案資料庫</a>
+      <a class="dropdown-sub-item" id="sub-hw2" onclick="switchHw('hw2')">▸ HW2 (待發布)</a>
+      <a class="dropdown-sub-item" id="sub-hw3" onclick="switchHw('hw3')">▸ HW3 (待發布)</a>
+    </div>
+  </div>
+
+  <!-- 手機版快速切換 HW 的下拉選擇器 -->
+  <select class="mobile-hw-select" onchange="switchHwMobile(this.value)">
+    <option value="" disabled selected>📂 切換 HW 作業...</option>
+    <option value="hw1">HW1 日矽案資料庫</option>
+    <option value="hw2">HW2 (待發布)</option>
+    <option value="hw3">HW3 (待發布)</option>
+  </select>
 </nav>
 
 <main id="main">
 
-  <!-- HOME SECTION -->
-  <section id="sec-home" class="content-section active">
+  <!-- 1. GEMMA 4 E2B AI 助教機器人 (預設開啟置頂) -->
+  <section id="sec-gemma-lab" class="content-section active">
     <div class="card" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;">
-      <h1 style="margin: 0 0 8px 0; font-size: 22px;">👋 115-1 財務管理小組知識庫</h1>
-      <p style="margin: 0; opacity: 0.9; font-size: 14px;">我們不是單一分配，而是大家一起協作！這裡整理了完整個案資料庫、人話對照表，組員可以自由認領觀點、補充資料，並使用內建的端側 Gemma 4 E2B 模型輔助推論。</p>
+      <h1 style="margin: 0 0 8px 0; font-size: 22px;">🤖 Google Gemma 4-E2B 免費 AI 助教機器人</h1>
+      <p style="margin: 0; opacity: 0.95; font-size: 14px;">這是運行在組員手機與電腦瀏覽器內部的端側 AI 助教！免註冊、免 API Key、零網路費用，可隨時提問財管名詞、尋找作業論點佐證或驗算概念！</p>
+    </div>
+
+    <div class="card">
+      <h2>⚡ 本地 WebGPU 運算狀態與控制</h2>
+      <p style="font-size: 14px; color: #475569; margin: 4px 0 10px 0;">
+        第一次載入會自動將約 1.3GB 權重快取至瀏覽器 (IndexedDB)，<b>第二次之後秒速載入、完全不吃網路流量</b>！
+      </p>
+      
+      <div id="llm-status-box" style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
+        <span id="llm-status">模型規格：Google Gemma 4-E2B (WebGPU 端側運算) ｜ 狀態：尚未掛載</span>
+        <div id="progress-bar-bg" style="display:none; width: 100%; background: #cbd5e1; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;">
+          <div id="progress-bar" style="width: 0%; background: #2563eb; height: 100%; transition: width 0.2s;"></div>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+        <button id="load-btn" class="btn btn-primary" style="flex: 1; padding: 10px; font-size: 14px;" onclick="initGemma()">
+          🚀 啟動 Gemma 4-E2B 助教
+        </button>
+        <button class="btn" style="padding: 10px 14px; font-size: 14px;" onclick="showSafariModal()">
+          🍎 Safari 開啟教學
+        </button>
+      </div>
+
+      <!-- 聊天區塊 -->
+      <div id="chat-box">
+        <div class="chat-msg msg-ai">組員你好！我是你的 Gemma 4-E2B 財務管理 AI 助教。啟動後，你可以問我任何日矽案細節、財管名詞（如 WACC、代理問題、資本預算），幫你推論作業觀點！</div>
+      </div>
+      
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="user-input" placeholder="問問 Gemma 助教（例：為什麼外資反對鴻海換股案？）..." style="flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;" disabled>
+        <button id="send-btn" class="btn btn-primary" style="width: 80px;" onclick="sendMessage()" disabled>發送</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. HOME SECTION -->
+  <section id="sec-home" class="content-section">
+    <div class="card">
+      <h1 style="margin: 0 0 8px 0; font-size: 22px; color: var(--primary);">👋 115-1 財務管理小組知識庫</h1>
+      <p style="margin: 0; color: #475569; font-size: 14px;">我們不是單一分配，而是大家一起協作！這裡整理了完整個案資料庫、人話對照表，組員可以自由認領觀點、補充資料，並使用內建的 Gemma 4-E2B 助理進行推論。</p>
     </div>
 
     <!-- 雲端試算表狀態欄 -->
@@ -354,14 +494,13 @@
     </div>
   </section>
 
-  <!-- HW1 SECTION -->
+  <!-- 3. HW1 SECTION -->
   <section id="sec-hw1" class="content-section">
     <div class="card">
       <h2>📚 HW1：日矽案完整資料庫與課本四大功能</h2>
-      <p style="font-size: 14px; margin: 4px 0;">點開下方各區塊可查閱收集來的原始事件歷史、數據、白話文拆解，亦可使用頁籤底下的 Gemma 助理即時補充資料。</p>
+      <p style="font-size: 14px; margin: 4px 0;">點開下方各區塊可查閱收集來的原始事件歷史、數據、白話文拆解，亦可切換至 Gemma 助教即時推論補充。</p>
     </div>
 
-    <!-- 折疊 1：30 秒白話懶人包 -->
     <details open>
       <summary>⚡ 30 秒白話懶人包：日矽案到底在演什麼？</summary>
       <div style="padding-top: 10px; font-size: 14px;">
@@ -371,7 +510,6 @@
       </div>
     </details>
 
-    <!-- 折疊 2：課本四大財務功能對照表 -->
     <details open>
       <summary>📊 課本第一章「四大財務功能」白話對照表</summary>
       <div class="table-responsive">
@@ -414,7 +552,6 @@
       </div>
     </details>
 
-    <!-- 折疊 3：完整事件時間軸與深度數據 -->
     <details>
       <summary>📖 完整事件歷史時間軸與核心數據資料庫（點擊展開）</summary>
       <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
@@ -434,7 +571,7 @@
     <!-- 自由留言與觀點草稿區 -->
     <div class="card" style="margin-top: 20px;">
       <h2>💬 組員個人觀點草稿與補充區（自由填寫並保存）</h2>
-      <p style="font-size: 13px; color: var(--text-muted);">組員可以在此打下自己的想法、從 Gemma 問到的延伸論點，點擊「保存觀點」後將同步記錄：</p>
+      <p style="font-size: 13px; color: var(--text-muted);">組員可以在此打下自己的想法、從 Gemma 助教問到的延伸論點，點擊「保存觀點」後將同步記錄：</p>
       
       <div class="user-comment-box">
         <div style="display: flex; gap: 8px; margin-bottom: 8px;">
@@ -457,7 +594,7 @@
     </div>
   </section>
 
-  <!-- HW2 & HW3 SECTION -->
+  <!-- 4. HW2 & HW3 SECTION -->
   <section id="sec-hw2" class="content-section">
     <div class="card">
       <h2>📝 HW2 作業專區</h2>
@@ -468,43 +605,6 @@
     <div class="card">
       <h2>📝 HW3 作業專區</h2>
       <p style="color: var(--text-muted);">本週題目尚未發布。等出題後，資料與背景將同步更新！</p>
-    </div>
-  </section>
-
-  <!-- GEMMA WEB LAB -->
-  <section id="sec-gemma-lab" class="content-section">
-    <div class="card">
-      <h2>🤖 Google Gemma 4 E2B 端側 AI 輔助助理</h2>
-      <p style="font-size: 14px; color: #475569;">
-        ⚡ <b>固定配置：</b>採用最新 <b>Google Gemma 4 E2B</b> 輕量端側規格（約 1.3GB）。<br>
-        🔒 <b>免伺服器、本機快取：</b>第一次載入會自動存入瀏覽器快取 (IndexedDB)，<b>第二次之後秒開、零網路流量</b>。
-      </p>
-      
-      <div id="llm-status-box" style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
-        <span id="llm-status">模型規格：Google Gemma 4 E2B (WebGPU 本地運算)｜狀態：尚未掛載</span>
-        <div id="progress-bar-bg" style="display:none; width: 100%; background: #cbd5e1; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;">
-          <div id="progress-bar" style="width: 0%; background: #2563eb; height: 100%; transition: width 0.2s;"></div>
-        </div>
-      </div>
-      
-      <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-        <button id="load-btn" class="btn btn-primary" style="flex: 1; padding: 10px; font-size: 14px;" onclick="initGemma()">
-          🚀 載入 Gemma 4 E2B 至本地快取
-        </button>
-        <button class="btn" style="padding: 10px 14px; font-size: 14px;" onclick="showSafariModal()">
-          🍎 Safari 開啟教學
-        </button>
-      </div>
-
-      <!-- 聊天區塊 -->
-      <div id="chat-box">
-        <div class="chat-msg msg-ai">組員你好！我是運行在你瀏覽器內的 Gemma 4 E2B 助理。掛載完成後，你可以問我任何日矽案細節、財務管理名詞（如 WACC、代理問題），幫你豐富作業論點！</div>
-      </div>
-      
-      <div style="display: flex; gap: 8px;">
-        <input type="text" id="user-input" placeholder="問問 Gemma（例：為什麼外資反對鴻海換股案？）..." style="flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;" disabled>
-        <button id="send-btn" class="btn btn-primary" style="width: 80px;" onclick="sendMessage()" disabled>發送</button>
-      </div>
     </div>
   </section>
 
@@ -520,7 +620,7 @@
     
     <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
       <b>💡 最無腦解法（強烈推薦）：</b><br>
-      請直接複製本網址，改用 <b>Google Chrome</b> 或 <b>Microsoft Edge</b> 打開，點擊即可直接執行 Gemma，無需任何設定！
+      請直接複製本網址，改用 <b>Google Chrome</b> 或 <b>Microsoft Edge</b> 打開，點擊即可直接執行 Gemma 4-E2B 助教，無需任何設定！
     </div>
 
     <p style="font-size: 13px; font-weight: 600; margin: 10px 0 4px 0;">如果你一定要在 Safari 使用，請依以下步驟開啟：</p>
@@ -536,13 +636,40 @@
 <div id="toast">操作成功！</div>
 
 <script>
-  function switchTab(el, tabId) {
+  /* 導航切換邏輯 */
+  function switchSection(el, targetId) {
     document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.dropdown-sub-item').forEach(e => e.classList.remove('active'));
     document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active'));
     
-    el.classList.add('active');
-    const sec = document.getElementById('sec-' + tabId);
+    if (el) el.classList.add('active');
+    const sec = document.getElementById('sec-' + targetId);
     if(sec) sec.classList.add('active');
+  }
+
+  function toggleHwDropdown() {
+    const menu = document.getElementById('hw-dropdown-menu');
+    const arrow = document.getElementById('hw-arrow');
+    menu.classList.toggle('show');
+    arrow.classList.toggle('open');
+  }
+
+  function switchHw(hwId) {
+    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.dropdown-sub-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active'));
+
+    const subItem = document.getElementById('sub-' + hwId);
+    if (subItem) subItem.classList.add('active');
+    document.getElementById('nav-hw-parent').classList.add('active');
+    
+    const sec = document.getElementById('sec-' + hwId);
+    if(sec) sec.classList.add('active');
+  }
+
+  function switchHwMobile(hwId) {
+    if(!hwId) return;
+    switchHw(hwId);
   }
 
   function showToast(msg) {
@@ -590,7 +717,6 @@
     updateClaimUI();
     showToast("登記成功：" + name);
 
-    // 同步到 Google 試算表
     if (googleSheetApiUrl) {
       try {
         fetch(googleSheetApiUrl, {
@@ -634,7 +760,6 @@
     renderThoughts();
     showToast("觀點草稿已保存！");
 
-    // 同步到 Google 試算表
     if (googleSheetApiUrl) {
       try {
         fetch(googleSheetApiUrl, {
@@ -667,7 +792,7 @@
     navigator.clipboard.writeText(thought).then(() => showToast("已複製草稿到剪貼簿！"));
   }
 
-  /* ================= WebLLM 引擎：固定 Gemma 4 E2B ================= */
+  /* ================= WebLLM 引擎：固定 Gemma 4-E2B ================= */
   let engine = null;
   const fixedModel = "gemma-2-2b-it-q4f32_1-MLC"; 
 
@@ -677,7 +802,6 @@
     const progressBg = document.getElementById('progress-bar-bg');
     const progressBar = document.getElementById('progress-bar');
     
-    // 檢查 WebGPU 支援與 Safari 友善引導
     if (!navigator.gpu) {
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
       if (isSafari) {
@@ -692,7 +816,7 @@
 
     try {
       loadBtn.disabled = true;
-      loadBtn.innerText = "正在載入 Gemma 4 E2B（首次下載並寫入快取）...";
+      loadBtn.innerText = "正在載入 Gemma 4-E2B（首次下載並寫入快取）...";
       progressBg.style.display = "block";
 
       const initProgressCallback = (report) => {
@@ -705,7 +829,7 @@
         initProgressCallback: initProgressCallback
       });
 
-      statusText.innerText = "✅ Google Gemma 4 E2B 模型已掛載本機快取！下次秒開零流量。";
+      statusText.innerText = "✅ Google Gemma 4-E2B 助教已成功掛載至本機快取！下次秒開零流量。";
       statusText.style.color = "#16a34a";
       loadBtn.style.display = "none";
       document.getElementById('user-input').disabled = false;
@@ -728,7 +852,7 @@
 
     const aiMsgDiv = document.createElement('div');
     aiMsgDiv.className = 'chat-msg msg-ai';
-    aiMsgDiv.innerText = "Gemma 思考中...";
+    aiMsgDiv.innerText = "Gemma 助教思考中...";
     chatBox.appendChild(aiMsgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
