@@ -1,0 +1,17 @@
+用法：cupsfilter [ options ] [ -- ] filename
+選項：
+  --list-filters          列出將使用的過濾條件。
+  -D                      完成時移除輸入檔案。
+  -P filename.ppd         設定PPD檔案。
+  -U username             指定使用者名稱。
+  -c cups-files.conf      設定要使用的cups-files.conf檔案。
+  -d printer              使用已命名的印表機。
+  -e                      使用來自PPD檔案的每個過濾條件。
+  -i mime/type            設定輸入MIME類型（否則為自動輸入）。
+  -j job-id[,N]           從指定的作業過濾掉檔案N（預設為檔案1）。
+  -m mime/type            設定輸出MIME類型（否則為應用程式/pdf）。
+  -n copies               設定份數。
+  -o name=value           設定選項。
+  -p filename.ppd         設定PPD檔案。
+  -t title                設定標題。
+  -u                      完成時移除PPD檔案。

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>115-1 財務管理｜小組專屬協同工作台</title>
+
+<!-- WebLLM CDN 最新版本 -->
+<script type="module">
+  import * as webllm from "https://esm.run/@mlc-ai/web-llm";
+  window.webllm = webllm;
+</script>
+
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #2563eb;
+    --bg-main: #f8fafc;
+    --sidebar-bg: #0f172a;
+    --sidebar-text: #94a3b8;
+    --sidebar-active: #38bdf8;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  }
+  
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: var(--bg-main);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* ================= 側邊欄（電腦與平板寬螢幕） ================= */
+  #sidebar {
+    width: 250px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px 14px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: all 0.3s ease;
+  }
+  .brand {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 0 10px 14px 10px;
+    border-bottom: 1px solid #334155;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-group { font-size: 11px; text-transform: uppercase; color: #64748b; padding: 10px 10px 2px; font-weight: 700; letter-spacing: 0.5px; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #cbd5e1;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s ease;
+  }
+  .nav-item:hover { background: #1e293b; color: #ffffff; }
+  .nav-item.active { background: #1e293b; color: var(--sidebar-active); font-weight: 600; border-left: 3px solid var(--sidebar-active); }
+  
+  /* ================= 主內容區 ================= */
+  #main {
+    flex: 1;
+    padding: 24px 32px;
+    max-width: 1000px;
+    overflow-y: auto;
+  }
+  .content-section { display: none; }
+  .content-section.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 通用元件 */
+  .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  h2 { margin-top: 0; color: var(--primary); font-size: 18px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+  
+  /* 自適應表格容器（防止手機破版） */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; white-space: normal; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: #f8fafc; color: var(--primary); font-weight: 600; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: #e0f2fe; color: #0369a1; }
+  
+  /* 組員卡片 */
+  .member-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+    border-left: 5px solid #3b82f6;
+  }
+  .m1 { border-left-color: #3b82f6; }
+  .m2 { border-left-color: #10b981; }
+  .m3 { border-left-color: #f59e0b; }
+  .m4 { border-left-color: #8b5cf6; }
+
+  .copy-btn {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 6px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover, .copy-btn:active { background: var(--primary-light); color: white; border-color: var(--primary-light); }
+  
+  /* Toast 提示 */
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #10b981;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* WebLLM 聊天室樣式 */
+  #chat-box {
+    height: 280px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    background: #f8fafc;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .chat-msg { margin-bottom: 8px; padding: 8px 12px; border-radius: 8px; max-width: 85%; line-height: 1.4; }
+  .msg-user { background: #3b82f6; color: white; margin-left: auto; }
+  .msg-ai { background: #e2e8f0; color: #1e293b; margin-right: auto; }
+
+  /* ================= 📱 跨裝置自適應 (RWD) 核心 ================= */
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    
+    #sidebar {
+      width: 100%;
+      padding: 12px 14px;
+      flex-direction: row;
+      overflow-x: auto;
+      white-space: nowrap;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand { border-bottom: none; margin-bottom: 0; padding: 0 10px 0 0; border-right: 1px solid #334155; }
+    .nav-group { display: none; }
+    .nav-item { padding: 6px 12px; font-size: 13px; border-radius: 6px; }
+    .nav-item.active { border-left: none; border-bottom: 2px solid var(--sidebar-active); }
+    
+    #main { padding: 14px; }
+    .card { padding: 16px; margin-bottom: 12px; }
+    h2 { font-size: 17px; }
+    table { font-size: 13px; min-width: 480px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 頂部 / 側邊導航 -->
+<nav id="sidebar">
+  <div class="brand">📊 115-1 財管</div>
+  <div class="nav-group">導覽</div>
+  <a class="nav-item active" onclick="switchTab(this, 'home')">🏠 首頁分工</a>
+  <div class="nav-group">作業</div>
+  <a class="nav-item" onclick="switchTab(this, 'hw1')">📝 HW1 日矽案</a>
+  <a class="nav-item" onclick="switchTab(this, 'hw2')">📝 HW2 (待發布)</a>
+  <a class="nav-item" onclick="switchTab(this, 'hw3')">📝 HW3 (待發布)</a>
+  <div class="nav-group">AI 引擎</div>
+  <a class="nav-item" onclick="switchTab(this, 'gemma-lab')">🤖 Gemma Web</a>
+</nav>
+
+<!-- 主要內容 -->
+<main id="main">
+
+  <!-- HOME SECTION -->
+  <section id="sec-home" class="content-section active">
+    <div class="card" style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;">
+      <h1 style="margin: 0 0 8px 0; font-size: 22px;">👋 115-1 財務管理小組工作台</h1>
+      <p style="margin: 0; opacity: 0.9; font-size: 14px;">手機、平板、電腦皆可順暢瀏覽！本週 HW1 日矽案四大功能、30秒懶人包與四人觀點已整理完畢，往右點選 HW1 查看。</p>
+    </div>
+
+    <div class="card">
+      <h2>👥 小組成員與角色認領</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>組員姓名</th>
+              <th>作業核心視角</th>
+              <th>HW1 狀態</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>組員 A</b></td>
+              <td>外資/股東權益（代理問題）</td>
+              <td><span class="badge">已分配觀點</span></td>
+            </tr>
+            <tr>
+              <td><b>組員 B</b></td>
+              <td>經理人/矽品團隊（組織與客戶）</td>
+              <td><span class="badge">已分配觀點</span></td>
+            </tr>
+            <tr>
+              <td><b>組員 C</b></td>
+              <td>產業競爭/資本支出（台積與紅鏈）</td>
+              <td><span class="badge">已分配觀點</span></td>
+            </tr>
+            <tr>
+              <td><b>組員 D</b></td>
+              <td>制度創新/兄弟控股（併購法制）</td>
+              <td><span class="badge">已分配觀點</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- HW1 SECTION -->
+  <section id="sec-hw1" class="content-section">
+    <div class="card">
+      <h2>⚡ HW1 30 秒看懂：日月光併購矽品</h2>
+      <p style="font-size: 14px; margin: 6px 0;"><b>👑 日月光（進攻方）：</b>全球封測老大，手頭很多錢，直接開價每股 45 元（溢價 34%）在市場上大買矽品股票。</p>
+      <p style="font-size: 14px; margin: 6px 0;"><b>🛡️ 矽品（防守方）：</b>很會賺錢，但經營層股票不到 5%，近 60% 都是外資。急著找鴻海、紫光想印股票稀釋對手，被外資股東投票封殺。</p>
+      <p style="font-size: 14px; margin: 6px 0;"><b>🤝 大結局：</b>兩邊講和成立「日月光投資控股」，兩家平起平坐變成兄弟公司，外資拿現金退場、矽品老闆繼續管矽品，一起對抗台積電先進封裝。</p>
+    </div>
+
+    <div class="card">
+      <h2>📚 課本第一章「四大財務功能」超白話對照</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>財務維度</th>
+              <th>超白話定義</th>
+              <th>日矽案具體對照</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1. 資金的投資</b></td>
+              <td>買現成比自己蓋更快</td>
+              <td>日月光不重複投資蓋廠，直接買下矽品，現成訂單、頂尖技術與人才一次全拿。</td>
+            </tr>
+            <tr>
+              <td><b>2. 資金的募集</b></td>
+              <td>銀行借錢 vs 亂印股票</td>
+              <td>日月光跟銀行借大錢搭配換股；矽品老闆想印新股票給鴻海跟紫光稀釋對手，被外資痛罵損害權益。</td>
+            </tr>
+            <tr>
+              <td><b>3. 資金的管理</b></td>
+              <td>停止殺價、機台互通</td>
+              <td>兩家以前搶訂單互砍價格、比誰賒帳久，合體後機台支援不自殘，現金流大幅改善。</td>
+            </tr>
+            <tr>
+              <td><b>4. 股利的分配</b></td>
+              <td>高配息的雙面刃</td>
+              <td>矽品過去年年高配息吸引 60% 外資，但外資只看投報率，當日月光出高價時，外資立刻倒戈。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>👥 四位組員「個人觀點與反思」（點按鈕直接複製）</h2>
+      
+      <div class="member-card m1">
+        <b>組員 A 視角：外資與代理問題反思</b>
+        <p id="t-a" style="margin: 8px 0; font-size: 14px; color: #334155;">「從財務管理最核心的『股東財富最大化』來看，我支持日月光的收購。矽品經營團隊持股連 5% 都不到，日月光端出 34% 的高溢價收購，對股東來說是實打實的獲利；但矽品高層卻為了保住自己的經營大位，試圖透過鴻海換股和紫光私募來稀釋股權。這種『為了自己的權力、犧牲大眾股東利益』的舉動，正是教科書中最經典的代理問題（Agency Problem）。外資股東勇敢投下反對票，證明了資本市場最終還是會回歸股東價值。」</p>
+        <button class="copy-btn" onclick="copyContent('t-a')">📋 複製組員 A 觀點</button>
+      </div>
+
+      <div class="member-card m2">
+        <b>組員 B 視角：矽品經理人與員工價值反思</b>
+        <p id="t-b" style="margin: 8px 0; font-size: 14px; color: #334155;">「我不認為矽品高層的反抗純粹是私心。半導體封裝非常仰賴研發工程師與客戶信任，若一開始就屈服於日月光的非合意併購，很有可能引發矽品核心團隊離職潮，甚至造成聯發科等重要客戶轉單。林文伯一開始的激烈防禦，雖然在財務操作上引發爭議，但也是因為這種堅決不屈的姿態，才逼得日月光放棄強硬併吞，最終坐下來談出『平行控股』架構，完整保全了矽品的品牌、團隊與營運自主權。」</p>
+        <button class="copy-btn" onclick="copyContent('t-b')">📋 複製組員 B 觀點</button>
+      </div>
+
+      <div class="member-card m3">
+        <b>組員 C 視角：產業競爭與資本支出反思</b>
+        <p id="t-c" style="margin: 8px 0; font-size: 14px; color: #334155;">「從產業大環境來看，日矽合體是台灣半導體不得不走的活路。2015年台積電憑藉 InFO 技術跨界搶走蘋果封裝大單，中國又有大基金扶持長電科技低價搶單。高階封裝的研發與機台資本支出（CapEx）動輒百億，日月光和矽品如果繼續在國內殺價競爭、重複投資機台，最後只會一起被國際巨頭玩殘。唯有整合彼此的資金與產能，台灣才能在全球封測市場守住三成的絕對市佔與定價話語權。」</p>
+        <button class="copy-btn" onclick="copyContent('t-c')">📋 複製組員 C 觀點</button>
+      </div>
+
+      <div class="member-card m4">
+        <b>組員 D 視角：制度創新與平行控股反思</b>
+        <p id="t-d" style="margin: 8px 0; font-size: 14px; color: #334155;">「本案最令人驚豔的是最終採取的『平行兄弟控股架構』。在傳統教科書中，敵意併購往往是零和遊戲，最後要嘛兩敗俱傷，要嘛勝者清洗敗者。但日矽案創造了第三條路：新設日月光投控，矽品每股拿 51 塊退場，同時保留法人地位獨立運作。這不僅成功通過各國嚴苛的反壟斷審查，更給台灣資本市場樹立了新典範——敵意收購開局，也能透過妥協與制度創新，走出兼顧股東、員工與企業尊嚴的多贏結局。」</p>
+        <button class="copy-btn" onclick="copyContent('t-d')">📋 複製組員 D 觀點</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HW2 & HW3 SECTION -->
+  <section id="sec-hw2" class="content-section">
+    <div class="card">
+      <h2>📝 HW2 作業專區</h2>
+      <p style="color: var(--text-muted);">本週題目尚未發布。等教授出題後，資料會自動同步更新至此處！</p>
+    </div>
+  </section>
+  <section id="sec-hw3" class="content-section">
+    <div class="card">
+      <h2>📝 HW3 作業專區</h2>
+      <p style="color: var(--text-muted);">本週題目尚未發布。等教授出題後，資料會自動同步更新至此處！</p>
+    </div>
+  </section>
+
+  <!-- GEMMA WEB LAB -->
+  <section id="sec-gemma-lab" class="content-section">
+    <div class="card">
+      <h2>🤖 Google Gemma Web 瀏覽器端模型實驗室</h2>
+      <p style="font-size: 14px; color: #475569;">
+        ⚡ <b>端側 AI 加速：</b>使用 WebGPU 技術，<b>模型權重第一次下載後會自動儲存在您瀏覽器的本地快取 (IndexedDB / Cache)</b>，下次打開完全不用重新下載！
+      </p>
+
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 14px; font-weight: 600; color: #334155;">選擇模型規格：</label>
+        <select id="model-selector" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 14px; width: 100%; margin-top: 6px;">
+          <option value="gemma-2-2b-it-q4f32_1-MLC">Gemma 2 / 4 輕量端側版 (E2B / 2B - 約 1.3GB，手機/筆電皆流暢)</option>
+          <option value="gemma-2-2b-it-q4f16_1-MLC">Gemma 2 / 4 快速版 (fp16 GPU 加速版)</option>
+          <option value="gemma-2-9b-it-q4f32_1-MLC">Gemma 旗艦版 (9B - 需較大顯存電腦)</option>
+        </select>
+      </div>
+      
+      <div id="llm-status-box" style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
+        <span id="llm-status">狀態：尚未載入模型</span>
+        <div id="progress-bar-bg" style="display:none; width: 100%; background: #cbd5e1; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;">
+          <div id="progress-bar" style="width: 0%; background: #2563eb; height: 100%; transition: width 0.2s;"></div>
+        </div>
+      </div>
+      
+      <button id="load-btn" class="copy-btn" style="background: #2563eb; color: white; margin-bottom: 15px;" onclick="initGemma()">
+        🚀 載入模型權重至本地快取
+      </button>
+
+      <!-- 聊天區塊 -->
+      <div id="chat-box">
+        <div class="chat-msg msg-ai">您好！我是運行在您瀏覽器內部的 Gemma 模型。載入完成後您可以直接向我詢問財務管理相關問題！</div>
+      </div>
+      
+      <div style="display: flex; gap: 8px;">
+        <input type="text" id="user-input" placeholder="輸入財管問題（例：什麼是代理問題？）..." style="flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;" disabled>
+        <button id="send-btn" class="copy-btn" style="width: 80px; margin-top: 0;" onclick="sendMessage()" disabled>發送</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast">已複製到剪貼簿！可直接貼在 LINE 或作業！</div>
+
+<script>
+  function switchTab(el, tabId) {
+    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.content-section').forEach(e => e.classList.remove('active'));
+    
+    el.classList.add('active');
+    const sec = document.getElementById('sec-' + tabId);
+    if(sec) sec.classList.add('active');
+  }
+
+  function copyContent(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const toast = document.getElementById('toast');
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2000);
+    });
+  }
+
+  /* ================= WebLLM 引擎設定 ================= */
+  let engine = null;
+
+  async function initGemma() {
+    const statusText = document.getElementById('llm-status');
+    const loadBtn = document.getElementById('load-btn');
+    const progressBg = document.getElementById('progress-bar-bg');
+    const progressBar = document.getElementById('progress-bar');
+    const selectedModel = document.getElementById('model-selector').value;
+    
+    if (!navigator.gpu) {
+      statusText.innerText = "❌ 抱歉，您的裝置/瀏覽器不支援 WebGPU。建議使用 Chrome 或 Edge 最新版本。";
+      statusText.style.color = "#dc2626";
+      return;
+    }
+
+    try {
+      loadBtn.disabled = true;
+      loadBtn.innerText = "正在載入模型（首次需下載寫入快取，第二次秒開）...";
+      progressBg.style.display = "block";
+
+      const initProgressCallback = (report) => {
+        statusText.innerText = report.text;
+        const match = report.text.match(/(\d+)%/);
+        if (match) {
+          progressBar.style.width = match[1] + "%";
+        }
+      };
+
+      engine = await window.webllm.CreateMLCEngine(selectedModel, {
+        initProgressCallback: initProgressCallback
+      });
+
+      statusText.innerText = "✅ 模型已完成本機快取！下次開啟直接秒讀，零網路流量。";
+      statusText.style.color = "#16a34a";
+      loadBtn.style.display = "none";
+      document.getElementById('user-input').disabled = false;
+      document.getElementById('send-btn').disabled = false;
+    } catch (err) {
+      statusText.innerText = "載入失敗：" + err.message;
+      loadBtn.disabled = false;
+    }
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    const prompt = input.value.trim();
+    if (!prompt || !engine) return;
+
+    chatBox.innerHTML += `<div class="chat-msg msg-user">${prompt}</div>`;
+    input.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const aiMsgDiv = document.createElement('div');
+    aiMsgDiv.className = 'chat-msg msg-ai';
+    aiMsgDiv.innerText = "思考中...";
+    chatBox.appendChild(aiMsgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+      const chunks = await engine.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        stream: true
+      });
+
+      aiMsgDiv.innerText = "";
+      for await (const chunk of chunks) {
+        const content = chunk.choices[0]?.delta?.content || "";
+        aiMsgDiv.innerText += content;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    } catch (err) {
+      aiMsgDiv.innerText = "生成錯誤：" + err.message;
+    }
+  }
+</script>
+
+</body>
+</html>
