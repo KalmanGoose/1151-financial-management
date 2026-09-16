@@ -777,15 +777,21 @@
         const curHash = JSON.stringify(data);
         if (curHash !== lastSyncHash) {
           lastSyncHash = curHash;
-          if (data && data.claims) {
-            Object.keys(data.claims).forEach(k => localStorage.setItem("claim_" + k, data.claims[k]));
-            updateClaimUI(); startSmartPolling();
-          }
-          if (data && data.thoughts) {
-            localStorage.setItem("my_saved_thoughts", JSON.stringify(data.thoughts));
-            renderThoughts();
-    startSmartPolling(); startSmartPolling();
-          }
+          // 1. 完全與雲端試算表對齊認領狀態（若雲端已被刪除，本地立刻解除認領）
+          const claims = (data && data.claims) ? data.claims : {};
+          ["role-1", "role-2", "role-3", "role-4"].forEach(roleId => {
+            if (claims[roleId]) {
+              localStorage.setItem("claim_" + roleId, claims[roleId]);
+            } else {
+              localStorage.removeItem("claim_" + roleId);
+            }
+          });
+          updateClaimUI();
+
+          // 2. 完全與雲端試算表對齊留言清單（若雲端被清空，本地立刻清空動態牆）
+          const thoughts = (data && data.thoughts) ? data.thoughts : [];
+          localStorage.setItem("my_saved_thoughts", JSON.stringify(thoughts));
+          renderThoughts();
           if (!silent) showToast("✅ 已同步最新小組討論進度！");
         }
       }
@@ -826,7 +832,7 @@
     if(!name) { alert("請輸入組員名字！"); return; }
     
     localStorage.setItem('claim_' + roleId, name);
-    updateClaimUI(); startSmartPolling();
+    updateClaimUI();
     showToast("登記成功：" + name);
 
     postToSheet({ type: "claim", role: roleId, name: name, time: new Date().toLocaleString() });
@@ -838,12 +844,20 @@
       const card = document.getElementById('card-' + id);
       const input = document.getElementById('name-' + id);
       const label = document.getElementById('label-' + id);
-      if(saved) {
+      if (saved) {
         input.value = saved;
-        card.classList.add('claimed');
+        if (card) card.classList.add('claimed');
         if (label) {
           label.innerText = `已由 ${saved} 認領`;
           label.style.display = 'inline-block';
+        }
+      } else {
+        // 若雲端已被重置/刪除，將畫面徹底重置回未認領的乾淨狀態
+        if (input) input.value = "";
+        if (card) card.classList.remove('claimed');
+        if (label) {
+          label.innerText = "";
+          label.style.display = 'none';
         }
       }
     });
@@ -861,7 +875,7 @@
     list.unshift(record);
     localStorage.setItem('my_saved_thoughts', JSON.stringify(list));
     renderThoughts();
-    startSmartPolling(); startSmartPolling();
+    
     showToast("觀點草稿已保存！");
 
     postToSheet({ type: "thought", ...record });
@@ -1103,9 +1117,9 @@
     }
 
     updateSyncStatus();
-    updateClaimUI(); startSmartPolling();
+    updateClaimUI();
     renderThoughts();
-    startSmartPolling(); startSmartPolling();
+    
 
     // 裝置硬體狀態判定
     if (isMobilePhone) {
