@@ -1057,7 +1057,10 @@
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <span id="md-current-title" style="font-weight: 600; color: var(--primary); font-size: 15px;">HOMEWORK/HW1/02_AGENT_COLLAB/HW1_COLLAB_FRAMEWORK.md</span>
-        <button class="btn" onclick="copyCurrentMarkdown()">📋 一鍵複製整份 Markdown 碼</button>
+        <div style="display: flex; gap: 8px;">
+          <a class="btn" href="HOMEWORK/HW1/HW1_GROUP1_SUBMISSION.pdf" download="HW1_第1組_整組繳交報告.pdf" style="text-decoration: none; border-color: #ef4444; color: #dc2626; font-weight: 600;">📥 下載作業 PDF</a>
+          <button class="btn" onclick="copyCurrentMarkdown()">📋 一鍵複製整份 Markdown 碼</button>
+        </div>
       </div>
 
       <pre id="md-raw-display" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; max-height: 520px; overflow: auto; white-space: pre-wrap; word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"></pre>
