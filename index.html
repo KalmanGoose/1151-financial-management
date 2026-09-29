@@ -359,7 +359,14 @@
     <option value="hw2">HW2 (待發布)</option>
     <option value="hw3">HW3 (待發布)</option>
     <option value="md-viewer">📄 原始 Markdown 檢視器</option>
+    <option value="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST">📚 興大圖書館電子書（李顯儀）</option>
   </select>
+
+  <div class="nav-group">課程教材</div>
+  <a class="nav-item" href="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST" target="_blank" style="text-decoration: none;">
+    <span>📚 興大圖書館電子書</span>
+    <span class="badge" style="background:#0284c7; color:#fff; font-size:10px;">李顯儀</span>
+  </a>
 
   <div class="nav-group">原始筆記</div>
   <a class="nav-item" id="nav-md-viewer" onclick="switchSection(this, 'md-viewer')">
@@ -441,6 +448,30 @@
       <p style="margin: 0; opacity: 0.95; font-size: 14px; line-height: 1.5;">
         我們不是單一分配，而是大家一起協作！下方提供<b>「觀點認領抽屜」</b>與<b>「HW 作業速查抽屜」</b>，組員可自由收合瀏覽、認領題目，並同步最新討論觀點。
       </p>
+    </div>
+
+    <!-- 課程指定教科書與興大圖書館線上借閱卡片 -->
+    <div class="card" style="background: linear-gradient(to right, #eff6ff, #f8fafc); border-left: 4px solid #2563eb; margin-bottom: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="max-width: 680px;">
+          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+            <span class="badge" style="background: #dbeafe; color: #1e40af; font-weight: 700;">課程指定教科書</span>
+            <span style="font-size: 12px; color: #64748b;">全華圖書 2023 年版</span>
+          </div>
+          <h3 style="margin: 2px 0 4px 0; font-size: 16px; color: #0f172a; font-weight: 700;">📖 《財務管理》（第六版）— 李顯儀 編著</h3>
+          <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">
+            本學期核心理論對照教材。國立中興大學圖書館已典藏 <b>udn 讀書館線上電子書（複本 100 冊充裕）</b>，修課同學可透過興大單簽帳號免費借閱與線上閱讀！
+          </p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <a href="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST" target="_blank" class="btn btn-primary" style="text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+            🏛️ 興大館藏查詢系統 ↗
+          </a>
+          <a href="https://reading.udn.com/udnLibService/router/redirect?T_ID=1567864&U_ID=nchu" target="_blank" class="btn" style="text-decoration: none; font-size: 13px; border-color: #2563eb; color: #2563eb; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; background: white;">
+            📱 udn 讀書館直接借閱 ↗
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- 雲端試算表連線狀態欄 -->
@@ -625,6 +656,16 @@
           </p>
         </div>
       </div>
+    </div>
+
+    <!-- 教科書理論對照提示條 -->
+    <div class="card" style="background: #f0fdf4; border-color: #bbf7d0; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+      <div style="font-size: 13.5px; color: #166534;">
+        📚 <b>HW1 課本理論對照教材：</b>《財務管理》（第六版，李顯儀 著）第一章「公司理財的內容架構（表 1-1）與代理問題」。
+      </div>
+      <a href="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST" target="_blank" class="btn" style="font-size: 12px; padding: 5px 12px; border-color: #16a34a; color: #166534; font-weight: 600; text-decoration: none; background: white;">
+        🏛️ 前往興大圖書館電子書 ↗
+      </a>
     </div>
 
     <!-- 模組 1：兩強對決關鍵財務指標與股權結構極致對照看板 -->
@@ -1411,7 +1452,7 @@
 
 ### 一、 個案核心問題與課本四大功能對照
 
-本組依據教科書《財務管理》第一章「公司理財的內容架構」（表 1-1）四大功能，將日矽案之關鍵資本運作梳理對照如下：
+本組依據教科書[《財務管理》（第六版，李顯儀 著）](https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST)第一章「公司理財的內容架構」（表 1-1）四大功能，將日矽案之關鍵資本運作梳理對照如下：
 
 | 課本四大功能 | 理論核心定義 | 日矽案核心實務對照 |
 | :--- | :--- | :--- |
@@ -1551,6 +1592,10 @@
 
   function switchHwMobile(hwId) {
     if(!hwId) return;
+    if (hwId.startsWith('http')) {
+      window.open(hwId, '_blank');
+      return;
+    }
     if (hwId === 'md-viewer') {
       switchSection(document.getElementById('nav-md-viewer'), 'md-viewer');
     } else {
