@@ -1733,6 +1733,9 @@
       <button class="btn quiz1-tab-btn" onclick="switchQuiz1Tab('mock', this)" style="padding: 10px 18px; font-weight: 600; border-radius: 8px;">
         ⏱️ 全真模擬自測 (14 題自動計分)
       </button>
+      <button class="btn quiz1-tab-btn" onclick="switchQuiz1Tab('record', this)" style="padding: 10px 18px; font-weight: 600; border-radius: 8px; background: #fff1f2; color: #e11d48; border: 1px solid #fda4af;">
+        🎥 上機考自存證據錄影
+      </button>
     </div>
 
     <!-- ========================================================= -->
@@ -2224,6 +2227,54 @@
         <p style="margin: 0 0 16px 0; font-size: 14px; color: #15803d;" id="mock-detail-text">答對 14 題 / 共 14 題</p>
         <div id="mock-wrong-summary" style="text-align: left; margin-bottom: 16px;"></div>
         <button class="btn btn-primary" onclick="resetMockQuiz()">🔄 重新測驗一次</button>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- TAB: 🎥 上機考自存證據錄影 -->
+    <!-- ========================================================= -->
+    <div id="quiz1-tab-record" class="quiz1-subtab-content" style="display: none;">
+      <div class="card" style="margin-bottom: 16px; background: #fff1f2; border: 1px solid #fda4af;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px; color: #9f1239;">🎥 遠端上機考自存證據（螢幕錄影）</h3>
+            <p style="margin: 2px 0 0 0; font-size: 13px; color: #be123c;">
+              純前端本地錄影，不經伺服器上傳，無隱私洩漏疑慮。錄影完成後請下載 <code style="background:#fecdd3;padding:2px 4px;border-radius:4px;">.webm</code> 檔案自行保存，以備考試成績爭議時佐證。<br>
+              <span style="font-size: 12px; opacity: 0.8;">💡 提示：開始時請選擇分享「整個螢幕」或「包含攝影機子母畫面」，才能完整記錄作答過程。</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background: #ffffff; border: 1px solid var(--border);">
+        <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+          <button id="btn-start-record" class="btn btn-primary" onclick="startExamRecording()" style="background: #e11d48; border-color: #e11d48;">
+            🔴 開始錄製
+          </button>
+          <button id="btn-stop-record" class="btn" onclick="stopExamRecording()" style="display: none; background: #475569; color: white; border-color: #475569;">
+            ⏹️ 結束錄製
+          </button>
+          <a id="btn-download-record" class="btn" style="display: none; background: #16a34a; color: white; border-color: #16a34a; text-decoration: none; align-items: center; justify-content: center; padding: 6px 12px;" download="exam_evidence.webm">
+            ⬇️ 下載錄影檔案 (.webm)
+          </a>
+        </div>
+
+        <!-- 錄影預覽區 -->
+        <div style="background: #000; border-radius: 8px; overflow: hidden; width: 100%; max-width: 800px; aspect-ratio: 16/9; display: flex; justify-content: center; align-items: center; position: relative;">
+          <video id="record-preview" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
+          <div id="record-status-indicator" style="position: absolute; top: 12px; left: 12px; background: rgba(225,29,72,0.9); color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; display: none; animation: blink 1s infinite alternate;">
+            🔴 錄影中...
+          </div>
+          <div id="record-placeholder" style="color: #64748b; font-size: 14px; position: absolute; pointer-events: none;">
+            預覽畫面準備就緒
+          </div>
+        </div>
+        <style>
+          @keyframes blink {
+            from { opacity: 1; }
+            to { opacity: 0.5; }
+          }
+        </style>
       </div>
     </div>
 
@@ -3453,6 +3504,117 @@
     document.getElementById('mock-result-card').style.display = 'none';
     window.scrollTo({ top: 0, behavior: 'smooth' });
     showToast('模擬測驗已重置！');
+  }
+
+  // ================= 🎥 錄影存證功能 =================
+  let examMediaRecorder;
+  let examRecordedChunks = [];
+  let examStream;
+
+  async function startExamRecording() {
+    try {
+      examStream = await navigator.mediaDevices.getDisplayMedia({
+        video: { cursor: "always" },
+        audio: true
+      });
+      
+      const preview = document.getElementById('record-preview');
+      preview.srcObject = examStream;
+      preview.controls = false;
+      preview.src = "";
+      
+      document.getElementById('record-placeholder').style.display = 'none';
+      document.getElementById('record-status-indicator').style.display = 'block';
+      document.getElementById('btn-start-record').style.display = 'none';
+      document.getElementById('btn-stop-record').style.display = 'inline-flex';
+      document.getElementById('btn-download-record').style.display = 'none';
+
+      examRecordedChunks = [];
+      examMediaRecorder = new MediaRecorder(examStream, { mimeType: 'video/webm; codecs=vp8,opus' });
+      
+      examMediaRecorder.ondataavailable = function(e) {
+        if (e.data.size > 0) {
+          examRecordedChunks.push(e.data);
+        }
+      };
+      
+      examMediaRecorder.onstop = function() {
+        const blob = new Blob(examRecordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        preview.srcObject = null;
+        preview.src = url;
+        preview.controls = true;
+        
+        const downloadBtn = document.getElementById('btn-download-record');
+        downloadBtn.href = url;
+        downloadBtn.style.display = 'inline-flex';
+        
+        document.getElementById('record-status-indicator').style.display = 'none';
+        document.getElementById('btn-start-record').style.display = 'inline-flex';
+        document.getElementById('btn-start-record').innerText = '🔄 重新錄製';
+        document.getElementById('btn-stop-record').style.display = 'none';
+      };
+      
+      examStream.getVideoTracks()[0].onended = function() {
+        if (examMediaRecorder.state !== 'inactive') {
+          stopExamRecording();
+        }
+      };
+
+      examMediaRecorder.start();
+      showToast('🔴 開始錄影：請保持此分頁開啟');
+    } catch (err) {
+      console.error("Error starting screen record:", err);
+      // Fallback if specific mimeType is not supported
+      if (err.name === 'NotSupportedError') {
+        try {
+          examMediaRecorder = new MediaRecorder(examStream);
+          examMediaRecorder.ondataavailable = function(e) {
+            if (e.data.size > 0) examRecordedChunks.push(e.data);
+          };
+          examMediaRecorder.onstop = function() {
+            const blob = new Blob(examRecordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const preview = document.getElementById('record-preview');
+            preview.srcObject = null;
+            preview.src = url;
+            preview.controls = true;
+            
+            const downloadBtn = document.getElementById('btn-download-record');
+            downloadBtn.href = url;
+            downloadBtn.style.display = 'inline-flex';
+            
+            document.getElementById('record-status-indicator').style.display = 'none';
+            document.getElementById('btn-start-record').style.display = 'inline-flex';
+            document.getElementById('btn-start-record').innerText = '🔄 重新錄製';
+            document.getElementById('btn-stop-record').style.display = 'none';
+          };
+          examStream.getVideoTracks()[0].onended = function() {
+            if (examMediaRecorder.state !== 'inactive') stopExamRecording();
+          };
+          examMediaRecorder.start();
+          showToast('🔴 開始錄影：請保持此分頁開啟');
+          return;
+        } catch(e2) {
+           alert('無法啟動螢幕錄影：' + e2.message);
+        }
+      } else {
+        alert('無法啟動螢幕錄影，請確認是否允許分享權限。' + err.message);
+      }
+      
+      document.getElementById('btn-start-record').style.display = 'inline-flex';
+      document.getElementById('btn-stop-record').style.display = 'none';
+    }
+  }
+
+  function stopExamRecording() {
+    if (examMediaRecorder && examMediaRecorder.state !== 'inactive') {
+      examMediaRecorder.stop();
+    }
+    if (examStream) {
+      examStream.getTracks().forEach(track => track.stop());
+    }
+    showToast('⏹️ 錄影結束，請點擊下載保存檔案。');
   }
 
   // 初始掛載第一次小考題庫與單字卡
