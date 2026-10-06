@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>📖 財務管理（第六版）本機離線整理庫 ｜ Ch.1 ~ Ch.3 全收錄</title>
+
+<style>
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #2563eb;
+    --bg-main: #f8fafc;
+    --sidebar-bg: #0f172a;
+    --sidebar-text: #94a3b8;
+    --sidebar-active: #38bdf8;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    --accent: #0284c7;
+  }
+  
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: var(--bg-main);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* ================= 側邊導航欄 ================= */
+  #sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px 14px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+  
+  .brand {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 8px 12px 8px;
+    border-bottom: 1px solid #334155;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .brand small { font-size: 11px; color: #38bdf8; font-weight: normal; }
+  
+  .nav-header {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    padding: 8px 10px 4px 10px;
+    font-weight: 700;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 13.5px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .nav-link:hover { background: #1e293b; color: #ffffff; }
+  .nav-link.active { background: #2563eb; color: #ffffff; font-weight: 600; }
+  .nav-link .badge-counter {
+    margin-left: auto;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: #334155;
+    color: #94a3b8;
+  }
+  .nav-link.active .badge-counter { background: #1d4ed8; color: #ffffff; }
+  
+  /* 標籤雲清單 */
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 4px 6px;
+  }
+  .tag-pill {
+    font-size: 11px;
+    background: #1e293b;
+    color: #94a3b8;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .tag-pill:hover { background: #38bdf8; color: #0f172a; }
+  
+  /* ================= 主內容區 ================= */
+  #main-content {
+    flex: 1;
+    padding: 24px 32px 60px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: calc(100% - 280px);
+  }
+  
+  /* 頂部標題列 */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .top-title h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .top-title p { margin: 4px 0 0 0; color: var(--text-muted); font-size: 13px; }
+  
+  /* 章節切換 Tabs */
+  .chapter-tabs-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    background: #e2e8f0;
+    padding: 6px;
+    border-radius: 10px;
+    overflow-x: auto;
+  }
+  .ch-tab-btn {
+    flex: 1;
+    min-width: 200px;
+    border: none;
+    background: transparent;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .ch-tab-btn:hover { background: rgba(255,255,255,0.6); color: #0f172a; }
+  .ch-tab-btn.active {
+    background: #ffffff;
+    color: #1d4ed8;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  }
+  .ch-tab-btn .tab-count {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 12px;
+    background: #e0e7ff;
+    color: #3730a3;
+  }
+  .ch-tab-btn.active .tab-count {
+    background: #2563eb;
+    color: #ffffff;
+  }
+
+  /* 提示標籤 */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-indigo { background: #e0e7ff; color: #3730a3; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-amber { background: #fef3c7; color: #92400e; }
+  .badge-purple { background: #f3e8ff; color: #6b21a8; }
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+  .btn-primary { background: var(--primary-light); color: #ffffff; border-color: var(--primary-light); }
+  .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+  .btn-green { background: #10b981; color: #ffffff; border-color: #10b981; }
+  .btn-green:hover { background: #059669; }
+
+  /* 跨頁檢視器卡片 */
+  .viewer-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  
+  .viewer-header {
+    background: #ffffff;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .viewer-header .title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .viewer-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .viewer-header .meta-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  
+  .viewer-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .page-nav-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  /* 圖片容器 */
+  .image-stage {
+    background: #0f172a;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    user-select: none;
+    min-height: 480px;
+  }
+  
+  .image-wrapper {
+    max-width: 100%;
+    position: relative;
+    cursor: zoom-in;
+    display: inline-block;
+  }
+  
+  .main-page-image {
+    max-width: 100%;
+    max-height: 720px;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    display: block;
+    transition: opacity 0.2s;
+  }
+  
+  .zoom-hint-pill {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
+    color: #f8fafc;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  
+  /* 縮圖輪播條 */
+  .thumb-strip {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px;
+    background: #f1f5f9;
+    border-top: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .thumb-item {
+    flex-shrink: 0;
+    width: 110px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    overflow: hidden;
+    background: #ffffff;
+    transition: all 0.2s;
+    text-align: center;
+    position: relative;
+  }
+  .thumb-item:hover { transform: translateY(-2px); border-color: #94a3b8; }
+  .thumb-item.active { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,0.3); }
+  .thumb-item img { width: 100%; height: 60px; object-fit: cover; display: block; }
+  .thumb-item .thumb-label {
+    font-size: 10.5px;
+    padding: 3px 2px;
+    color: #475569;
+    font-weight: 600;
+    background: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .thumb-item.active .thumb-label { background: #2563eb; color: #ffffff; }
+
+  /* 學理對照整理卡片 */
+  .notes-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .notes-card h3 {
+    margin: 0 0 14px 0;
+    font-size: 16px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid #e0e7ff;
+    padding-bottom: 8px;
+  }
+  .notes-content {
+    line-height: 1.7;
+    font-size: 14px;
+    color: #334155;
+  }
+  .notes-content h4 { margin: 16px 0 8px 0; font-size: 15px; color: #0f172a; }
+  .concept-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  .concept-table th, .concept-table td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+  }
+  .concept-table th { background: #f8fafc; font-weight: 600; color: #334155; }
+  .concept-table tr:hover { background: #f8fafc; }
+  
+  .two-col-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 14px 0;
+  }
+  .col-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .col-header { font-weight: 700; margin-bottom: 8px; font-size: 14px; }
+  .pros-cons { margin-top: 10px; font-size: 13px; }
+  .pros-cons ul { margin: 4px 0 0 0; padding-left: 18px; }
+
+  .alert-box {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+
+  /* 個人隨堂筆記面板 */
+  .user-notes-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .user-notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .user-notes-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1e293b;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .user-notes-textarea:focus { border-color: #2563eb; }
+
+  /* 🤖 MLX AI 助教面板樣式 */
+  .ai-assistant-card {
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border: 1.5px solid #c4b5fd;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .ai-assistant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chat-container {
+    background: #ffffff;
+    border: 1px solid #ddd6fe;
+    border-radius: 8px;
+    height: 240px;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .chat-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+  .chat-user {
+    align-self: flex-end;
+    background: #2563eb;
+    color: #ffffff;
+    border-bottom-right-radius: 2px;
+  }
+  .chat-ai {
+    align-self: flex-start;
+    background: #f8fafc;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    border-bottom-left-radius: 2px;
+  }
+  .citation-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 4px;
+    margin-top: 4px;
+    transition: 0.15s;
+  }
+  .citation-badge:hover {
+    background: #16a34a;
+    color: #ffffff;
+  }
+
+  /* ================= 放大燈箱 (Lightbox Modal) ================= */
+  .lightbox-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.95);
+    z-index: 9999;
+    flex-direction: column;
+  }
+  .lightbox-modal.show { display: flex; }
+  
+  .lightbox-toolbar {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .lightbox-toolbar button {
+    background: rgba(255,255,255,0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .lightbox-toolbar button:hover { background: rgba(255,255,255,0.2); }
+  
+  .lightbox-img-container {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: grab;
+  }
+  .lightbox-img-container:active { cursor: grabbing; }
+  .lightbox-img {
+    max-width: 95%;
+    max-height: 90vh;
+    object-fit: contain;
+    transition: transform 0.15s ease-out;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 992px) {
+    body { flex-direction: column; }
+    #sidebar { width: 100%; height: auto; position: static; }
+    #main-content { width: 100%; padding: 16px; }
+    .two-col-grid { grid-template-columns: 1fr; }
+    .chapter-tabs-bar { flex-direction: column; }
+    .ch-tab-btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 側邊導航欄 -->
+<aside id="sidebar">
+  <div class="brand">
+    <div>📖 財務管理（第六版）</div>
+    <small>李顯儀 著 ｜ 115-1 課本整理庫</small>
+  </div>
+  
+  <a class="nav-link" href="./index.html">
+    <span>🏠</span> 返回小組主協作平台
+  </a>
+
+  <div class="nav-header">章節切換</div>
+  <a class="nav-link active" id="side-nav-ch1" onclick="switchChapter('ch1')">
+    <span>📘</span> 第一章：財務管理概論
+    <span class="badge-counter" id="ch1-counter">8 頁</span>
+  </a>
+  <a class="nav-link" id="side-nav-ch2" onclick="switchChapter('ch2')">
+    <span>📊</span> 第二章：財務報表分析
+    <span class="badge-counter" id="ch2-counter">20 頁</span>
+  </a>
+  <a class="nav-link" id="side-nav-ch3" onclick="switchChapter('ch3')">
+    <span>⏱️</span> 第三章：貨幣之時間價值
+    <span class="badge-counter" id="ch3-counter">19 頁</span>
+  </a>
+
+  <div class="nav-header">本章跨頁目錄</div>
+  <div id="side-page-list" style="display: flex; flex-direction: column; gap: 4px; max-height: 240px; overflow-y: auto;">
+    <!-- 動態生成側邊頁碼 -->
+  </div>
+  
+  <div class="nav-header">觀念主題標籤索引</div>
+  <div class="tag-cloud" id="tag-cloud-container">
+    <!-- 動態生成標籤 -->
+  </div>
+  
+  <div style="margin-top: auto; padding-top: 14px; border-top: 1px solid #334155; font-size: 11px; color: #64748b; line-height: 1.5;">
+    💡 <b>離線閱讀提示：</b><br>
+    支援鍵盤 <code>←</code> / <code>→</code> 跨頁切換。<br>
+    點擊圖片可進入高解析無段放大燈箱。
+  </div>
+</aside>
+
+<!-- 主內容區 -->
+<main id="main-content">
+
+  <!-- 頂部標題列 -->
+  <div class="top-bar">
+    <div class="top-title">
+      <h1 id="main-chapter-title">📘 第一章：財務管理概論</h1>
+      <p id="main-chapter-sub">高解析跨頁整理 ｜ 隨堂精華筆記 ｜ 國考習題全解 ｜ 本地 MLX RAG 助教</p>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn-green" onclick="exportCurrentChapterNotes()">
+        📥 匯出本章筆記 (.md)
+      </button>
+      <button class="btn" onclick="exportAllChaptersNotes()">
+        📦 匯出全書筆記 (.md)
+      </button>
+      <button class="btn" id="toggle-notes-btn" onclick="toggleNotesView()">
+        📝 隱藏學理對照
+      </button>
+    </div>
+  </div>
+
+  <!-- 章節切換 Tabs -->
+  <div class="chapter-tabs-bar">
+    <button id="tab-ch1" class="ch-tab-btn active" onclick="switchChapter('ch1')">
+      <span>📘</span> 第一章：財務管理概論
+      <span class="tab-count">8 跨頁</span>
+    </button>
+    <button id="tab-ch2" class="ch-tab-btn" onclick="switchChapter('ch2')">
+      <span>📊</span> 第二章：財務報表分析
+      <span class="tab-count">20 跨頁</span>
+    </button>
+    <button id="tab-ch3" class="ch-tab-btn" onclick="switchChapter('ch3')">
+      <span>⏱️</span> 第三章：貨幣之時間價值
+      <span class="tab-count">19 跨頁</span>
+    </button>
+  </div>
+
+  <!-- 🤖 MLX Qwen2.5 本地智能助教面板 (RAG 知識庫) -->
+  <div class="ai-assistant-card" id="ai-assistant-card">
+    <div class="ai-assistant-header">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 20px;">🤖</span>
+        <h3 style="margin: 0; font-size: 16px; color: #5b21b6;">MLX Qwen2.5-3B 課本＆作業 RAG 智能助教（Ch.1 ~ Ch.3 全知識庫）</h3>
+        <span id="mlx-status-badge" class="badge" style="background: #e2e8f0; color: #475569; font-size: 11px;">
+          ⏳ 偵測本機 MLX 服務中...
+        </span>
+      </div>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <button class="btn" style="font-size: 11px; padding: 3px 8px;" onclick="manualUnloadModel()" title="手動釋放 2GB 記憶體">
+          💤 釋放記憶體
+        </button>
+        <button class="btn" style="font-size: 11px; padding: 3px 8px;" onclick="clearAiChat()">
+          🗑️ 清空對話
+        </button>
+      </div>
+    </div>
+
+    <!-- 快捷提問膠囊 -->
+    <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;" id="quick-prompts-container">
+      <span style="font-size: 12px; font-weight: 700; color: #6b21a8;">💡 課本＆作業速問：</span>
+      <button class="btn" style="font-size: 11.5px; padding: 3px 8px;" onclick="quickMlxPrompt('請用白話解釋課本第一章提到的「代理問題」，並列出股東與經理人的四大衝突原因。')">🗣️ 白話代理問題 (Ch.1)</button>
+      <button class="btn" style="font-size: 11.5px; padding: 3px 8px;" onclick="quickMlxPrompt('課本第 1-12 頁的「管理買下 (MBO)」是什麼？它跟「槓桿買下 (LBO)」有什麼差別？')">⚔️ MBO vs LBO (Ch.1)</button>
+      <button class="btn" style="font-size: 11.5px; padding: 3px 8px;" onclick="quickMlxPrompt('第二章的「杜邦三分解法」公式是什麼？如何透過它診斷企業的獲利是靠賺錢、轉得快還是開槓桿？')">📊 杜邦三分解法 (Ch.2)</button>
+      <button class="btn" style="font-size: 11.5px; padding: 3px 8px;" onclick="quickMlxPrompt('為什麼計算速動比率時，必須要把「存貨」與「預付費用」扣除？')">🧪 速動比率扣存貨 (Ch.2)</button>
+      <button class="btn" style="font-size: 11.5px; padding: 3px 8px;" onclick="quickMlxPrompt('第三章提到的神奇「72 法則」是什麼？如果年報酬率是 8%，本金翻倍大概要幾年？')">⏱️ 72 法則翻倍 (Ch.3)</button>
+      <button class="btn" style="font-size: 11.5px; padding: 3px 8px;" onclick="quickMlxPrompt('普通年金現值 (PVA) 公式是什麼？如果要計算 30 年房貸每月還款金額，該如何代入？')">🏠 房貸年金現值 (Ch.3)</button>
+    </div>
+
+    <!-- 對話視窗 -->
+    <div class="chat-container" id="ai-chat-box">
+      <div class="chat-bubble chat-ai">
+        同學你好！我是由 <b>Apple 原生 MLX 引擎</b> 與 <b>Qwen2.5-3B</b> 驅動的財管專屬 AI 助教。<br>
+        我已完全吸收了<b>課本第一章、第二章、第三章全部 47 個跨頁</b>與 <b>HW1 日矽併購案資料庫</b>。你可以隨時點擊上方快捷膠囊提問，或在下方輸入任何專有名詞，我會自動檢索課本段落並附上<b>可點擊的出處跳轉按鈕</b>！
+      </div>
+    </div>
+
+    <!-- 輸入列 -->
+    <div style="display: flex; gap: 8px;">
+      <input type="text" id="ai-input" placeholder="輸入問題（例如：何謂窗飾行為？或請解釋高登股利折現模型）..." style="flex: 1; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13.5px; outline: none;" onkeydown="if(event.key==='Enter') sendMlxMessage()">
+      <button id="ai-send-btn" class="btn btn-primary" style="padding: 10px 16px; font-weight: 600;" onclick="sendMlxMessage()">
+        發送
+      </button>
+    </div>
+    
+    <div id="mlx-offline-tip" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; font-size: 12px; color: #92400e;">
+      💡 <b>提示：</b>目前本機 MLX 服務尚未啟動。若想使用完整大模型問答，請在專案目錄雙擊執行 <code>啟動AI助教.command</code>（或在終端機執行 <code>bash run_ai_helper.sh</code>）！目前系統支援本機純關鍵字檢索。
+    </div>
+  </div>
+
+  <!-- 跨頁圖片檢視卡片 -->
+  <div class="viewer-card" id="main-viewer-card">
+    <div class="viewer-header">
+      <div class="title-group">
+        <h2 id="cur-page-title">載入中...</h2>
+        <div class="meta-sub">
+          <span id="cur-page-section">章節載入中</span> ｜ 
+          頁碼：<b id="cur-page-range" style="color: #2563eb;">-</b> ｜ 
+          進度：<span id="cur-page-index-label" style="font-weight: 600;">1 / 8</span>
+        </div>
+      </div>
+      <div class="viewer-controls">
+        <select id="jump-select" class="btn" onchange="goToPage(parseInt(this.value))" style="padding: 6px 10px;">
+          <!-- 動態載入頁面清單 -->
+        </select>
+        <button class="btn page-nav-btn" onclick="prevPage()" title="快捷鍵: ← 或 A">‹ 上一跨頁</button>
+        <button class="btn btn-primary page-nav-btn" onclick="nextPage()" title="快捷鍵: → 或 D">下一跨頁 ›</button>
+      </div>
+    </div>
+    
+    <!-- 標籤展示 -->
+    <div style="padding: 8px 20px; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; gap: 6px; align-items: center; flex-wrap: wrap;" id="cur-page-tags">
+      <!-- 動態載入當前頁標籤 -->
+    </div>
+    
+    <!-- 核心大圖檢視區 -->
+    <div class="image-stage">
+      <div class="image-wrapper" onclick="openLightbox()">
+        <img id="cur-page-img" class="main-page-image" src="" alt="課本頁面載入中">
+        <div class="zoom-hint-pill">🔍 點擊圖片進入無段放大燈箱 (支援滑鼠滾輪縮放)</div>
+      </div>
+    </div>
+    
+    <!-- 底部縮圖輪播條 -->
+    <div class="thumb-strip" id="thumb-strip">
+      <!-- 動態載入縮圖 -->
+    </div>
+  </div>
+
+  <!-- 個人隨堂筆記系統 -->
+  <div class="user-notes-card">
+    <div class="user-notes-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 18px;">✍️</span>
+        <h3 style="margin: 0; font-size: 16px; color: #0f172a;">我的隨堂研讀筆記（自動存檔）</h3>
+        <span id="note-saved-status" class="badge badge-green" style="display: none;">已自動保存</span>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span id="note-word-count" style="font-size: 12px; color: var(--text-muted);">0 字</span>
+        <span style="font-size: 12px; color: #cbd5e1;">|</span>
+        <span id="chapter-notes-stat" style="font-size: 12px; color: #2563eb; font-weight: 600;">已完成筆記：0 跨頁</span>
+        <button class="btn" style="font-size: 12px; padding: 4px 8px;" onclick="copyCurrentNote()">📋 複製此頁筆記</button>
+        <button class="btn" style="font-size: 12px; padding: 4px 8px; color: #ef4444;" onclick="clearCurrentNote()">清空</button>
+      </div>
+    </div>
+    <textarea id="user-note-input" class="user-notes-textarea" placeholder="在此輸入你的個人閱讀筆記、重點整理或期中考必背觀念（內容會即時自動保存在此電腦，切換頁面或關閉瀏覽器絕不遺失）..." oninput="handleNoteInput()"></textarea>
+  </div>
+
+  <!-- 學理對照精華整理卡片 -->
+  <div class="notes-card" id="notes-card">
+    <h3>
+      <span>📚</span> 課本學理重點對照與延伸剖析
+      <span class="badge badge-indigo" style="font-size: 11px; font-weight: normal; margin-left: auto;">李顯儀《財務管理》核心精華</span>
+    </h3>
+    <div class="notes-content" id="cur-page-notes">
+      <!-- 動態載入學理筆記 -->
+    </div>
+  </div>
+
+</main>
+
+<!-- 高解析度燈箱檢視器 (Lightbox Modal) -->
+<div class="lightbox-modal" id="lightbox-modal">
+  <div class="lightbox-toolbar">
+    <div style="font-weight: 600; font-size: 14px;" id="lb-title">高解析度課本檢視</div>
+    <div style="font-size: 12px; color: #94a3b8;">
+      滑鼠滾輪可直接放大/縮小 ｜ 目前比例：<span id="lb-scale">100%</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button onclick="zoomIn()">🔍 放大 (+)</button>
+      <button onclick="zoomOut()">🔍 縮小 (-)</button>
+      <button onclick="resetZoom()">↺ 重設比例 (100%)</button>
+      <button onclick="closeLightbox()" style="color: #f87171; font-weight: bold;">✕ 關閉 (ESC)</button>
+    </div>
+  </div>
+  <div class="lightbox-img-container" id="lightbox-container">
+    <img id="lightbox-img" class="lightbox-img" src="" alt="高解析放大圖片">
+  </div>
+</div>
+
+<!-- 離線資料與閱讀器控制器 -->
+<script>
+  // 注入各章節所有跨頁資料
+  const chaptersData = {
+    ch1: {
+      id: "ch1",
+      title: "第一章：財務管理概論",
+      sub: "利潤 vs 股東財富最大化 ｜ 公司組織與代理問題 ｜ OECD 公司治理原則 ｜ 國考精選 14 題",
+      imgFolder: "./電子書/課本/第一章節",
+      pages: [
+  {
+    "id": "ch01_p1-8-1-9",
+    "pageRange": "pp. 1-8 ~ 1-9",
+    "filename": "截圖 2026-09-29 下午6.59.14.png",
+    "section": "1-1 財務管理目標 & 1-2 企業組織型態",
+    "title": "利潤 vs 股東財富最大化 ＆ 獨資與合夥特徵",
+    "tags": [
+      "股東財富最大化",
+      "EPS",
+      "獨資企業",
+      "合夥企業",
+      "無限清償責任"
+    ],
+    "summary": "探討財務管理最高目標之爭（利潤最大化 vs 股東財富最大化），並介紹前兩大傳統企業組織型態（獨資、合夥）之運作架構與優缺點。",
+    "notes": "<div class='note-block'><h4>📌 利潤 vs 股東財富最大化 ＆ 獨資與合夥特徵</h4><p>📌 一、財務管理的目標探討 目標類型 衡量指標 核心優點 潛在缺陷 / 限制 利潤最大化 (Profit Maximization) 會計純益、每股盈餘 (EPS) EPS = 稅後淨利 / 流通在外普通股數 直觀、財報易於追蹤與衡量 1. 忽視貨幣時間價值 （不分眼前或遠期收益） 2. 忽略經營風險 （為求高利潤可能押注高風險項目） 3. 忽略現金流量 （會計應計基礎易被操弄） 4. 容易導致經理人追求短期獲利而犧牲公司長期價值 股東財富最大化 (Shareholder Wealth Maximization) 股票市場價格極大化 總財富 = 股價 × 發行股數 1. 充分考量未來 現金流量的時間價值 2. 反映了市場對 經營風險 的折現率評估 3. 與股東實質福祉完全契合（現代財管公認最優目標） 需有具備效率之資本市場支持；若有嚴重代理問題時需要治理機制約束。 📌 二、企業組織型態（一）：獨資與合夥 👤 獨資企業 (Sole Proprietorship) 定義： 由一人單獨出資、經營，自負盈虧與全部風險之企業型態。世界上最常見、最古老的組織。 👍 優點： 設立手續簡單便利、成本極低（免設章程）。 決策迅速果斷，無代理問題（經營者即出資者）。 經營機密易於保守、盈餘歸個人所有。 👎 缺點： 無限清償責任 (Unlimited Liability) ：公司資產不足還債時，須以業主個人私人財產清償。 募集資金受限於個人財力與銀行信用，規模不易擴大。 不易永續經營（業主身故若無繼承人即面臨解散）。 所有權移轉困難。 👥 合夥企業 (Partnership) 定義： 二人以上相互訂立契約，共同出資、共同經營，按出資比例分配損益之企業型態。 👍 優點： 組設簡單便利，依法簽訂合約即可成立。 損益共同承擔，經營風險相較獨資分散。 集合多位合夥人之專業才能與人脈資本。 👎 缺點： 無限連帶清償責任 ：每一合夥人均須對企業全部債務負連帶無限清償責任。 合夥人易起爭執糾紛，往往導致拆夥解散。 資本籌措能力仍遜於股份有限公司。 所有權移轉不易（需經全體合夥人同意）。</p></div>"
+  },
+  {
+    "id": "ch01_p1-10-1-11",
+    "pageRange": "pp. 1-10 ~ 1-11",
+    "filename": "截圖 2026-09-29 下午6.59.16.png",
+    "section": "1-2 公司組織特徵 & 1-3 代理問題起源",
+    "title": "公司組織之四大特點 ＆ 代理問題的萌芽",
+    "tags": [
+      "股份有限公司",
+      "有限責任",
+      "永續經營",
+      "代理問題",
+      "所有權與管理權分離"
+    ],
+    "summary": "分析股份有限公司（Corporation）相較獨資與合夥的四大強大優勢，以及伴隨而來的核心缺陷——所有權與經營權分離所產生的代理問題。",
+    "notes": "<div class='note-block'><h4>📌 公司組織之四大特點 ＆ 代理問題的萌芽</h4><p>📌 一、股份有限公司的四大核心優勢與兩大缺點 向度 特性重點 商業競爭優勢意涵 👍 資金募集容易 資本細分為股份，可公開向公眾發行股票與債券。 能快速籌措龐大資金，進行大規模資本支出與先進研發競賽。 👍 具有法人地位與永續經營 公司為獨立法人，生命不因個別股東之過世、退股而終止。 確保長期經營計畫可延續推動，具備商業穩定性。 👍 有限清償責任 (Limited Liability) 股東最大損失僅限於其所認購之出資股份額度，不波及私人財產。 極大降低投資者風險，鼓勵大眾積極參與資本市場投資。 👍 所有權容易移轉 股份單位標準化，可在次級市場（證券交易所）自由買賣轉讓。 投資人流動性極佳，資產變現迅速。 👎 籌設程序繁雜 受公司法、證交法等嚴格法規監管，會計審計、資訊申報成本高。 合規與監管成本沉重。 👎 容易產生代理問題 所有權（股東）與管理權（經理人）完全分離 。 經營當局若追求個人私利，將嚴重損害廣大外部股東利益。 📌 二、何謂「代理關係」與「代理問題」？ 💡 代理關係 (Agency Relationship) 之學理定義： 當一方作為 「主理人」(Principals，如股東) ，委託另一方作為 「代理人」(Agents，如專業經理人) 代為執行公司經營與特定決策時，雙方即建立起契約上的委託代理關係。 ⚠️ 代理問題 (Agency Problems) 的根源： 由於人的自利本性，當代理人（管理層）的目標函數（如個人權力、高薪、豪奢辦公室）與主理人（股東財富最大化）發生衝突，且存在 資訊不對稱 與監督不完整時，代理問題便應運而生！</p></div>"
+  },
+  {
+    "id": "ch01_p1-12-1-13",
+    "pageRange": "pp. 1-12 ~ 1-13",
+    "filename": "截圖 2026-09-29 下午6.59.18.png",
+    "section": "1-3 代理問題深度剖析",
+    "title": "股東與管理者、股東與債權人之代理衝突與解方",
+    "tags": [
+      "特權消費",
+      "管理買下 MBO",
+      "過度投資",
+      "敵意併購",
+      "股票選擇權",
+      "資產替代",
+      "債權稀釋",
+      "投資不足"
+    ],
+    "summary": "全面剖析財務管理兩大代理衝突：（1）股東與管理者；（2）股東與債權人，並詳解其發生原因與因應機制。",
+    "notes": "<div class='note-block'><h4>📌 股東與管理者、股東與債權人之代理衝突與解方</h4><p>📌 一、股東 vs 管理者的代理問題 ⚠️ 四大常見發生原因（經理人自利行為） 怠忽職守 (Shirking)： 努力工作的成果大部分歸股東享有，管理者缺乏激勵誘因，易產生懈怠。 特權消費 (Perquisites Consumption)： 利用公務報銷個人私人娛樂、買豪車、奢華裝潢等非必要開銷。 管理買下 (Management Buyouts, MBO / LBO)： 為低價奪得公司控制權，刻意壓低股價再藉由融資買回股權，損害原始股東。 過度投資 (Overinvestment / Empire Building)： 追求個人掌管龐大帝國的虛榮，盲目推動 NPV 🛡️ 四大解決機制（對齊利益與監督威脅） 解雇威脅： 董事會代表股東嚴格考核，績效不彰或違背股東利益時予以解聘。 接管威脅 (Hostile Takeover)： 經營不善致股價重挫時，外部掠奪者可能發動敵意收購撤換經營層，促使其努力維持股價。 薪資激勵計畫： 設計長期激勵方案，如 股票選擇權 (Stock Options) 、 績效股票 (Performance Shares) ，將經理人身家與股價綁定。 經理人勞動市場競爭 (Managerial Labor Market)： 市場聲譽機制促使經理人維持良好績效，避免未來身價暴跌。 📌 二、股東 vs 債權人的代理問題 當債權人把資金貸給公司後，股東掌握實際資金運用權，基於 「有限責任」 的看漲選擇權特質，股東有動機損害債權人以自肥： 衝突類型 學理機制與行為 對債權人的傷害 1. 資產替換 (Asset Substitution) 以低風險名義借貸，取得資金後擅自投資 高風險項目 。若成功獲利全歸股東；若失敗由債權人承擔虧損。 承受超越原先利率補償之高風險。 2. 債權稀釋 (Claim Dilution) 公司隨後發行更多同順位或更高順位之新債，大幅推升負債比率。 舊債權人之資產受償擔保被稀釋，違約風險暴增。 3. 股利支付 (Dividend Payout) 在財務陷入困難時，強行將大量借得之現金作為股利發放給股東。 直接掏空公司資產與流動性，使公司淪為空殼。 4. 投資不足 (Underinvestment) 財務困窘時，即使有 NPV > 0 的優良投資計畫 ，若新獲利預期全被債權人拿去清償舊債，股東便拒絕增資投資。 錯失為公司創造價值與翻身的良機。</p></div>"
+  },
+  {
+    "id": "ch01_p1-14-1-15",
+    "pageRange": "pp. 1-14 ~ 1-15",
+    "filename": "截圖 2026-09-29 下午6.59.20.png",
+    "section": "1-3 債權人防衛機制 & 1-4 公司治理導論",
+    "title": "債權人防衛條款 ＆ 公司治理的起源與 OECD 原則",
+    "tags": [
+      "限制條款",
+      "風險溢酬",
+      "公司治理",
+      "OECD 六原則",
+      "盡職治理守則",
+      "利害關係人"
+    ],
+    "summary": "說明債權人如何藉由契約條款自保，並深入探討 1997 亞洲金融風暴催生的「公司治理」制度與 OECD 六大治理準則。",
+    "notes": "<div class='note-block'><h4>📌 債權人防衛條款 ＆ 公司治理的起源與 OECD 原則</h4><p>📌 一、債權人的自我防衛之道 📜 1. 訂立限制性契約條款 (Restrictive Covenants) 積極限制條款： 要求公司維持特定財務比率（如流動比率 ≥ 200%、利息保障倍數 ≥ 3 倍）、按期提供經會計師查核之財務報表。 消極限制條款： 限制發放現金股利總額、限制再發行新債之額度與順位、未經許可不得處分核心資產或進行大型併購。 擔保品要求： 設定專屬高順位實體資產抵押權。 📈 2. 提高借款利率（要求風險溢酬） 事前評估公司治理水準與代理風險，將潛在道德風險反映在借貸利率上。 若公司代理風險高，債權人便調升違約風險溢酬，使公司融資成本增加。 或要求附帶 「可轉換公司債 (CB)」 條款，讓債權人能分享公司股價上漲好處。 📌 二、公司治理 (Corporate Governance) 簡介與歷史脈絡 自 1997 年亞洲金融風暴 後，公司治理被公認為防範金融危機與企業弊端的良方。台灣於 2003 年成立「公司治理中心」，金管會更於 2020 年發布「公司治理 3.0－永續發展藍圖」。 🌐 OECD 公司治理六大原則（2015 修正版）： 項次 核心原則名稱 實務重點內涵 原則一 建置有效的公司治理架構 透明、效率、明確劃分管理階層與董事會權責，兼顧法律制度與市場監理。 原則二 保障並公允對待全體股東權益 確保所有股東（含少數股東、外資股東）均受公允對待，維護投票權與資訊知情權。 原則三 強調機構投資人盡職治理 (Institutional Stewardship) 退休金、主權基金、投信等大戶應扮演積極監督者，落實盡職治理守則與出席行使表決權。 原則四 保障公司利害關係人權益 (Stakeholders Rights) 依法尊重債權人、員工、供應鏈及社區權益，鼓勵企業善盡社會責任 (CSR)。 原則五 提升資訊的揭露與透明度 落實會計審計品質、重大訊息及時公告、提升外語資訊申報水準。 原則六 強化董事會效能與責任 設立獨立董事、審計與薪酬功能委員會，客觀監督管理階層運作。</p></div>"
+  },
+  {
+    "id": "ch01_p1-16-1-17",
+    "pageRange": "pp. 1-16 ~ 1-17",
+    "filename": "截圖 2026-09-29 下午6.59.23.png",
+    "section": "1-4 公司治理核心效能 & ESG 實務案例",
+    "title": "董監職責強化、治理重要性 ＆ ESG 評鑑四大指標",
+    "tags": [
+      "獨立董事",
+      "董總兼任",
+      "ESG 評鑑指標",
+      "CSR",
+      "降低融資成本"
+    ],
+    "summary": "探討董事會獨立性機制（如杜絕董總兼任弊病）與公司治理四大重要性，並延伸剖析產業界評鑑 ESG 公司治理的四大關鍵指標。",
+    "notes": "<div class='note-block'><h4>📌 董監職責強化、治理重要性 ＆ ESG 評鑑四大指標</h4><p>📌 一、強化董監事效能與職責之關鍵機制 ⚠️ 國內傳統弊病：董事長兼任總經理（董總合一） 當董事長兼任總經理時，形同「自己監督自己」，導致董事會監督機能名存實亡，重大決策缺乏客觀制衡。 ✅ 現代公司治理推動方向： 推動獨立董事制度： 引進外部獨立公正專業人士，確保審計委員會由獨董組成。 董監事投保責任保險： 提高董監事勇於任事與承擔責任的意願與保障。 將薪酬績效與長約連結： 設置薪酬委員會，杜絕短線操作與自肥。 📌 二、實施優質公司治理的四大核心價值 1. 促進資本市場正常發展 透明運作降低資訊不對稱，維護市場秩序與投資人信心，吸引海內外長期資金進駐。 2. 讓公司善盡企業社會責任 (CSR) 兼顧獲利與環境保護、人權法治及公益參與，達成社會福祉最大化。 3. 維護所有利害關係人權益 建立暢通申訴管道，保障員工薪酬待遇、債權人資金安全與上下游供應鏈公平合作。 4. 增進經營績效與股東權益價值 大幅提高公司信用評等， 顯著降低股權與債權融資成本 ，進而推升企業本益比與股價！ 📌 三、案例觀點：掌握 ESG 關鍵，評鑑治理四大指標 依據國際永續投資趨勢論壇與投信機構見解，觀察一家公司 ESG 中的 G (Governance) 是否落實，核心觀察四大向度： 董事會結構與獨立性： 獨立董事席次比例、女性董事多元性、平均出席率與決策效率。 管理層利益與公司長遠利益一致性： 給予長期激勵（如長期限制型股票），避免經理人只顧短期 EPS 衝刺。 財務報告的透明性與會計師審計品質： 落實嚴謹會計準則，無保留意見審計報告。 資本市場評價與資本配置效率： 能否將資金投入最具競爭優勢的綠色與高回報標的。</p></div>"
+  },
+  {
+    "id": "ch01_p1-18-1-19",
+    "pageRange": "pp. 1-18 ~ 1-19",
+    "filename": "截圖 2026-09-29 下午6.59.26.png",
+    "section": "1-4 永續財務百科 & 第一章重點全覽",
+    "title": "ESG 三大支柱、公司治理 3.0 ＆ 第一章核心摘要",
+    "tags": [
+      "ESG 三大支柱",
+      "公司治理 3.0",
+      "TCFD",
+      "SASB",
+      "永續板",
+      "本章重點"
+    ],
+    "summary": "整理 ESG（環境、社會、公司治理）完整意涵、金管會「公司治理 3.0」六大具體實施措施，並總結第一章財務管理核心精華脈絡。",
+    "notes": "<div class='note-block'><h4>📌 ESG 三大支柱、公司治理 3.0 ＆ 第一章核心摘要</h4><p>📌 一、財務小百科：何謂 ESG？ ESG 原則 英文原名 涵蓋之具體議題範疇 環境 (E) Environment 能源使用管理、溫室氣體盤查、淨零碳排、水資源管理、污染防治、氣候變遷因應。 社會 (S) Social 員工健康與職場工安、勞工人權、供應鏈管理、資安與個人隱私保護、社區參與。 公司治理 (G) Governance 資訊揭露透明度 、獨立董事職能、內部稽核控制、對利害關係人與少數股東之保障、商業道德與反貪腐。 📌 二、金管會「公司治理 3.0－永續發展藍圖」六大推動重點 推動獨立董事席次不得少於董事總席次之 1/3。 半數以上獨立董事連續任期不得超過三屆（9 年），避免獨董久任而喪失獨立性。 參考國際永續準則： 全面導入氣候相關財務揭露 TCFD 與永續會計準則委員會 SASB 準則，強化永續報告書第三方確信。 分階段要求上市櫃公司申報自結財務資訊 ，並提前公告年度財務報告。 深化投資人盡職治理： 研議強化自辦股東會視訊投票法制，建立投票顧問機構對話機制。 建置永續板市場： 積極推動綠色債券、社會責任債券及可持續發展債券之籌資管道。 📌 三、第一章全章學理總結與全書脈絡 🎯 財務管理核心骨幹： 三大領域： 公司理財 (Corporate Finance)、投資學 (Investments)、金融市場與機構 (Financial Markets)。 三大財務決策： 投資決策 (資本預算)、融資決策 (資本結構)、盈餘分配決策 (股利政策)。 最高目標： 堅持 股東財富最大化（股價極大化） ，而非單純的會計短期利潤極大化。 核心挑戰： 因公司組織所有權與管理權分離，衍生 股東與管理者、股東與債權人之代理問題 。 解決架構： 透過內外部 公司治理機制 （獨董、薪酬掛鉤、揭露透明、接管威脅）與 ESG 實踐 ，確保企業永續創造價值！</p></div>"
+  },
+  {
+    "id": "ch01_p1-20-1-21",
+    "pageRange": "pp. 1-20 ~ 1-21",
+    "filename": "截圖 2026-09-29 下午6.59.32.png",
+    "section": "1-5 第一章精選習題解析",
+    "title": "本章精選習題庫（國考選擇 14 題 ＋ 簡答題 5 題全解）",
+    "tags": [
+      "國考精選",
+      "選擇題解析",
+      "簡答題",
+      "期中考必考",
+      "自測題庫"
+    ],
+    "summary": "精選第一章全數 14 道歷屆公股行庫/國考選擇題與 5 道簡答題，並提供詳細之參考解答與解題思路分析，期中考複習必備！",
+    "notes": "<div class='note-block'><h4>📌 本章精選習題庫（國考選擇 14 題 ＋ 簡答題 5 題全解）</h4><p>📝 一、選擇題題庫與考點解析（點擊可展開答案與詳細說明） 第 1 題：下列敘述何者正確？ 題目選項： (A) 獨資業主須負無限清償責任，但合夥不用 (B) 公司股東會擔心公司倒閉，須負無限清償責任 (C) 公司若想要永續經營較獨資容易 (D) 獨資與合夥所有權容易移轉。 正確答案：(C) 考點剖析： • (A) 錯誤：合夥人同樣須對合夥債務承擔連帶無限清償責任。 • (B) 錯誤：股份有限公司股東享有「有限責任」，最多僅損失出資股款。 • (C) 正確 ：公司具有獨立法人地位，不因個別股東生死而終止，相較獨資更易永續經營。 • (D) 錯誤：獨資與合夥移轉所有權困難，反而是公司的股票在市場上自由流通、最易移轉。 第 2 題：有關代理問題何者正確？ 題目選項： (A) 管理人員總是以股東的最佳利益為出發點行事 (B) 股東和債券持有人之間無利益衝突 (C) 若管理當局得到應有薪資獎勵就比較不會發生代理問題 (D) 合夥企業會發生代理問題。 正確答案：(C) 考點剖析： • (A) 錯誤：經理人受自利動機影響，常有追求特權消費或帝國建造等自私行為。 • (B) 錯誤：股東與債權人間存在「資產替代」、「債權稀釋」等嚴重利益衝突。 • (C) 正確 ：設計完善的激勵薪酬（如認股權、績效股）能將經理人利益與股價綁定，大幅降低代理問題。 • (D) 錯誤：合夥通常所有權與經營權合一，一般探討代理問題以「股份有限公司」最為顯著。 第 3 題：下列對於股權代理問題之描述何者為非？ 題目選項： (A) 若所有權和管理權完全一樣，則不會有股東與管理者之間的代理問題存在 (B) 獨資也會有代理問題 (C) 因股東和管理者間存在利益衝突 (D) 此種代理問題最常見的現象即「特權消費」。 正確答案：(B) 為非 考點剖析： • 獨資企業之出資者即經營者（所有權與經營權百分之百合一），業主自己承擔所有盈虧，絕不可能對自己產生委託代理問題。故 (B) 敘述錯誤。 第 4 題：下列何者對於公司治理的描述有誤？ 題目選項： (A) 是一種監管企業經營的制度 (B) 公司治理較優的公司，有利於發行債券籌措資金 (C) 機構投資人在公司治理機制中，也可扮演監督角色 (D) 實施公司治理的企業，對股東較有利，但不利於債權人。 正確答案：(D) 有誤 考點剖析： • 良好的公司治理強調保障 全體利害關係人（含債權人與員工） 。資訊透明與嚴謹內控能大幅降低倒閉與掏空風險， 對債權人同樣高度有利 ，還能降低借款成本。故 (D) 稱不利於債權人純屬錯誤。 第 5 題：【2007年國營事業】股東與債權人間之代理問題？（複選題） 題目選項： (A) 資產替代 (B) 補貼性消費 (C) 債權稀釋 (D) 過度投資。 正確答案：(A) 及 (C) 考點剖析： • 股東 vs 債權人 ：資產替代 (Asset Substitution)、債權稀釋 (Claim Dilution)、股利掏空、投資不足。 • (B) 補貼性消費與 (D) 過度投資 則是 股東 vs 管理者 之間的代理問題。 第 6 題：【2007年國營事業】承上題，下列何者方法可解決股東與債權人間之代理問題？（複選題） 題目選項： (A) 實施員工認股選擇權 (B) 在債務契約中訂立限制條款 (C) 發行可轉換公司債 (D) 降低自由現金流量。 正確答案：(B) 及 (C) 考點剖析： • (B) 限制條款 ：限制股利發放、限制舉新債、要求擔保品，直接約束股東。 • (C) 發行可轉換公司債 ：使債權人享有轉換成股票分享高成長果實的權利，有效消除股東拿借款冒險博弈之動機。 • (A) 員工認股選擇權是解決管理者代理問題的方法。 第 7 題：【2017華南銀行】下列何者會增加股東與管理者的代理問題？ 題目選項： (A) 公司的負債比例下降 (B) 大股東持股比例增加 (C) 公司所在產業的競爭增加，盈餘減少 (D) 增加股利發放。 正確答案：(A) 考點剖析： • 負債具有強制的還本付息剛性壓力，能有效約束經理人手頭多餘的「自由現金流量 (Free Cash Flow)」。當 負債比例下降 時，經理人手上充斥免付利息的閒錢，容易進行特權消費與盲目過度投資，從而 加劇代理問題 。 • (B) 大股東監督、(C) 產業競爭淘汰、(D) 發放股利抽走閒置現金，皆具有抑制代理問題的正面效果。 第 8 題：【2017中國鋼鐵】合理的公司經營目標應該是： 題目選項： (A) 銷售量極大化 (B) 經營者影響力極大化 (C) 市佔率極大化 (D) 股票價值極大化。 正確答案：(D) 股票價值極大化 考點剖析： 財務管理的終極目標即為 股東財富最大化 ，在股份公開發行市場上即表現為 股票價格（股票價值）極大化 。 第 9 題：【2018桃園捷運】下列何者誘發股東與管理者之間的潛在代理問題相對較為嚴重？ 題目選項： (A) 資產替代 (B) 補貼性消費 (C) 過度投資 (D) 以上皆非。 正確答案：(B) 及 (C)（依各校單選標準通常以 (B) 補貼性消費最典型） 考點剖析： (A) 資產替代是股東與債權人間的代理問題；(B) 補貼性消費（特權消費）是經理人濫用公帑最常見的侵害行為。 第 10 題：【2018農會】下列敘述何者正確？ 題目選項： (A) 獨資企業的缺點之一為公司的所有者承擔無限責任 (B) 合夥比公司更容易轉移所有權益 (C) 公司組織的優點是可以避免雙重課稅 (D) 從社會角度看，公司的優點為每個股東都有公平的投票權，即一人一票 (E) 所有類型的公司都必須繳交企業所得。 正確答案：(A) 考點剖析： • (A) 正確：獨資業主承擔無限清償責任，當企業資產不足時須以個人私人財產償還。 • (B) 錯誤：公司股票在次級市場自由流通，移轉所有權遠比合夥容易。 • (C) 錯誤：公司組織無法避免雙重課稅（公司繳營所稅，股東分紅繳綜所稅）。 • (D) 錯誤：公司投票權為一股一票，並非一人一票。 第 11 題：【2019台中捷運】公司財務管理所追求的目標為： 題目選項： (A) 公司股東財富極大化 (B) 公司管理者財富極大化 (C) 公司利潤極大化 (D) 公司每股盈餘極大化。 正確答案：(A) 公司股東財富極大化 第 12 題：【2019農會】企業的代理問題是發生在： 題目選項： (A) 獨資企業 (B) 合夥企業 (C) 股份有限公司 (D) 有限公司。 原卷答案：(A) 獨資企業 ｜ 學理標準：(C) 股份有限公司 考點剖析與防踩雷： ⚠️ 本題為 2019 農會特考原卷題目，官方公告答案為 (A)！但學理上代理問題發生於所有權與經營權分離之 (C) 股份有限公司（獨資無代理問題）。若考卷直接沿用原卷標準答案請注意選 (A)，若教授強調學理則為 (C)。 第 13 題：【2021農會】下列何者通常不包含在公司財務的主題範圍之內？（複選題） 題目選項： (A) 融資決策 (B) 採購決策 (C) 存貨決策 (D) 盈餘分配決策 (E) 投資決策。 正確答案：(B) 及 (C) 考點剖析： 公司財務三大核心決策為： 投資決策、融資決策、盈餘分配決策 。採購與存貨屬於作業/供應鏈營運範疇。 第 14 題：【2021農會】相較於獨資或合夥的企業組織型態，公司通常有哪些優點？（複選題） 題目選項： (A) 稅負較低 (B) 有限責任 (C) 資金來源較多 (D) 成立較為容易 (E) 主導權較高。 正確答案：(B) 及 (C) 考點剖析： 公司享有 有限清償責任 與 資金來源廣泛多元 （可發行各類股債）。缺點則是成立程序繁瑣與面臨企業所得稅雙重課稅。 📝 二、簡答題重點解題方向 1. 財務管理的三大領域為何？ 答： 公司理財 (Corporate Finance) 、 投資學 (Investments) 、 金融市場與金融機構 (Financial Markets & Institutions) 。 2. 財務管理的目標為何？ 答：核心目標為 股東財富最大化 （具體表現為 股票市場價值極大化 ）。兼顧資金時間價值與風險折現，優於短期會計利潤最大化。 3. 金融市場有哪四大市場？ 答：按交易工具期限與性質區分包含： 貨幣市場 (Money Market) 、 資本市場 (Capital Market) 、 外匯市場 (Foreign Exchange Market) 、 衍生性金融商品市場 (Derivatives Market) 。 4. 請說明獨資、合夥與公司之優缺點？ 答：獨資/合夥具設立簡便、決策快之優點，但負擔 無限責任 且籌資受限；公司具備 有限責任、永續經營、籌資容易、股份自由移轉 四大優點，但有籌設繁雜與 代理問題 兩大缺點。 5. 請說明代理問題的種類、發生的原因與解決方法？ 答：涵蓋「股東 vs 管理者」與「股東 vs 債權人」。前者成因為特權消費、怠忽職守，解方為激勵性薪酬、董事會監督與接管威脅；後者成因為資產替代、債權稀釋，解方為債務限制條款、提高風險溢酬與發行可轉債。</p></div>"
+  },
+  {
+    "id": "ch01_p-ch2-cover",
+    "pageRange": "Chapter 2 封面導讀",
+    "filename": "截圖 2026-09-29 下午6.59.34.png",
+    "section": "Part 1 基礎篇 ｜ 第二章 財務報表分析",
+    "title": "第二章預覽：財務報表架構與五大財務比率綱要",
+    "tags": [
+      "財務報表分析",
+      "流動性比率",
+      "資產管理比率",
+      "負債比率",
+      "獲利能力",
+      "市場價值比率",
+      "章節預告"
+    ],
+    "summary": "課本第二章封面導讀，提綱挈領介紹三大主要財務報表（資產負債表、綜合損益表、現金流量表）之分析方法，以及五大財務比率分析架構。",
+    "notes": "<div class='note-block'><h4>📌 第二章預覽：財務報表架構與五大財務比率綱要</h4><p>📌 第二章 財務報表分析（Financial Statement Analysis）三大節次大綱 節次 節名 核心研討主題與重點內容 2-1 財務報表分析概論 • 財務報表之編製目的與對內對外使用對象。 • 四大基本報表：資產負債表、綜合損益表、現金流量表、權益變動表。 • 報表分析之基礎方法（水平分析、垂直共同比分析）。 2-2 財務比率分析 (Financial Ratio Analysis) 1. 流動性比率 (Liquidity Ratios)： 流動比率、速動比率（短期償債能力）。 2. 資產管理比率 (Asset Management Ratios)： 應收帳款週轉率、存貨週轉率、總資產週轉率（營運資產效率）。 3. 負債管理比率 (Debt Management Ratios)： 負債比率、權益乘數、利息保障倍數（長期財務槓桿與違約風險）。 4. 獲利能力比率 (Profitability Ratios)： 毛利率、純益率、ROA（資產報酬率）、ROE（股東權益報酬率，杜邦方程式）。 5. 市場價值比率 (Market Value Ratios)： 本益比 (P/E)、市價淨值比 (P/B)、股利殖利率。 2-3 財務比率分析比較 • 趨勢分析 (Trend Analysis)： 同一公司跨年度歷年比較，觀察成長與惡化軌跡。 • 同業比較分析 (Benchmarking)： 與同產業標竿企業（如台積電 vs 聯電，或日月光 vs 矽品）基準比較。 • 財務比率分析之限制與盈餘管理之識別。</p></div>"
+  }
+]
+    },
+    ch2: {
+      id: "ch2",
+      title: "第二章：財務報表分析",
+      sub: "四大財務報表 ｜ 五大財務比率分析 ｜ 經典杜邦三分解系統 ｜ 財報限制與窗飾防範",
+      imgFolder: "./電子書/課本/第二三章節",
+      pages: [
+  {
+    "id": "p2-cover",
+    "pageRange": "Ch.2 封面導讀",
+    "filename": "截圖 2026-09-29 晚上7.56.41.png",
+    "section": "第二章 財務報表分析",
+    "title": "第二章 財務報表分析 核心骨幹與學習地圖",
+    "tags": [
+      "財務報表分析",
+      "四大報表",
+      "杜邦分析",
+      "財務比率"
+    ],
+    "summary": "第二章全章學習目標與架構導覽：三大基本財務報表、五大類財務比率分析、杜邦恆等式及財報分析之限制。",
+    "notes": "<div class='note-block'><h4>📌 第二章 學習地圖總覽</h4><p>財務報表分析是評估企業經營成果與財務體質的核心工具。本章重點掌握：四大財務報表間之勾稽關係、五大類財務比率分析及杜邦系統分析。</p></div>"
+  },
+  {
+    "id": "p2-2-2-3",
+    "pageRange": "pp. 2-2 ~ 2-3",
+    "filename": "截圖 2026-09-29 晚上7.56.42.png",
+    "section": "2-1 財務報表分析概論",
+    "title": "財務報表分析目的與四大財務報表概觀",
+    "tags": [
+      "資產負債表",
+      "損益表",
+      "現金流量表",
+      "股東權益變動表"
+    ],
+    "summary": "剖析企業財務報表分析的內外部目的，並介紹四大核心財務報表的功能定位。",
+    "notes": "<div class='note-block'><h4>📌 財務報表分析之核心目的</h4><ul><li><b>內部管理目的：</b>協助經理人進行經營績效評估、擬定資本預算與營業方針。</li><li><b>外部評估目的：</b>投資人評估股票價值、銀行評估授信違約風險。</li></ul></div>"
+  },
+  {
+    "id": "p2-4-2-5",
+    "pageRange": "pp. 2-4 ~ 2-5",
+    "filename": "截圖 2026-09-29 晚上7.56.44.png",
+    "section": "2-1 資產負債表與損益表",
+    "title": "資產負債表（存量觀念）與 綜合損益表（流量觀念）",
+    "tags": [
+      "資產負債表",
+      "流動資產",
+      "非流動資產",
+      "會計恆等式",
+      "損益表"
+    ],
+    "summary": "詳解資產負債表架構（資產＝負債＋權益）與損益表營收認列與淨利計算流程。",
+    "notes": "<div class='note-block'><h4>📌 存量與流量觀念對比</h4><table class='concept-table'><thead><tr><th>報表名稱</th><th>時間特性</th><th>會計公式 / 核心內涵</th></tr></thead><tbody><tr><td><b>資產負債表</b></td><td><b>存量 (Stock)</b><br>特定時點之財務狀況</td><td><code>資產 = 負債 + 股東權益</code></td></tr><tr><td><b>綜合損益表</b></td><td><b>流量 (Flow)</b><br>特定期間之經營績效</td><td><code>營業收入 - 成本 - 費用 = 營業利益<br>營業利益 ± 業外 - 稅 = 稅後純益</code></td></tr></tbody></table></div>"
+  },
+  {
+    "id": "p2-6-2-7",
+    "pageRange": "pp. 2-6 ~ 2-7",
+    "filename": "截圖 2026-09-29 晚上7.56.48.png",
+    "section": "2-1 現金流量表",
+    "title": "現金流量表三大活動（營業、投資、籌資）",
+    "tags": [
+      "現金流量表",
+      "營業活動現金流",
+      "投資活動現金流",
+      "籌資活動現金流"
+    ],
+    "summary": "分析現金流量表之分類結構，說明盈餘不等於現金之重要性。",
+    "notes": "<div class='note-block'><h4>📌 現金流量表三大支柱</h4><ul><li><b>營業活動現金流量 (CFO)：</b>本業賺取現金之能力（最核心之現金動能）。</li><li><b>投資活動現金流量 (CFI)：</b>購置廠房設備（資本支出）或處分資產之現金流。</li><li><b>籌資活動現金流量 (CFF)：</b>發行股票、舉借長期債務或配發現金股利之現金流。</li></ul></div>"
+  },
+  {
+    "id": "p2-8-2-9",
+    "pageRange": "pp. 2-8 ~ 2-9",
+    "filename": "截圖 2026-09-29 晚上7.56.50.png",
+    "section": "2-2 財務比率分析分類",
+    "title": "財務比率分析五大類別架構",
+    "tags": [
+      "流動性比率",
+      "資產管理比率",
+      "負債管理比率",
+      "獲利能力比率",
+      "市場價值比率"
+    ],
+    "summary": "財務比率五大維度架構體系介紹。",
+    "notes": "<div class='note-block'><h4>📌 財務比率五大分析維度</h4><ol><li><b>流動性比率：</b>短期償債能力衡量。</li><li><b>資產管理（活動）比率：</b>資產運用效率。</li><li><b>負債管理比率：</b>長期財務槓桿與違約風險。</li><li><b>獲利能力比率：</b>營業與資本報酬效益。</li><li><b>市場價值比率：</b>股票市場定價與成長預期。</li></ol></div>"
+  },
+  {
+    "id": "p2-10-2-11",
+    "pageRange": "pp. 2-10 ~ 2-11",
+    "filename": "截圖 2026-09-29 晚上7.56.53.png",
+    "section": "2-2 流動性比率",
+    "title": "短期償債能力：流動比率 ＆ 速動比率（酸性測驗）",
+    "tags": [
+      "流動比率",
+      "速動比率",
+      "流動資產",
+      "流動負債",
+      "存貨扣除"
+    ],
+    "summary": "詳細定義流動比率與速動比率公式，分析存貨與預付費用扣除之理由。",
+    "notes": "<div class='note-block'><h4>📌 短期償債能力比率公式</h4><ul><li><b>流動比率 (Current Ratio)：</b><code>流動比率 = 流動資產 / 流動負債</code>（標準通常以 200% 為參考）。</li><li><b>速動比率 (Quick Ratio)：</b><code>速動比率 = (流動資產 - 存貨 - 預付費用) / 流動負債</code><br>💡 <b>為什麼要扣除存貨？</b>因為存貨變現速度最慢且可能面臨跌價或滯銷風險。</li></ul></div>"
+  },
+  {
+    "id": "p2-12-2-13",
+    "pageRange": "pp. 2-12 ~ 2-13",
+    "filename": "截圖 2026-09-29 晚上7.56.54.png",
+    "section": "2-2 資產管理比率",
+    "title": "資產運用效率：存貨週轉率 ＆ 應收帳款週轉率",
+    "tags": [
+      "存貨週轉率",
+      "銷貨成本",
+      "應收帳款週轉率",
+      "平均收現天數",
+      "DSO"
+    ],
+    "summary": "分析存貨週轉天數與應收帳款回收天數（DSO）對營運資金壓力的影響。",
+    "notes": "<div class='note-block'><h4>📌 資產管理核心公式</h4><ul><li><b>存貨週轉率 (Inventory Turnover)：</b><code>銷貨成本 / 平均存貨</code>（週轉天數 = 365 / 存貨週轉率）。</li><li><b>應收帳款週轉率 (A/R Turnover)：</b><code>賒銷淨額 / 平均應收帳款</code>。</li><li><b>平均收帳期間 (DSO)：</b><code>365 / 應收帳款週轉率</code>（天數愈短表示資金回收愈快）。</li></ul></div>"
+  },
+  {
+    "id": "p2-14-2-15",
+    "pageRange": "pp. 2-14 ~ 2-15",
+    "filename": "截圖 2026-09-29 晚上7.56.56.png",
+    "section": "2-2 資產管理比率",
+    "title": "固定資產週轉率 ＆ 總資產週轉率 (TATO)",
+    "tags": [
+      "總資產週轉率",
+      "固定資產週轉率",
+      "資本密集度",
+      "營業收入"
+    ],
+    "summary": "總資產週轉率如何反映每一元資產所能創造的營業額大小。",
+    "notes": "<div class='note-block'><h4>📌 總資產週轉率 (Total Asset Turnover)</h4><p><code>總資產週轉率 = 營業收入 / 總資產</code><br>衡量公司全面性資產利用效率，是後續<b>杜邦分析</b>的重要支柱之一！</p></div>"
+  },
+  {
+    "id": "p2-16-2-17",
+    "pageRange": "pp. 2-16 ~ 2-17",
+    "filename": "截圖 2026-09-29 晚上7.56.58.png",
+    "section": "2-2 負債管理比率",
+    "title": "長期財務槓桿：負債比率、權益乘數 ＆ 利息保障倍數 (TIE)",
+    "tags": [
+      "負債比率",
+      "財務槓桿",
+      "權益乘數",
+      "利息保障倍數",
+      "TIE",
+      "EBIT"
+    ],
+    "summary": "分析負債比率、財務槓桿度以及利息保障倍數（EBIT / 利息費用）的償債安全邊際。",
+    "notes": "<div class='note-block'><h4>📌 負債管理與清償能力指標</h4><ul><li><b>負債比率 (Debt Ratio)：</b><code>總負債 / 總資產</code>。</li><li><b>權益乘數 (Equity Multiplier)：</b><code>總資產 / 股東權益 = 1 / (1 - 負債比率)</code>。</li><li><b>利息保障倍數 (Times Interest Earned, TIE)：</b><code>EBIT / 利息費用</code><br>衡量盈餘足夠支付幾次借款利息，倍數過低時容易發生債務違約危機。</li></ul></div>"
+  },
+  {
+    "id": "p2-18-2-19",
+    "pageRange": "pp. 2-18 ~ 2-19",
+    "filename": "截圖 2026-09-29 晚上7.57.00.png",
+    "section": "2-2 獲利能力比率",
+    "title": "經營成果：營業毛利率、營業利益率 ＆ 稅後純益率",
+    "tags": [
+      "毛利率",
+      "營業利益率",
+      "純益率",
+      "淨利率",
+      "損益分層"
+    ],
+    "summary": "損益表三道獲利防線（毛利、營業利益、稅後淨利）之毛利率、營益率與純利率計算對比。",
+    "notes": "<div class='note-block'><h4>📌 獲利三大核心利潤率</h4><ul><li><b>營業毛利率：</b><code>(營業收入 - 銷貨成本) / 營業收入</code>（產品競爭力與定價權指標）。</li><li><b>營業利益率：</b><code>營業利益 / 營業收入</code>（本業管銷研費用控管效率）。</li><li><b>稅後純益率 (Net Profit Margin)：</b><code>稅後淨利 / 營業收入</code>（最終股東收益轉化率）。</li></ul></div>"
+  },
+  {
+    "id": "p2-20-2-21",
+    "pageRange": "pp. 2-20 ~ 2-21",
+    "filename": "截圖 2026-09-29 晚上7.57.01.png",
+    "section": "2-2 獲利能力比率",
+    "title": "資產與股東回報：總資產報酬率 (ROA) ＆ 股東權益報酬率 (ROE)",
+    "tags": [
+      "ROA",
+      "ROE",
+      "資產報酬率",
+      "股東權益報酬率",
+      "巴菲特指標"
+    ],
+    "summary": "深入解構財務管理公認最重要的獲利指標 ROA 與 ROE 之異同與計算。",
+    "notes": "<div class='note-block'><h4>📌 ROA vs ROE 關鍵對照</h4><ul><li><b>總資產報酬率 (ROA)：</b><code>稅後淨利 / 總資產</code>（衡量公司投入全部資源產生的效益）。</li><li><b>股東權益報酬率 (ROE)：</b><code>稅後淨利 / 股東權益</code>（股東每出資一元所能分得之盈餘回報，巴菲特最推崇之選股指標）。</li></ul></div>"
+  },
+  {
+    "id": "p2-22-2-23",
+    "pageRange": "pp. 2-22 ~ 2-23",
+    "filename": "截圖 2026-09-29 晚上7.57.03.png",
+    "section": "2-2 市場價值比率",
+    "title": "股票市場定價：本益比 (P/E)、市價淨值比 (P/B) ＆ 股利殖利率",
+    "tags": [
+      "本益比",
+      "PE Ratio",
+      "市價淨值比",
+      "PB Ratio",
+      "殖利率",
+      "EPS"
+    ],
+    "summary": "次級市場股票估值三大指標：本益比（P/E）、股價淨值比（P/B）與現金殖利率之應用。",
+    "notes": "<div class='note-block'><h4>📌 資本市場估值指標</h4><ul><li><b>每股盈餘 (EPS)：</b><code>(稅後淨利 - 特別股股利) / 流通在外普通股股數</code>。</li><li><b>本益比 (Price-Earnings Ratio, P/E)：</b><code>每股市價 / EPS</code>（投資人願意為每一元盈餘付出多少代價，反映成長性期望）。</li><li><b>市價淨值比 (P/B Ratio)：</b><code>每股市價 / 每股淨值</code>。</li></ul></div>"
+  },
+  {
+    "id": "p2-24-2-25",
+    "pageRange": "pp. 2-24 ~ 2-25",
+    "filename": "截圖 2026-09-29 晚上7.57.04.png",
+    "section": "2-3 杜邦分析系統",
+    "title": "杜邦分析法 (DuPont System) 萌芽與三大支柱分解",
+    "tags": [
+      "杜邦分析",
+      "DuPont",
+      "純益率",
+      "總資產週轉率",
+      "權益乘數"
+    ],
+    "summary": "杜邦方程式將 ROE 分解為「獲利能力 × 營運效率 × 財務槓桿」三大維度。",
+    "notes": "<div class='note-block'><h4>📌 經典杜邦三分解公式 (The DuPont Identity)</h4><div class='alert-box'><b>ROE = 純益率 × 總資產週轉率 × 權益乘數</b><br><br><code>(稅後淨利 / 權益) = (稅後淨利 / 營收) × (營收 / 總資產) × (總資產 / 權益)</code></div><ul><li><b>純益率 (Profit Margin)：</b>產品賺不賺錢（營業控管能力）。</li><li><b>總資產週轉率 (Asset Turnover)：</b>資產轉得快不快（營運管理效率）。</li><li><b>權益乘數 (Equity Multiplier)：</b>槓桿借得大不大（財務風險承受度）。</li></ul></div>"
+  },
+  {
+    "id": "p2-26-2-27",
+    "pageRange": "pp. 2-26 ~ 2-27",
+    "filename": "截圖 2026-09-29 晚上7.57.06.png",
+    "section": "2-3 杜邦分析實務",
+    "title": "杜邦系統推導分析與企業經營策略診斷",
+    "tags": [
+      "高週轉低毛利",
+      "高毛利低週轉",
+      "鴻海模式",
+      "台積電模式"
+    ],
+    "summary": "如何透過杜邦分析判斷公司商業模式：薄利多銷（高週轉）vs 高附加價值（高純益率）。",
+    "notes": "<div class='note-block'><h4>📌 商業模式在杜邦方程式上的體現</h4><ul><li><b>零售/代工型（如好市多、鴻海）：</b>低純益率，依賴極高的總資產週轉率創造高 ROE。</li><li><b>高科技晶圓/精品型（如台積電、LVMH）：</b>高純益率，即便資產龐大週轉較低，依然維持頂尖 ROE。</li><li><b>過度舉債型：</b>若純益率與週轉率下滑，純靠墊高「權益乘數」衝高 ROE，隱藏極大破產財務風險！</li></ul></div>"
+  },
+  {
+    "id": "p2-28-2-29",
+    "pageRange": "pp. 2-28 ~ 2-29",
+    "filename": "截圖 2026-09-29 晚上7.57.07.png",
+    "section": "2-3 杜邦圖解與延伸",
+    "title": "杜邦分析樹狀圖 (DuPont Chart) 完整拆解架構",
+    "tags": [
+      "杜邦樹狀圖",
+      "成本控管",
+      "流動資產配置",
+      "負債結構"
+    ],
+    "summary": "完整展開杜邦分析樹狀圖，追蹤損益表與資產負債表各細項對 ROE 的影響途徑。",
+    "notes": "<div class='note-block'><h4>📌 杜邦樹狀圖診斷路徑</h4><p>當企業 ROE 出現衰退時，管理者能按圖索驥：先查是純益率縮水（原料上漲？行銷失控？），或是存貨積壓導致週轉率驟降，精確揪出病灶。</p></div>"
+  },
+  {
+    "id": "p2-30-2-31",
+    "pageRange": "pp. 2-30 ~ 2-31",
+    "filename": "截圖 2026-09-29 晚上7.57.09.png",
+    "section": "2-4 財務報表分析之限制",
+    "title": "財報分析之限制、會計操弄與美化帳面（窗飾 Window Dressing）",
+    "tags": [
+      "窗飾",
+      "Window Dressing",
+      "會計政策",
+      "通貨膨脹",
+      "報表限制"
+    ],
+    "summary": "警示財務報表分析的盲點：歷史成本計價、不同會計估計（折舊方法、存貨計價）以及年底經理人刻意做帳的窗飾行為。",
+    "notes": "<div class='note-block'><h4>📌 財務分析五大限制與窗飾陷阱</h4><ul><li><b>歷史成本缺陷：</b>忽視通膨與實質重置成本。</li><li><b>會計方法不同：</b>加速折舊 vs 直線折舊、先進先出 (FIFO) 導致同業難以直接比較。</li><li><b>窗飾行為 (Window Dressing)：</b>經理人在結帳日前刻意清償短期借款、暫緩進貨以美化流動比率，過年後再借回。</li><li><b>跨產業多元化：</b>大企業多角化經營，難以找到單一產業基準比較。</li></ul></div>"
+  },
+  {
+    "id": "p2-32-2-33",
+    "pageRange": "pp. 2-32 ~ 2-33",
+    "filename": "截圖 2026-09-29 晚上7.57.11.png",
+    "section": "第二章 本章總結",
+    "title": "第二章 全章重點回顧與核心公式清單",
+    "tags": [
+      "第二章總結",
+      "公式清單",
+      "期中考必背",
+      "ROA",
+      "ROE"
+    ],
+    "summary": "整理第二章所有必考比率計算公式與核心觀念對照表。",
+    "notes": "<div class='note-block'><h4>📌 第二章 核心必考公式總整理</h4><p>期中考必備武器：流動比、速動比、存貨週轉天數、利息保障倍數、杜邦三方程式。</p></div>"
+  },
+  {
+    "id": "p2-34-2-35",
+    "pageRange": "pp. 2-34 ~ 2-35",
+    "filename": "截圖 2026-09-29 晚上7.57.12.png",
+    "section": "本章精選習題",
+    "title": "第二章 習題庫（一）：選擇題 1 ~ 12 題詳解",
+    "tags": [
+      "選擇題",
+      "習題詳解",
+      "流動比率",
+      "存貨週轉"
+    ],
+    "summary": "精選國考與銀行特考第 1 至 12 題選擇題題目與逐題解析對照。",
+    "notes": "<div class='note-block'><h4>📌 精選習題對照（第 1 ~ 12 題）</h4><p>題目涵蓋四大報表觀念、短期償債能力計算及營運資金週轉分析。</p></div>"
+  },
+  {
+    "id": "p2-36-2-37",
+    "pageRange": "pp. 2-36 ~ 2-37",
+    "filename": "截圖 2026-09-29 晚上7.57.14.png",
+    "section": "本章精選習題",
+    "title": "第二章 習題庫（二）：選擇題 13 ~ 24 題詳解",
+    "tags": [
+      "選擇題",
+      "習題詳解",
+      "杜邦分析",
+      "ROE計算"
+    ],
+    "summary": "精選習題第 13 至 24 題選擇題解析，重點在杜邦方程式拆解與槓桿指標判斷。",
+    "notes": "<div class='note-block'><h4>📌 精選習題對照（第 13 ~ 24 題）</h4><p>包含國考常考題：總資產報酬率、淨值收益率、權益乘數之計算與實務應用。</p></div>"
+  },
+  {
+    "id": "p2-38-ch3-cover",
+    "pageRange": "pp. 2-38 ~ Ch.3 導讀",
+    "filename": "截圖 2026-09-29 晚上7.57.17.png",
+    "section": "第二章 簡答題 ＆ 第三章 預覽",
+    "title": "第二章 簡答題精解 ＆ 第三章 貨幣時間價值 封面導讀",
+    "tags": [
+      "簡答題",
+      "貨幣時間價值",
+      "第三章預覽",
+      "Time Value of Money"
+    ],
+    "summary": "第二章簡答題詳解對照，以及即將進入的第三章「貨幣時間價值」核心架構引導。",
+    "notes": "<div class='note-block'><h4>📌 第三章 預覽：貨幣時間價值 (TVM)</h4><p>「今天的一塊錢，永遠大於明天的一塊錢！」掌握現代財務管理第一大支柱：現值、終值、年金與貸款攤提計算。</p></div>"
+  }
+]
+    },
+    ch3: {
+      id: "ch3",
+      title: "第三章：貨幣之時間價值",
+      sub: "單利與複利原理 ｜ 現值與終值運算 ｜ 普通年金與先付年金 ｜ 72法則 ｜ 實質有效年利率 (EAR)",
+      imgFolder: "./電子書/課本/第二三章節",
+      pages: [
+  {
+    "id": "p3-2-3-3",
+    "pageRange": "pp. 3-2 ~ 3-3",
+    "filename": "截圖 2026-09-29 晚上7.57.19.png",
+    "section": "3-1 貨幣時間價值概論",
+    "title": "貨幣時間價值本質 ＆ 單利 vs 複利 (Simple vs Compound Interest)",
+    "tags": [
+      "單利",
+      "複利",
+      "貨幣時間價值",
+      "利息",
+      "本金"
+    ],
+    "summary": "探討為何錢有時間價值（機會成本、通貨膨脹、風險不確定性），並嚴謹比較單利與複利的利息滾動本質。",
+    "notes": "<div class='note-block'><h4>📌 一、貨幣具有時間價值 (TVM) 的三大理由</h4><ol><li><b>機會成本 (Opportunity Cost)：</b>手頭有錢可以進行投資賺取利息或投資報酬。</li><li><b>通貨膨脹 (Inflation)：</b>隨時間推移，物價上漲會侵蝕貨幣實質購買力。</li><li><b>未來不確定性與風險 (Risk)：</b>未來收到的承諾存在違約風險，眼前拿到才是落袋為安。</li></ol></div>"
+  },
+  {
+    "id": "p3-4-3-5",
+    "pageRange": "pp. 3-4 ~ 3-5",
+    "filename": "截圖 2026-09-29 晚上7.57.20.png",
+    "section": "3-2 單筆現金之終值與現值",
+    "title": "終值 (Future Value, FV) 運算原理與複利效應",
+    "tags": [
+      "終值",
+      "FV",
+      "複利終值因子",
+      "FVIF",
+      "利滾利"
+    ],
+    "summary": "單一筆資金在複利計算下未來的價值推導：FV = PV × (1 + r)^n。",
+    "notes": "<div class='note-block'><h4>📌 複利終值公式</h4><div class='alert-box'><b>FV_n = PV × (1 + r)^n</b><br>其中 <code>(1 + r)^n</code> 稱為<b>複利終值因子 (FVIF_r,n)</b>。</div><p>時間 n 愈長、利率 r 愈高，指數增長的「利滾利」雪球威力愈強大！</p></div>"
+  },
+  {
+    "id": "p3-6-3-7",
+    "pageRange": "pp. 3-6 ~ 3-7",
+    "filename": "截圖 2026-09-29 晚上7.57.22.png",
+    "section": "3-2 單筆現金之終值與現值",
+    "title": "現值 (Present Value, PV) 與折現 (Discounting)",
+    "tags": [
+      "現值",
+      "PV",
+      "折現",
+      "折現率",
+      "PVIF"
+    ],
+    "summary": "將未來的款項折算回今天價值的過程——折現。PV = FV / (1 + r)^n。",
+    "notes": "<div class='note-block'><h4>📌 複利現值公式</h4><div class='alert-box'><b>PV = FV_n / (1 + r)^n = FV_n × (1 + r)^(-n)</b><br>其中 <code>1 / (1 + r)^n</code> 稱為<b>複利現值因子 (PVIF_r,n)</b>。</div><p>💡 <b>重要性質：</b>折現率 r 愈高，未來的同一筆錢在今天看來愈不值錢（現值 PV 愈小）。</p></div>"
+  },
+  {
+    "id": "p3-8-3-9",
+    "pageRange": "pp. 3-8 ~ 3-9",
+    "filename": "截圖 2026-09-29 晚上7.57.24.png",
+    "section": "3-2 查表法與計算",
+    "title": "複利終值表與現值表之查表應用與插補法",
+    "tags": [
+      "查表法",
+      "插補法",
+      "財務計算機",
+      "FVIF",
+      "PVIF"
+    ],
+    "summary": "傳統財務報表附錄之利率因子查表技巧與計算步驟說明。",
+    "notes": "<div class='note-block'><h4>📌 查表法要領</h4><p>查表時橫軸為利率 r，縱軸為期數 n。現代財管考試亦可使用工程計算機之 <code>y^x</code> 鍵快速計算。</p></div>"
+  },
+  {
+    "id": "p3-10-3-11",
+    "pageRange": "pp. 3-10 ~ 3-11",
+    "filename": "截圖 2026-09-29 晚上7.57.26.png",
+    "section": "3-2 期數與報酬率求解",
+    "title": "神奇「72 法則」本金翻倍速算法 ＆ 報酬率 r 求解",
+    "tags": [
+      "72法則",
+      "翻倍時間",
+      "年化報酬率",
+      "雙倍本金"
+    ],
+    "summary": "資產翻倍的極速心算工具：72 法則（72 / 年化報酬率(%) ≈ 翻倍所需年數）。",
+    "notes": "<div class='note-block'><h4>📌 神奇 72 法則 (Rule of 72)</h4><div class='alert-box'><b>本金翻倍所需年數 ≈ 72 / 報酬率 (%)</b></div><p>範例：若年利率為 6%，則本金翻倍約需 <code>72 / 6 = 12 年</code>；若年利率為 8%，約需 <code>72 / 8 = 9 年</code>！</p></div>"
+  },
+  {
+    "id": "p3-12-3-13",
+    "pageRange": "pp. 3-12 ~ 3-13",
+    "filename": "截圖 2026-09-29 晚上7.57.27.png",
+    "section": "3-3 年金 (Annuities) 觀念",
+    "title": "年金概念定義 ＆ 普通年金終值 (FV of Ordinary Annuity)",
+    "tags": [
+      "年金",
+      "普通年金",
+      "FVA",
+      "退休金規劃",
+      "等額給付"
+    ],
+    "summary": "每期期末支付等額款項之普通年金終值公式與退休金累積計算。",
+    "notes": "<div class='note-block'><h4>📌 普通年金終值公式 (FVA)</h4><div class='alert-box'><b>FVA_n = PMT × [ ((1 + r)^n - 1) / r ]</b><br>其中括號內稱為<b>年金終值因子 (FVIFA_r,n)</b>。</div><p>適用於：每月定額定期定額存股、每年定額存入退休金之最終資產估算。</p></div>"
+  },
+  {
+    "id": "p3-14-3-15",
+    "pageRange": "pp. 3-14 ~ 3-15",
+    "filename": "截圖 2026-09-29 晚上7.57.28.png",
+    "section": "3-3 普通年金現值",
+    "title": "普通年金現值 (PV of Ordinary Annuity) ＆ 房貸車貸月付額推導",
+    "tags": [
+      "年金現值",
+      "PVA",
+      "貸款月付額",
+      "房貸試算",
+      "PVIFA"
+    ],
+    "summary": "房貸車貸與獎學金設立的核心：PVA = PMT × [ (1 - (1+r)^(-n)) / r ]。",
+    "notes": "<div class='note-block'><h4>📌 普通年金現值公式 (PVA)</h4><div class='alert-box'><b>PVA_n = PMT × [ (1 - (1 + r)^(-n)) / r ]</b><br>其中括號內稱為<b>年金現值因子 (PVIFA_r,n)</b>。</div><p>💡 <b>生活應用：</b>銀行借你 1,000 萬房貸（PVA），你未來 30 年每月要還的本利和就是 <code>PMT</code>！</p></div>"
+  },
+  {
+    "id": "p3-16-3-17",
+    "pageRange": "pp. 3-16 ~ 3-17",
+    "filename": "截圖 2026-09-29 晚上7.57.30.png",
+    "section": "3-3 先付年金",
+    "title": "先付年金（期初年金，Annuity Due）終值與現值換算秘訣",
+    "tags": [
+      "先付年金",
+      "期初年金",
+      "Annuity Due",
+      "租金付費"
+    ],
+    "summary": "期初付款的先付年金與普通年金的轉化關係：先付年金數值 = 普通年金數值 × (1 + r)。",
+    "notes": "<div class='note-block'><h4>📌 先付年金速記法則</h4><div class='alert-box'><b>先付年金價值 = 普通年金價值 × (1 + r)</b></div><p>因為每一期付款都比普通年金提早一整期投入，所以多滾了一期利息 <code>(1 + r)</code>！</p></div>"
+  },
+  {
+    "id": "p3-18-3-19",
+    "pageRange": "pp. 3-18 ~ 3-19",
+    "filename": "截圖 2026-09-29 晚上7.57.31.png",
+    "section": "3-3 永續年金",
+    "title": "永續年金 (Perpetuity) 價值公式 ＆ 特別股評價",
+    "tags": [
+      "永續年金",
+      "Perpetuity",
+      "特別股",
+      "永久債券",
+      "極限推導"
+    ],
+    "summary": "無限期發放等額現金流之永續年金現值公式：PV = PMT / r。",
+    "notes": "<div class='note-block'><h4>📌 永續年金公式 (Perpetuity)</h4><div class='alert-box'><b>PV = PMT / r</b></div><p>當期數 n 趨近於無窮大時，<code>(1+r)^(-n)</code> 趨近於 0，簡化出優雅至極的公式。常用於特別股固定股利估值、英國領事債券 (Consols)。</p></div>"
+  },
+  {
+    "id": "p3-20-3-21",
+    "pageRange": "pp. 3-20 ~ 3-21",
+    "filename": "截圖 2026-09-29 晚上7.57.32.png",
+    "section": "3-3 成長型年金",
+    "title": "成長型永續年金 (Growing Perpetuity) ＆ 高登股利折現模型 (DDM)",
+    "tags": [
+      "高登模型",
+      "DDM",
+      "成長型永續年金",
+      "股票估值",
+      "股利折現"
+    ],
+    "summary": "每期以固定成長率 g 增加的永續現金流：PV = C1 / (r - g)，此即股票評價的 Gordon Growth Model。",
+    "notes": "<div class='note-block'><h4>📌 成長型永續年金公式</h4><div class='alert-box'><b>PV = C_1 / (r - g)</b> （條件必須為 r > g）</div><p>財務管理股票估價的核心基石！C1 為次期預期現金流，r 為折現率，g 為永續固定成長率。</p></div>"
+  },
+  {
+    "id": "p3-22-3-23",
+    "pageRange": "pp. 3-22 ~ 3-23",
+    "filename": "截圖 2026-09-29 晚上7.57.33.png",
+    "section": "3-4 一年多次計息",
+    "title": "一年多次計息原理：名目利率 (APR) 轉換與期利率",
+    "tags": [
+      "一年多次計息",
+      "名目利率",
+      "期利率",
+      "計息頻率",
+      "半年配息"
+    ],
+    "summary": "半年計息、季計息與月計息下，期數與期利率的調整原則（期利率 = r/m, 總期數 = n×m）。",
+    "notes": "<div class='note-block'><h4>📌 一年計息 m 次之調整公式</h4><ul><li><b>每期實質利率：</b><code>r* = APR / m</code></li><li><b>總複利期數：</b><code>N* = n × m</code></li><li><b>終值公式：</b><code>FV = PV × (1 + APR/m)^(n×m)</code></li></ul></div>"
+  },
+  {
+    "id": "p3-24-3-25",
+    "pageRange": "pp. 3-24 ~ 3-25",
+    "filename": "截圖 2026-09-29 晚上7.57.34.png",
+    "section": "3-4 有效年利率",
+    "title": "實質有效年利率 (Effective Annual Rate, EAR) 與連續複利",
+    "tags": [
+      "有效年利率",
+      "EAR",
+      "名目利率",
+      "連續複利",
+      "信用卡利息陷阱"
+    ],
+    "summary": "拆穿金融機構名目利率陷阱的利器：EAR = (1 + r/m)^m - 1；連續複利下 EAR = e^r - 1。",
+    "notes": "<div class='note-block'><h4>📌 有效年利率 (EAR) 公式</h4><div class='alert-box'><b>EAR = [ 1 + (APR / m) ]^m - 1</b></div><p>💡 <b>常見盲點：</b>信用卡循環信用利率名目寫 15%（月計息），其真正的實質年負擔 <code>EAR = (1 + 0.15/12)^12 - 1 = 16.08%</code>！</p></div>"
+  },
+  {
+    "id": "p3-26-3-27",
+    "pageRange": "pp. 3-26 ~ 3-27",
+    "filename": "截圖 2026-09-29 晚上7.57.35.png",
+    "section": "3-5 貸款攤提表",
+    "title": "貸款攤提 (Loan Amortization) 表製作：本息平均攤還法",
+    "tags": [
+      "貸款攤提",
+      "本息均攤",
+      "本金償還",
+      "利息支出",
+      "Amortization"
+    ],
+    "summary": "詳細解構銀行本息平均攤還中，每期還款金額中「利息先多後少、本金先少後多」的數學機理。",
+    "notes": "<div class='note-block'><h4>📌 貸款攤提表核心法則</h4><ol><li>每期月付額 PMT 固定不變。</li><li>當期利息 = 上期剩餘本金餘額 × 期利率。</li><li>當期還本金 = 每期月付額 PMT - 當期利息。</li><li>新本金餘額 = 上期剩餘本金餘額 - 當期還本金。</li></ol></div>"
+  },
+  {
+    "id": "p3-28-3-29",
+    "pageRange": "pp. 3-28 ~ 3-29",
+    "filename": "截圖 2026-09-29 晚上7.57.37.png",
+    "section": "第三章 核心公式整理",
+    "title": "第三章 全章貨幣時間價值 終極公式速查表",
+    "tags": [
+      "TVM公式總整理",
+      "PV",
+      "FV",
+      "PVA",
+      "FVA",
+      "EAR"
+    ],
+    "summary": "第三章所有 TVM 公式（單筆、普通年金、先付年金、永續年金、EAR）終極總整理。",
+    "notes": "<div class='note-block'><h4>📌 第三章 終極公式速查矩陣</h4><p>囊括：PVIF、FVIF、PVIFA、FVIFA、永續年金與 EAR 對照。</p></div>"
+  },
+  {
+    "id": "p3-30-3-31",
+    "pageRange": "pp. 3-30 ~ 3-31",
+    "filename": "截圖 2026-09-29 晚上7.57.38.png",
+    "section": "本章精選習題",
+    "title": "第三章 習題庫（一）：選擇題 1 ~ 10 題詳解",
+    "tags": [
+      "選擇題",
+      "習題詳解",
+      "複利計算",
+      "現值計算"
+    ],
+    "summary": "精選國考與銀行特考貨幣時間價值第 1 至 10 題解析對照。",
+    "notes": "<div class='note-block'><h4>📌 習題精析（第 1 ~ 10 題）</h4><p>重點演練：單利複利對比、折現因子求現值、利率與年數敏感度分析。</p></div>"
+  },
+  {
+    "id": "p3-32-3-33",
+    "pageRange": "pp. 3-32 ~ 3-33",
+    "filename": "截圖 2026-09-29 晚上7.57.39.png",
+    "section": "本章精選習題",
+    "title": "第三章 習題庫（二）：選擇題 11 ~ 20 題詳解",
+    "tags": [
+      "選擇題",
+      "習題詳解",
+      "年金現值",
+      "有效年利率"
+    ],
+    "summary": "精選習題第 11 至 20 題選擇題解析，包含先付年金與 EAR 必考題。",
+    "notes": "<div class='note-block'><h4>📌 習題精析（第 11 ~ 20 題）</h4><p>重點演練：一年多次計息轉換、普通年金終值計算、永續年金折現。</p></div>"
+  },
+  {
+    "id": "p3-34-3-35",
+    "pageRange": "pp. 3-34 ~ 3-35",
+    "filename": "截圖 2026-09-29 晚上7.57.40.png",
+    "section": "本章精選計算題",
+    "title": "第三章 計算題庫（一）：計算題 1 ~ 4 題逐步拆解",
+    "tags": [
+      "計算題",
+      "步驟拆解",
+      "房貸試算",
+      "教育基金"
+    ],
+    "summary": "手把手計算題步驟拆解：單利複利回報比較、定額儲蓄終值計算。",
+    "notes": "<div class='note-block'><h4>📌 計算題實戰解析（第 1 ~ 4 題）</h4><p>詳細列示計算公式代入、因子查表與四捨五入計算過程。</p></div>"
+  },
+  {
+    "id": "p3-36-3-37",
+    "pageRange": "pp. 3-36 ~ 3-37",
+    "filename": "截圖 2026-09-29 晚上7.57.41.png",
+    "section": "本章精選計算題",
+    "title": "第三章 計算題庫（二）：計算題 5 ~ 8 題逐步拆解",
+    "tags": [
+      "計算題",
+      "步驟拆解",
+      "退休規劃",
+      "房貸月付額"
+    ],
+    "summary": "房貸月付額計算、退休金領取年金現值倒推計算。",
+    "notes": "<div class='note-block'><h4>📌 計算題實戰解析（第 5 ~ 8 題）</h4><p>涵蓋經典考題：30 年期房貸在不同利率下月付額的敏感度分析。</p></div>"
+  },
+  {
+    "id": "p3-38-3-40",
+    "pageRange": "pp. 3-38 ~ 3-40",
+    "filename": "截圖 2026-09-29 晚上7.57.42.png",
+    "section": "本章精選計算題",
+    "title": "第三章 計算題庫（三）：計算題 9 ~ 12 題大題全解",
+    "tags": [
+      "綜合計算題",
+      "貸款攤提表",
+      "高登模型實戰",
+      "大學畢業獎金試算"
+    ],
+    "summary": "綜合大題全解：包括畢業獎金折現（題目 12：畢業 4 年後 5 萬元獎金在 6% 年利率下的現值試算）、貸款攤提全表演練。",
+    "notes": "<div class='note-block'><h4>📌 計算題第 12 題實戰全解</h4><div class='alert-box'><b>題目：</b>假設你 4 年大學畢業後會有 5 萬元的獎金，在年利率為 6% 的情況下，請問獎金的現值是多少？<br><br><b>解析：</b><br><code>PV = FV / (1 + r)^n = 50,000 / (1 + 0.06)^4 = 50,000 / 1.262477 ≈ 39,604.7 元</code></div></div>"
+  }
+]
+    }
+  };
+
+  let currentChapterKey = 'ch1';
+  let currentPageIdx = 0;
+  let isNotesVisible = true;
+  let currentZoom = 1.0;
+  let autoSaveTimeout = null;
+
+  // MLX 服務通訊變數
+  const MLX_API_BASE = 'http://127.0.0.1:8008';
+  let isMlxOnline = false;
+
+  // 取得當前章節的頁面陣列與圖片目錄
+  function getCurrentChapter() {
+    return chaptersData[currentChapterKey];
+  }
+
+  // 切換章節
+  function switchChapter(chKey, targetPageIdx = 0) {
+    if (!chaptersData[chKey]) return;
+    currentChapterKey = chKey;
+    currentPageIdx = targetPageIdx;
+
+    // 更新頂部 Tabs
+    ['ch1', 'ch2', 'ch3'].forEach(k => {
+      const tab = document.getElementById('tab-' + k);
+      const sideNav = document.getElementById('side-nav-' + k);
+      if (tab) tab.classList.toggle('active', k === chKey);
+      if (sideNav) sideNav.classList.toggle('active', k === chKey);
+    });
+
+    const ch = getCurrentChapter();
+    document.getElementById('main-chapter-title').innerText = ch.title;
+    document.getElementById('main-chapter-sub').innerText = ch.sub;
+
+    renderSidePageList();
+    renderJumpSelect();
+    renderThumbnails();
+    renderTagCloud();
+    loadPage(targetPageIdx);
+    updateChapterNotesStat();
+  }
+
+  // 初始化閱讀器
+  function initViewer() {
+    document.addEventListener('keydown', handleKeyDown);
+    initLightboxZoom();
+    switchChapter('ch1', 0);
+  }
+
+  // 渲染側邊欄頁碼清單
+  function renderSidePageList() {
+    const list = document.getElementById('side-page-list');
+    list.innerHTML = '';
+    const ch = getCurrentChapter();
+    ch.pages.forEach((p, idx) => {
+      const item = document.createElement('a');
+      item.className = 'nav-link' + (idx === currentPageIdx ? ' active' : '');
+      item.id = 'side-page-' + idx;
+      item.onclick = () => goToPage(idx);
+      
+      const noteSaved = localStorage.getItem(`note_${currentChapterKey}_${idx}`);
+      const noteBadge = (noteSaved && noteSaved.trim().length > 0) ? ' ✍️' : '';
+      
+      item.innerHTML = `
+        <span style="font-size: 12px; font-weight: 600;">${idx + 1}.</span>
+        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px;">${p.pageRange}${noteBadge}</span>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  // 渲染下拉跳轉選單
+  function renderJumpSelect() {
+    const select = document.getElementById('jump-select');
+    select.innerHTML = '';
+    const ch = getCurrentChapter();
+    ch.pages.forEach((p, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.text = `${idx + 1}. [${p.pageRange}] ${p.title.slice(0, 18)}...`;
+      select.appendChild(opt);
+    });
+  }
+
+  // 渲染底部縮圖列
+  function renderThumbnails() {
+    const strip = document.getElementById('thumb-strip');
+    strip.innerHTML = '';
+    const ch = getCurrentChapter();
+    ch.pages.forEach((p, idx) => {
+      const div = document.createElement('div');
+      div.className = 'thumb-item' + (idx === currentPageIdx ? ' active' : '');
+      div.id = 'thumb-item-' + idx;
+      div.onclick = () => goToPage(idx);
+
+      const safePath = ch.imgFolder + '/' + encodeURIComponent(p.filename);
+      div.innerHTML = `
+        <img src="${safePath}" alt="${p.pageRange}" loading="lazy">
+        <div class="thumb-label">${p.pageRange}</div>
+      `;
+      strip.appendChild(div);
+    });
+  }
+
+  // 渲染標籤雲
+  function renderTagCloud() {
+    const container = document.getElementById('tag-cloud-container');
+    container.innerHTML = '';
+    const allTags = new Set();
+    const ch = getCurrentChapter();
+    ch.pages.forEach(p => p.tags.forEach(t => allTags.add(t)));
+
+    allTags.forEach(tag => {
+      const pill = document.createElement('span');
+      pill.className = 'tag-pill';
+      pill.innerText = '#' + tag;
+      pill.onclick = () => searchByTag(tag);
+      container.appendChild(pill);
+    });
+  }
+
+  // 載入指定頁面
+  function loadPage(idx) {
+    const ch = getCurrentChapter();
+    if (idx < 0 || idx >= ch.pages.length) return;
+    currentPageIdx = idx;
+    const p = ch.pages[idx];
+
+    // 更新圖片
+    const imgEl = document.getElementById('cur-page-img');
+    const safePath = ch.imgFolder + '/' + encodeURIComponent(p.filename);
+    imgEl.src = safePath;
+
+    // 更新標題與章節資訊
+    document.getElementById('cur-page-title').innerText = p.title;
+    document.getElementById('cur-page-section').innerText = p.section;
+    document.getElementById('cur-page-range').innerText = p.pageRange;
+    document.getElementById('cur-page-index-label').innerText = `${idx + 1} / ${ch.pages.length}`;
+
+    // 更新標籤
+    const tagsContainer = document.getElementById('cur-page-tags');
+    tagsContainer.innerHTML = '';
+    p.tags.forEach(t => {
+      const span = document.createElement('span');
+      span.className = 'badge badge-blue';
+      span.innerText = '#' + t;
+      tagsContainer.appendChild(span);
+    });
+
+    // 更新學理筆記
+    document.getElementById('cur-page-notes').innerHTML = p.notes;
+
+    // 更新選單狀態
+    document.getElementById('jump-select').value = idx;
+
+    // 更新側邊欄與縮圖 active 狀態
+    ch.pages.forEach((_, i) => {
+      const sideItem = document.getElementById('side-page-' + i);
+      if (sideItem) sideItem.classList.toggle('active', i === idx);
+      const thumb = document.getElementById('thumb-item-' + i);
+      if (thumb) thumb.classList.toggle('active', i === idx);
+    });
+
+    // 縮圖自動捲動置中
+    const curThumb = document.getElementById('thumb-item-' + idx);
+    if (curThumb) {
+      curThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    // 載入當前頁個人筆記
+    loadCurrentNote();
+  }
+
+  // 換頁函數
+  function nextPage() {
+    const ch = getCurrentChapter();
+    if (currentPageIdx < ch.pages.length - 1) {
+      loadPage(currentPageIdx + 1);
+    }
+  }
+
+  function prevPage() {
+    if (currentPageIdx > 0) {
+      loadPage(currentPageIdx - 1);
+    }
+  }
+
+  function goToPage(idx) {
+    loadPage(idx);
+  }
+
+  // 標籤篩選跳轉
+  function searchByTag(tag) {
+    const ch = getCurrentChapter();
+    const targetIdx = ch.pages.findIndex(p => p.tags.includes(tag));
+    if (targetIdx !== -1) {
+      goToPage(targetIdx);
+      window.scrollTo({ top: document.getElementById('main-viewer-card').offsetTop - 20, behavior: 'smooth' });
+    }
+  }
+
+  // ================= 個人隨堂筆記系統 =================
+  function getNoteStorageKey() {
+    return `note_${currentChapterKey}_${currentPageIdx}`;
+  }
+
+  function loadCurrentNote() {
+    const noteText = localStorage.getItem(getNoteStorageKey()) || '';
+    const textarea = document.getElementById('user-note-input');
+    textarea.value = noteText;
+    updateWordCount(noteText);
+    document.getElementById('note-saved-status').style.display = 'none';
+  }
+
+  function handleNoteInput() {
+    const textarea = document.getElementById('user-note-input');
+    const noteText = textarea.value;
+    updateWordCount(noteText);
+    
+    document.getElementById('note-saved-status').style.display = 'none';
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = setTimeout(() => {
+      localStorage.setItem(getNoteStorageKey(), noteText);
+      const badge = document.getElementById('note-saved-status');
+      badge.style.display = 'inline-flex';
+      setTimeout(() => { badge.style.display = 'none'; }, 2000);
+      updateChapterNotesStat();
+      renderSidePageList();
+    }, 400);
+  }
+
+  function updateWordCount(text) {
+    const count = text.trim().length;
+    document.getElementById('note-word-count').innerText = `${count} 字`;
+  }
+
+  function updateChapterNotesStat() {
+    const ch = getCurrentChapter();
+    let annotatedCount = 0;
+    ch.pages.forEach((_, i) => {
+      const saved = localStorage.getItem(`note_${currentChapterKey}_${i}`);
+      if (saved && saved.trim().length > 0) annotatedCount++;
+    });
+    document.getElementById('chapter-notes-stat').innerText = `已完成筆記：${annotatedCount} / ${ch.pages.length} 跨頁`;
+  }
+
+  function copyCurrentNote() {
+    const textarea = document.getElementById('user-note-input');
+    if (!textarea.value.trim()) {
+      alert('目前筆記為空，請先輸入內容！');
+      return;
+    }
+    navigator.clipboard.writeText(textarea.value).then(() => {
+      alert('✅ 此頁筆記已成功複製到剪貼簿！');
+    });
+  }
+
+  function clearCurrentNote() {
+    if (confirm('確定要清空當前頁面的筆記嗎？')) {
+      const textarea = document.getElementById('user-note-input');
+      textarea.value = '';
+      localStorage.removeItem(getNoteStorageKey());
+      updateWordCount('');
+      updateChapterNotesStat();
+      renderSidePageList();
+    }
+  }
+
+  // 匯出當前章節筆記
+  function exportCurrentChapterNotes() {
+    const ch = getCurrentChapter();
+    let md = `# 📖 財務管理（第六版）個人研讀筆記 ｜ ${ch.title}\n`;
+    md += `匯出日期：${new Date().toLocaleString()}\n\n---\n\n`;
+
+    let count = 0;
+    ch.pages.forEach((p, idx) => {
+      const note = localStorage.getItem(`note_${currentChapterKey}_${idx}`) || '';
+      md += `## 📄 跨頁 ${idx + 1}：[${p.pageRange}] ${p.title}\n`;
+      md += `**章節分類**：${p.section} ｜ **標籤**：${p.tags.join(', ')}\n\n`;
+      if (note.trim()) {
+        count++;
+        md += `### ✍️ 我的隨堂註記：\n${note.trim()}\n\n`;
+      } else {
+        md += `*（此跨頁尚未填寫個人筆記）*\n\n`;
+      }
+      md += `---\n\n`;
+    });
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `財務管理_${ch.title.replace(/[:：]/g, '_')}_研讀筆記.md`;
+    a.click();
+  }
+
+  // 匯出全書所有章節筆記
+  function exportAllChaptersNotes() {
+    let md = `# 📖 財務管理（第六版）全章節個人研讀筆記全集\n`;
+    md += `匯出日期：${new Date().toLocaleString()}\n\n---\n\n`;
+
+    ['ch1', 'ch2', 'ch3'].forEach(k => {
+      const ch = chaptersData[k];
+      md += `# 【${ch.title}】\n\n`;
+      ch.pages.forEach((p, idx) => {
+        const note = localStorage.getItem(`note_${k}_${idx}`) || '';
+        md += `## [${p.pageRange}] ${p.title}\n`;
+        if (note.trim()) {
+          md += `### ✍️ 個人註記：\n${note.trim()}\n\n`;
+        } else {
+          md += `*（無註記）*\n\n`;
+        }
+      });
+      md += `\n---\n\n`;
+    });
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '財務管理_全章節研讀筆記全集.md';
+    a.click();
+  }
+
+  // 鍵盤導航
+  function handleKeyDown(e) {
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+      nextPage();
+    } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+      prevPage();
+    } else if (e.key === 'Escape') {
+      closeLightbox();
+    }
+  }
+
+  function toggleNotesView() {
+    isNotesVisible = !isNotesVisible;
+    const notesCard = document.getElementById('notes-card');
+    const btn = document.getElementById('toggle-notes-btn');
+    if (isNotesVisible) {
+      notesCard.style.display = 'block';
+      btn.innerText = '📝 隱藏學理對照';
+    } else {
+      notesCard.style.display = 'none';
+      btn.innerText = '📖 展開學理對照';
+    }
+  }
+
+  // ================= 🤖 MLX Qwen2.5 RAG 通訊與出處跳轉 =================
+  async function checkMlxHealth() {
+    const badge = document.getElementById('mlx-status-badge');
+    const tip = document.getElementById('mlx-offline-tip');
+    try {
+      const res = await fetch(MLX_API_BASE + '/api/health', { method: 'GET', signal: AbortSignal.timeout(2000) });
+      if (res.ok) {
+        const data = await res.json();
+        isMlxOnline = true;
+        tip.style.display = 'none';
+        if (data.model_loaded) {
+          badge.innerHTML = `🟢 MLX 在線 (Qwen2.5-3B 運算中 ｜ 閒置釋放倒數 ${data.idle_remaining_seconds}s)`;
+          badge.style.background = '#ecfdf5';
+          badge.style.color = '#065f46';
+        } else {
+          badge.innerHTML = `💤 MLX 模型休眠中 (2GB RAM 已釋放，發問即秒級喚醒)`;
+          badge.style.background = '#fef3c7';
+          badge.style.color = '#92400e';
+        }
+      } else {
+        throw new Error('Health check non-200');
+      }
+    } catch (e) {
+      isMlxOnline = false;
+      badge.innerHTML = `⚪ MLX 離線 (點擊下方提示啟動)`;
+      badge.style.background = '#f1f5f9';
+      badge.style.color = '#64748b';
+      tip.style.display = 'block';
+    }
+  }
+
+  async function sendMlxMessage() {
+    const input = document.getElementById('ai-input');
+    const query = input.value.trim();
+    if (!query) return;
+
+    input.value = '';
+    appendChatMessage('user', query);
+
+    const loadingId = appendChatMessage('ai', '🤖 MLX 思考與檢索課本資料庫中...');
+
+    try {
+      const res = await fetch(MLX_API_BASE + '/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: query })
+      });
+
+      if (!res.ok) throw new Error('後端服務回應異常');
+      const data = await res.json();
+      updateChatMessage(loadingId, data.answer, data.sources, data.elapsed_seconds, data.backend);
+    } catch (err) {
+      console.warn('MLX 後端呼叫失敗，回退本機關鍵字匹配:', err);
+      fallbackLocalSearch(loadingId, query);
+    }
+  }
+
+  function fallbackLocalSearch(msgId, query) {
+    let matchedSources = [];
+    const keywords = query.toLowerCase().split(/\s+/);
+
+    ['ch1', 'ch2', 'ch3'].forEach(k => {
+      const ch = chaptersData[k];
+      ch.pages.forEach((p, idx) => {
+        let score = 0;
+        const text = (p.title + ' ' + p.summary + ' ' + p.tags.join(' ')).toLowerCase();
+        keywords.forEach(kw => {
+          if (kw && text.includes(kw)) score += 1;
+        });
+        if (score > 0) {
+          matchedSources.push({
+            chapter: k,
+            page_index: idx,
+            page_range: p.pageRange,
+            title: p.title,
+            score: score
+          });
+        }
+      });
+    });
+
+    matchedSources.sort((a, b) => b.score - a.score);
+    const topMatches = matchedSources.slice(0, 3);
+
+    let reply = `【本機離線關鍵字索引】：\n`;
+    if (topMatches.length > 0) {
+      reply += `已為你在課本中找到相關章節！可直接點擊下方出處按鈕前往對照：\n`;
+      topMatches.forEach(m => {
+        reply += `\n• 【${chaptersData[m.chapter].shortTitle} ${m.page_range}】《${m.title}》`;
+      });
+    } else {
+      reply += `未在課本中直接匹配到關鍵字，你可以點擊上方章節切換瀏覽，或啟動 MLX 助教提問！`;
+    }
+
+    const sources = topMatches.map(m => ({
+      chapter: m.chapter,
+      page_index: m.page_index,
+      badge: `${chaptersData[m.chapter].shortTitle} ${m.page_range}`
+    }));
+
+    updateChatMessage(msgId, reply, sources, 0.05, '本機純瀏覽器關鍵字匹配');
+  }
+
+  function appendChatMessage(role, text) {
+    const box = document.getElementById('ai-chat-box');
+    const msgDiv = document.createElement('div');
+    const id = 'msg-' + Date.now();
+    msgDiv.id = id;
+    msgDiv.className = `chat-bubble chat-${role}`;
+    msgDiv.innerText = text;
+    box.appendChild(msgDiv);
+    box.scrollTop = box.scrollHeight;
+    return id;
+  }
+
+  function updateChatMessage(msgId, answer, sources = [], elapsed = 0, backend = '') {
+    const el = document.getElementById(msgId);
+    if (!el) return;
+
+    let html = answer.replace(/\n/g, '<br>');
+    if (sources && sources.length > 0) {
+      html += `<div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 11.5px; color: #475569;"><b>📖 課本與案例出處（點擊跳轉）：</b><br>`;
+      sources.forEach(s => {
+        let chKey = s.chapter;
+        if (!chKey) {
+          if (s.id && s.id.includes('ch02')) chKey = 'ch2';
+          else if (s.id && s.id.includes('ch03')) chKey = 'ch3';
+          else chKey = 'ch1';
+        }
+        const pIdx = (s.page_index !== undefined) ? s.page_index : 0;
+        const badgeLabel = s.badge || s.page_range || s.title;
+        html += `<span class="citation-badge" onclick="jumpToCitation('${chKey}', ${pIdx})">📖 ${badgeLabel} ➜</span>`;
+      });
+      html += `</div>`;
+    }
+
+    if (elapsed > 0) {
+      html += `<div style="font-size: 10px; color: #94a3b8; margin-top: 4px; text-align: right;">⚡ 運算耗時：${elapsed}s ｜ 引擎：${backend || 'Apple MLX'}</div>`;
+    }
+
+    el.innerHTML = html;
+    const box = document.getElementById('ai-chat-box');
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function jumpToCitation(chapterKey, pageIdx) {
+    switchChapter(chapterKey, pageIdx);
+    const viewer = document.getElementById('main-viewer-card');
+    viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function quickMlxPrompt(q) {
+    document.getElementById('ai-input').value = q;
+    sendMlxMessage();
+  }
+
+  async function manualUnloadModel() {
+    try {
+      const res = await fetch(MLX_API_BASE + '/api/unload', { method: 'POST' });
+      if (res.ok) {
+        alert('💤 已成功向後端發出卸載指令，2GB 統一記憶體已釋放！');
+        checkMlxHealth();
+      }
+    } catch (e) {
+      alert('卸載失敗，請確認後端服務是否正在運行。');
+    }
+  }
+
+  function clearAiChat() {
+    const box = document.getElementById('ai-chat-box');
+    box.innerHTML = `
+      <div class="chat-bubble chat-ai">
+        對話紀錄已清空。你可以隨時點擊上方快捷膠囊提問，或輸入專有名詞開始研讀！
+      </div>
+    `;
+  }
+
+  // ================= 燈箱縮放 =================
+  function openLightbox() {
+    const modal = document.getElementById('lightbox-modal');
+    const lbImg = document.getElementById('lightbox-img');
+    const curImg = document.getElementById('cur-page-img');
+    const ch = getCurrentChapter();
+    const p = ch.pages[currentPageIdx];
+
+    document.getElementById('lb-title').innerText = `[${ch.title}] ${p.pageRange} ｜ ${p.title}`;
+    lbImg.src = curImg.src;
+    currentZoom = 1.0;
+    updateZoom();
+    modal.classList.add('show');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox-modal').classList.remove('show');
+  }
+
+  function initLightboxZoom() {
+    const container = document.getElementById('lightbox-container');
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        currentZoom = Math.min(currentZoom + 0.15, 3.5);
+      } else {
+        currentZoom = Math.max(currentZoom - 0.15, 0.6);
+      }
+      updateZoom();
+    }, { passive: false });
+  }
+
+  function zoomIn() {
+    currentZoom = Math.min(currentZoom + 0.25, 3.5);
+    updateZoom();
+  }
+
+  function zoomOut() {
+    currentZoom = Math.max(currentZoom - 0.25, 0.5);
+    updateZoom();
+  }
+
+  function resetZoom() {
+    currentZoom = 1.0;
+    updateZoom();
+  }
+
+  function updateZoom() {
+    const lbImg = document.getElementById('lightbox-img');
+    lbImg.style.transform = `scale(${currentZoom})`;
+    document.getElementById('lb-scale').innerText = `${Math.round(currentZoom * 100)}%`;
+  }
+
+  // 啟動入口
+  window.onload = () => {
+    initViewer();
+    checkMlxHealth();
+    setInterval(checkMlxHealth, 10000);
+  };
+</script>
+</body>
+</html>

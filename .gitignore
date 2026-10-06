@@ -1,0 +1,7 @@
+.DS_Store
+.chrome_tmp/
+__pycache__/
+*.pyc
+.venv/
+*.log
+scratch/
