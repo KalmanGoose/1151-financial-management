@@ -315,6 +315,105 @@
     #main { padding: 14px; }
     table { min-width: 500px; }
   }
+
+  /* ================= 🃏 3D 考點單字卡樣式 ================= */
+  .flashcard-container {
+    max-width: 680px;
+    margin: 0 auto 20px auto;
+  }
+  .flashcard-box {
+    perspective: 1000px;
+    min-height: 250px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    min-height: 250px;
+    text-align: center;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  }
+  .flashcard-inner.flipped {
+    transform: rotateY(180deg);
+  }
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 28px;
+    box-sizing: border-box;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #ffffff;
+    border: 2px solid #3b82f6;
+  }
+  .flashcard-back {
+    background: #ffffff;
+    color: #0f172a;
+    transform: rotateY(180deg);
+    border: 2px solid #10b981;
+    text-align: left;
+    align-items: flex-start;
+  }
+  .flashcard-badge {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+  .flashcard-tip-label {
+    position: absolute;
+    bottom: 12px;
+    font-size: 11.5px;
+    opacity: 0.85;
+  }
+  /* 考點思路提示卡 */
+  .hint-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s;
+    margin-bottom: 10px;
+  }
+  .hint-toggle-btn:hover {
+    background: #fde68a;
+  }
+  .hint-box {
+    display: none;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #78350f;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
 </style>
 </head>
 <body>
@@ -1619,8 +1718,8 @@
 
     <!-- 功能切換 Tabs -->
     <div style="display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;" id="quiz1-tabs">
-      <button class="btn btn-primary quiz1-tab-btn" onclick="switchQuiz1Tab('cheat', this)" style="padding: 10px 18px; font-weight: 700; border-radius: 8px;">
-        ⚡ 課本重點速記 (Cheat Sheet)
+      <button class="btn btn-primary quiz1-tab-btn" onclick="switchQuiz1Tab('flashcards', this)" style="padding: 10px 18px; font-weight: 700; border-radius: 8px;">
+        🃏 考點單字卡 (Flashcards)
       </button>
       <button class="btn quiz1-tab-btn" onclick="switchQuiz1Tab('choice', this)" style="padding: 10px 18px; font-weight: 600; border-radius: 8px;">
         🎯 歷屆選擇題庫 14 題 (互動刷題)
@@ -1628,12 +1727,103 @@
       <button class="btn quiz1-tab-btn" onclick="switchQuiz1Tab('short', this)" style="padding: 10px 18px; font-weight: 600; border-radius: 8px;">
         📝 5 大核心簡答題 (標準答案)
       </button>
+      <button class="btn quiz1-tab-btn" onclick="switchQuiz1Tab('cheat', this)" style="padding: 10px 18px; font-weight: 600; border-radius: 8px;">
+        ⚡ 課本重點速記 (Cheat Sheet)
+      </button>
       <button class="btn quiz1-tab-btn" onclick="switchQuiz1Tab('mock', this)" style="padding: 10px 18px; font-weight: 600; border-radius: 8px;">
         ⏱️ 全真模擬自測 (14 題自動計分)
       </button>
     </div>
 
     <!-- ========================================================= -->
+    <!-- TAB 0: 🃏 考點單字卡 (Flashcards 翻轉記憶卡) -->
+    <!-- ========================================================= -->
+    <div id="quiz1-tab-flashcards" class="quiz1-subtab-content" style="display: block;">
+      <div class="card" style="margin-bottom: 16px; background: linear-gradient(to right, #eff6ff, #f8fafc); border-left: 4px solid #2563eb;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="margin: 0; font-size: 17px; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
+              <span>🃏</span> 考前 3 分鐘特急翻翻卡（必考概念單字卡）
+            </h3>
+            <p style="margin: 3px 0 0 0; font-size: 13px; color: #475569;">
+              點擊卡片即可<b>翻轉查看正解與考點</b>。支援左右切換、隨機抽考與標記熟記功能！
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn" onclick="toggleFlashcardView('deck')" id="btn-fc-deck" style="font-size: 12.5px; padding: 5px 12px; background: #2563eb; color: #fff; font-weight: 600;">
+              🃏 抽卡模式
+            </button>
+            <button class="btn" onclick="toggleFlashcardView('grid')" id="btn-fc-grid" style="font-size: 12.5px; padding: 5px 12px; font-weight: 600;">
+              📋 全卡片一覽
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 單張抽卡模式視圖 -->
+      <div id="fc-deck-view" class="flashcard-container">
+        <!-- 進度條與計數器 -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; color: #64748b;">
+          <span id="fc-index-display" style="font-weight: 700; color: #1e3a8a;">卡片 1 / 15</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span id="fc-mastered-count" style="color: #166534; font-weight: 600;">🌟 已熟記：0</span>
+            <div style="width: 140px; height: 7px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+              <div id="fc-progress-bar" style="width: 6.6%; height: 100%; background: #2563eb; transition: width 0.3s;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D 翻轉卡片本體 -->
+        <div class="flashcard-box" onclick="flipCurrentCard()">
+          <div class="flashcard-inner" id="current-flashcard">
+            <!-- 卡片正面 -->
+            <div class="flashcard-front">
+              <span class="flashcard-badge" style="background: rgba(255,255,255,0.25); color: #ffffff;" id="fc-tag-front">
+                領域分類
+              </span>
+              <div id="fc-text-front" style="font-size: 19px; font-weight: 700; line-height: 1.5; margin: 20px 0;">
+                財務管理的三大領域是哪三項？
+              </div>
+              <div class="flashcard-tip-label">👆 點擊卡片翻面看解析</div>
+            </div>
+            <!-- 卡片背面 -->
+            <div class="flashcard-back">
+              <span class="flashcard-badge" style="background: #dcfce7; color: #166534;" id="fc-tag-back">
+                ✅ 正解與速背口訣
+              </span>
+              <div id="fc-text-back" style="font-size: 14.5px; line-height: 1.6; color: #1e293b; margin: 18px 0 0 0; width: 100%;">
+                <!-- Dynamic Back Text -->
+              </div>
+              <div class="flashcard-tip-label" style="color: #64748b; width: 100%; text-align: center;">👆 點擊卡片翻回正面</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片操作按鈕群 -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; flex-wrap: wrap; gap: 8px;">
+          <button class="btn" onclick="prevCard()" style="font-size: 13.5px; padding: 8px 18px;">
+            ⬅️ 上一張
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn" onclick="toggleMasterCurrentCard()" id="btn-master-card" style="font-size: 13px; padding: 8px 14px; border-color: #86efac; color: #15803d; background: #f0fdf4;">
+              🌟 標記已熟記
+            </button>
+            <button class="btn" onclick="shuffleCards()" style="font-size: 13px; padding: 8px 14px;">
+              🔀 隨機抽考
+            </button>
+          </div>
+          <button class="btn btn-primary" onclick="nextCard()" style="font-size: 13.5px; padding: 8px 20px;">
+            下一張 ➡️
+          </button>
+        </div>
+      </div>
+
+      <!-- 全卡片網格視圖（預設隱藏） -->
+      <div id="fc-grid-view" style="display: none; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; margin-top: 14px;">
+        <!-- Grid rendered dynamically -->
+      </div>
+    </div>
+    <!-- ===+ -->
     <!-- TAB 1: 課本重點速記 (Cheat Sheet) -->
     <!-- ========================================================= -->
     <div id="quiz1-tab-cheat" class="quiz1-subtab-content" style="display: block;">
@@ -2593,13 +2783,109 @@
 </script>
 
 
+
 <script>
-  /* 第一次小考題庫資料結構 */
+  /* 考點單字卡 (Flashcards) 題庫 */
+  const FLASHCARDS_DATA = [
+    {
+      id: 1,
+      tag: "領域分類",
+      q: "請問財務管理的三大領域是哪三項？",
+      a: "<b>1. 公司理財 (Corporate Finance)</b>：研討企業資金的募集、管理、投資與分配。<br><b>2. 投資學 (Investments)</b>：研討資產風險報酬衡量、投資組合與效率市場。<br><b>3. 金融市場 (Financial Markets)</b>：借貸、籌資與避險管道。<br><span style='color:#2563eb;'>💡 <b>口訣</b>：公司籌資做投資，進入金融市場。</span>"
+    },
+    {
+      id: 2,
+      tag: "決策範圍",
+      q: "公司理財的三大核心決策為何？哪些決策不包含？",
+      a: "<b>三大核心決策：</b><br>• <b>投資決策</b>（資本預算）<br>• <b>融資決策</b>（資本結構）<br>• <b>股利分配決策</b>（盈餘分配）<br><span style='color:#dc2626;'>⚠️ <b>大考陷阱</b>：<b>「採購決策」</b>與<b>「存貨決策」</b>屬於生產作業與供應鏈管理，不屬於公司理財！</span>"
+    },
+    {
+      id: 3,
+      tag: "經營目標",
+      q: "財務管理的合理最高經營目標為何？為什麼不是會計利潤最大化？",
+      a: "<b>唯一最高目標：股東財富最大化（股票市場價值極大化）</b><br>❌ <b>為什麼不是「利潤最大化 (EPS)」？</b><br>1. 忽略<b>貨幣時間價值</b>（未折現）<br>2. 忽略<b>投資風險</b>（高利潤伴隨高破產風險）<br>3. 誘發經理人短視近利（犧牲長期 R&D 衝高短期 EPS）。"
+    },
+    {
+      id: 4,
+      tag: "金融市場",
+      q: "金融市場四大市場名稱與工具速配？",
+      a: "<b>1. 貨幣市場</b>（1 年期以下短期）：國庫券 TB、商業本票 CP、銀行承兌匯票 BA、可轉讓定期存單 NCD。<br><b>2. 資本市場</b>（1 年期以上或未定）：股票市場＋債券市場。<br><b>3. 外匯市場</b>：外國貨幣買賣場所。<br><b>4. 衍生性商品市場</b>：遠期契約、期貨、選擇權、金融交換 (Swap)。"
+    },
+    {
+      id: 5,
+      tag: "金融機構",
+      q: "貨幣機構 vs 非貨幣機構的區別與名單？",
+      a: "• <b>貨幣機構</b>（會影響/創造存款貨幣供給量）：商業銀行、信用合作社、農漁會信用部、郵局儲匯處。<br>• <b>非貨幣機構</b>（不影響存款貨幣供給）：證券商、期貨商、票券公司、投信、投顧、保險公司、電子支付機構。"
+    },
+    {
+      id: 6,
+      tag: "組織型態",
+      q: "獨資企業 (Sole Proprietorship) 的兩大優點與四大缺點？",
+      a: "👍 <b>優點</b>：1. 設立簡單便利；2. 決策效率最迅速（無代理問題）。<br>👎 <b>缺點</b>：<br>1. <b>無限清償責任</b>（個人私產負連帶責任）<br>2. 募集資金有限<br>3. 不易永續經營（業主身故即結束）<br>4. 所有權移轉困難。"
+    },
+    {
+      id: 7,
+      tag: "組織型態",
+      q: "合夥企業 (Partnership) 的優缺點？最常發生的問題？",
+      a: "👍 <b>優點</b>：組設簡單便利、損益共同承擔（分散風險）。<br>👎 <b>缺點</b>：<b>連帶無限清償責任</b>、資金有限、不易永續。<br>⚠️ <b>最常發生的問題</b>：<b>合夥人易起爭執</b>，理念不合易拆夥。"
+    },
+    {
+      id: 8,
+      tag: "組織型態",
+      q: "股份有限公司 (Corporation) 相較獨資合夥的四大強大優點？兩大缺點？",
+      a: "👍 <b>四大優點</b>：<br>1. <b>有限清償責任</b>（最多僅損失出資額）<br>2. <b>可以永續經營</b>（具獨立法人地位）<br>3. <b>資金募集容易</b>（公開發行股票債券）<br>4. <b>所有權易移轉</b>（標準化股份自由買賣）。<br>👎 <b>缺點</b>：籌設程序繁雜、<b>易起代理問題</b>、雙重課稅。"
+    },
+    {
+      id: 9,
+      tag: "代理問題",
+      q: "何謂代理關係？代理問題發生的根本原因？",
+      a: "<b>定義</b>：<b>主理人 (Principals)</b> 委託 <b>代理人 (Agents)</b> 代為執行管理決策。<br><b>成因</b>：<br>1. 雙方<b>利益目標發生衝突</b>（經理人追求個人私利，股東追求財富最大化）<br>2. 雙方存在<b>資訊不對稱</b>與監督不完整。"
+    },
+    {
+      id: 10,
+      tag: "代理問題",
+      q: "股東 vs 管理者的四大自利成因（經理人侵權行為）？",
+      a: "1. <b>怠忽職守 (Shirking)</b>：缺乏激勵誘因工作懈怠。<br>2. <b>特權消費 (Perquisites)</b>：公費報銷奢華私用（補貼性消費）。<br>3. <b>管理買下 (MBO)</b>：刻意壓低股價，再舉債買回股權奪取所有權。<br>4. <b>過度投資 (Overinvestment)</b>：好大喜功帝國擴張盲目投資。"
+    },
+    {
+      id: 11,
+      tag: "代理問題",
+      q: "股東約束管理者的四大機制（解決之道）？",
+      a: "1. <b>解雇威脅</b>：董事會開除不適任經理人。<br>2. <b>接管威脅 (Hostile Takeover)</b>：股價暴跌遭外部敵意收購撤換高層。<br>3. <b>薪資獎勵</b>：發放股票選擇權 (認股權)、績效配股，利益與股價綁定。<br>4. <b>同工同酬</b>：管理人力市場競爭評價機制。"
+    },
+    {
+      id: 12,
+      tag: "超高頻考點",
+      q: "【大考必考陷阱】公司的「負債比例下降」會增加還是減少代理問題？",
+      a: "👉 答案：<b>會增加代理問題！</b><br>💡 <b>學理解析</b>：負債具有每期剛性還本付息的壓力，能約束經理人手頭多餘閒錢；當<b>負債比例下降</b>時，經理人手上充斥免付息的「自由現金流量 (FCF)」，缺乏還款約束，更容易做特權消費與過度投資！"
+    },
+    {
+      id: 13,
+      tag: "代理問題",
+      q: "股東 vs 債權人的四大衝突原因（股東有限責任博弈）？",
+      a: "1. <b>資產替換 (Asset Substitution)</b>：借低風險的錢投高風險（賺歸股東，賠由債權人擔）。<br>2. <b>債權稀釋 (Claim Dilution)</b>：大量加發新債，降低舊債清償順位。<br>3. <b>股利支付 (Dividend Payout)</b>：將借來的錢充作現金股利發給股東掏空資產。<br>4. <b>投資不足 (Underinvestment)</b>：有良好計畫但利潤全拿去還債，股東拒絕增資。"
+    },
+    {
+      id: 14,
+      tag: "代理問題",
+      q: "債權人保護自身權益的兩大解決機制？（另有一重要證券工具）",
+      a: "1. <b>訂立限制條款 (Restrictive Covenants)</b>：契約明定限制發放股利上限、限制新發債券、要求維持流動比率、要求專屬擔保品。<br>2. <b>提高借款利息</b>：收取更高的風險溢酬 (Risk Premium)。<br>3. <i>(重要工具)</i> <b>發行可轉換公司債 (CB)</b>：讓債權人能轉成股票分享成長果實。"
+    },
+    {
+      id: 15,
+      tag: "⚠️ 爭議防踩雷",
+      q: "【2019 農會特考原題】企業的代理問題是發生在？",
+      a: "👉 <b>原卷官方答案：(A) 獨資企業</b><br>👉 <b>教科書學理答案：(C) 股份有限公司</b><br><div style='background:#fef3c7; color:#92400e; padding:6px 10px; border-radius:6px; margin-top:4px;'>⚠️ <b>應考叮嚀</b>：本題出現在 2019 農會特考，官方公告答案為 (A)！若隨堂測驗是直接原題目影印，請認準原題答案 <b>(A)</b>；若老師課堂強調所有權與經營權分離的學理，則為 <b>(C)</b>！</div>"
+    }
+  ];
+
+  /* 第一次小考 14 道選擇題題庫（含思路提示 hint） */
   const QUIZ1_QUESTIONS = [
     {
       id: 1,
       source: "觀念題",
       q: "下列敘述何者正確？",
+      hint: "想一想：哪種組織型態具有「獨立法人地位」，即使個別股東過世或退股，公司也能永久經營？",
       opts: [
         { key: "A", text: "獨資業主須負無限清償責任，但合夥不用" },
         { key: "B", text: "公司股東會擔心公司倒閉，須負無限清償責任" },
@@ -2614,6 +2900,7 @@
       id: 2,
       source: "觀念題",
       q: "有關代理問題何者正確？",
+      hint: "想一想：如何讓經理人把公司當作自己的心血去努力？給他認股選擇權或績效獎金能對齊利益嗎？",
       opts: [
         { key: "A", text: "管理人員總是以股東的最佳利益為出發點行事" },
         { key: "B", text: "股東和債券持有人之間無利益衝突" },
@@ -2628,6 +2915,7 @@
       id: 3,
       source: "觀念題",
       q: "下列對於股權代理問題之描述何者為非？",
+      hint: "想一想：獨資企業的出資者是誰？老闆是誰？如果出資跟管理是同一個人，還需要委託別人代管嗎？",
       opts: [
         { key: "A", text: "若所有權和管理權完全一樣，則不會有股東與管理者之間的代理問題在" },
         { key: "B", text: "獨資也會有代理問題" },
@@ -2642,6 +2930,7 @@
       id: 4,
       source: "觀念題",
       q: "下列何者對於公司治理的描述有誤？",
+      hint: "想一想：公司治理保障的是所有利害關係人。如果一家公司資訊公開透明且財報真實，債權人借錢給它會不利嗎？",
       opts: [
         { key: "A", text: "是一種監管企業經營的制度" },
         { key: "B", text: "公司治理較優的公司，要利於發行債券籌措資金" },
@@ -2656,6 +2945,7 @@
       id: 5,
       source: "【2007年國營事業】",
       q: "股東與債權人間之代理問題有？（複選題）",
+      hint: "想一想：經理人公款私用叫補貼性消費；但股東拿借來的錢去玩高風險專案或多借新債叫什麼？",
       opts: [
         { key: "A", text: "資產替代" },
         { key: "B", text: "補貼性消費" },
@@ -2670,6 +2960,7 @@
       id: 6,
       source: "【2007年國營事業】",
       q: "承上題，下列何者方法可解決股東與債權人間之代理問題？（複選題）",
+      hint: "想一想：在借貸契約中限制發放股利叫什麼條款？如果發行一種可以轉成股票分享成長的公司債叫什麼？",
       opts: [
         { key: "A", text: "實施員工認股選擇權" },
         { key: "B", text: "在債務契約中訂立限制條款" },
@@ -2682,8 +2973,9 @@
     },
     {
       id: 7,
-      source: "【2017華南銀行】",
+      source: "【2017華南銀行】★大熱門考點",
       q: "下列何者會增加股東與管理者的代理問題？",
+      hint: "想一想：舉債有每期強制還本付息的壓力，能逼經理人節制；如果「負債比例下降」，經理人手頭會多出什麼充裕的資金？",
       opts: [
         { key: "A", text: "公司的負債比例下降" },
         { key: "B", text: "大股東持股比例增加" },
@@ -2698,6 +2990,7 @@
       id: 8,
       source: "【2017中國鋼鐵】",
       q: "合理的公司經營目標應該是：",
+      hint: "想一想：財管講求考量現金流量、時間價值與折現風險，在公開市場上體現為哪一項的極大化？",
       opts: [
         { key: "A", text: "銷售量極大化" },
         { key: "B", text: "經營者影響力極大化" },
@@ -2712,6 +3005,7 @@
       id: 9,
       source: "【2018桃園捷運】",
       q: "下列何者讓股東與管理者之間的潛在代理問題相對較為嚴重？",
+      hint: "想一想：經理人利用公款買豪車、奢華裝潢招待自己，在學理上稱為什麼消費？",
       opts: [
         { key: "A", text: "資產替代" },
         { key: "B", text: "補貼性消費" },
@@ -2726,9 +3020,10 @@
       id: 10,
       source: "【2018農會】",
       q: "下列敘述何者正確？",
+      hint: "想一想：獨資如果破產倒閉，業主本人的私人存款與房產需要拿去抵債嗎？",
       opts: [
         { key: "A", text: "獨資企業的缺點之一為公司的所有者承擔無限責任" },
-        { key: "B", text: "合夥比公司更容易轉移所有權益" },
+        { key: "B",合夥比公司更容易轉移所有權益" },
         { key: "C", text: "公司組織的優點是可以避免雙重課稅" },
         { key: "D", text: "從社會角度看，公司的優點為每個股東都有公平的投票權，即一人一票" },
         { key: "E", text: "所有類型的公司都必須繳交企業所得。" }
@@ -2741,6 +3036,7 @@
       id: 11,
       source: "【2019台中捷運】",
       q: "公司財務管理所追求的目標為：",
+      hint: "想一想：公司是誰的？財務管理的核心利益歸於誰？",
       opts: [
         { key: "A", text: "公司股東財富極大化" },
         { key: "B", text: "公司管理者財富極大化" },
@@ -2755,6 +3051,7 @@
       id: 12,
       source: "【2019農會】⚠️ 爭議防踩雷",
       q: "企業的代理問題是發生在：",
+      hint: "想一想：【注意原題陷阱】農會官方答案公布為 (A)！但學理上所有權與管理權分離的是哪一種？",
       opts: [
         { key: "A", text: "獨資企業" },
         { key: "B", text: "合夥企業" },
@@ -2769,6 +3066,7 @@
       id: 13,
       source: "【2021農會】",
       q: "下列何者通常不包含在公司財務的主題範圍之內？（複選題）",
+      hint: "想一想：財務三大決策是「投資、融資、股利」。工廠要買多少料、倉庫擺多少貨是財務還是生產作業營運？",
       opts: [
         { key: "A", text: "融資決策" },
         { key: "B", text: "採購決策" },
@@ -2784,6 +3082,7 @@
       id: 14,
       source: "【2021農會】",
       q: "相較於獨資或合夥的企業組織型態，公司通常有哪些優點？（複選題）",
+      hint: "想一想：公司的股東需要拿全家私人財產去賠債務嗎？公司可以發行股票跟債券，資金來源廣不廣？",
       opts: [
         { key: "A", text: "稅負較低" },
         { key: "B", text: "有限責任" },
@@ -2796,6 +3095,129 @@
       exp: "<b>(B) 及 (C) 正確</b>：公司享有<b>有限清償責任</b>與發行股債管道多所帶來的<b>資金來源較多</b>。缺點則是成立程序繁瑣與面臨雙重課稅。"
     }
   ];
+
+  /* 考點單字卡控制器邏輯 */
+  let currentCardIndex = 0;
+  let masteredCardIds = new Set();
+  let flashcardDeck = [...FLASHCARDS_DATA];
+
+  function renderCurrentFlashcard() {
+    const card = flashcardDeck[currentCardIndex];
+    if (!card) return;
+
+    const inner = document.getElementById('current-flashcard');
+    if (inner) inner.classList.remove('flipped');
+
+    document.getElementById('fc-index-display').innerText = `卡片 ${currentCardIndex + 1} / ${flashcardDeck.length}`;
+    document.getElementById('fc-tag-front').innerText = card.tag;
+    document.getElementById('fc-text-front').innerHTML = card.q;
+    document.getElementById('fc-tag-back').innerText = `✅ ${card.tag} 解構`;
+    document.getElementById('fc-text-back').innerHTML = card.a;
+
+    const progressPercent = ((currentCardIndex + 1) / flashcardDeck.length) * 100;
+    document.getElementById('fc-progress-bar').style.width = progressPercent + '%';
+
+    const isMastered = masteredCardIds.has(card.id);
+    const btnMaster = document.getElementById('btn-master-card');
+    if (btnMaster) {
+      if (isMastered) {
+        btnMaster.innerText = '✅ 已熟記（點擊取消）';
+        btnMaster.style.background = '#15803d';
+        btnMaster.style.color = '#fff';
+      } else {
+        btnMaster.innerText = '🌟 標記已熟記';
+        btnMaster.style.background = '#f0fdf4';
+        btnMaster.style.color = '#15803d';
+      }
+    }
+    document.getElementById('fc-mastered-count').innerText = `🌟 已熟記：${masteredCardIds.size}`;
+  }
+
+  function flipCurrentCard() {
+    const inner = document.getElementById('current-flashcard');
+    if (inner) inner.classList.toggle('flipped');
+  }
+
+  function nextCard() {
+    currentCardIndex = (currentCardIndex + 1) % flashcardDeck.length;
+    renderCurrentFlashcard();
+  }
+
+  function prevCard() {
+    currentCardIndex = (currentCardIndex - 1 + flashcardDeck.length) % flashcardDeck.length;
+    renderCurrentFlashcard();
+  }
+
+  function shuffleCards() {
+    flashcardDeck.sort(() => Math.random() - 0.5);
+    currentCardIndex = 0;
+    renderCurrentFlashcard();
+    showToast('🔀 已隨機打亂單字卡順序！');
+  }
+
+  function toggleMasterCurrentCard() {
+    const card = flashcardDeck[currentCardIndex];
+    if (!card) return;
+    if (masteredCardIds.has(card.id)) {
+      masteredCardIds.delete(card.id);
+      showToast('已取消熟記標記');
+    } else {
+      masteredCardIds.add(card.id);
+      showToast('🌟 已標記為熟記！');
+    }
+    renderCurrentFlashcard();
+  }
+
+  function toggleFlashcardView(mode) {
+    const deckView = document.getElementById('fc-deck-view');
+    const gridView = document.getElementById('fc-grid-view');
+    const btnDeck = document.getElementById('btn-fc-deck');
+    const btnGrid = document.getElementById('btn-fc-grid');
+
+    if (mode === 'deck') {
+      deckView.style.display = 'block';
+      gridView.style.display = 'none';
+      btnDeck.style.background = '#2563eb';
+      btnDeck.style.color = '#fff';
+      btnGrid.style.background = '#fff';
+      btnGrid.style.color = '#1e293b';
+      renderCurrentFlashcard();
+    } else {
+      deckView.style.display = 'none';
+      gridView.style.display = 'grid';
+      btnGrid.style.background = '#2563eb';
+      btnGrid.style.color = '#fff';
+      btnDeck.style.background = '#fff';
+      btnDeck.style.color = '#1e293b';
+      renderGridFlashcards();
+    }
+  }
+
+  function renderGridFlashcards() {
+    const grid = document.getElementById('fc-grid-view');
+    grid.innerHTML = '';
+    FLASHCARDS_DATA.forEach((card, idx) => {
+      const cardEl = document.createElement('div');
+      cardEl.className = 'card';
+      cardEl.style.border = '1px solid var(--border)';
+      cardEl.style.cursor = 'pointer';
+      cardEl.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span class="badge badge-blue">#${idx + 1} ${card.tag}</span>
+          <span style="font-size: 11px; color: #64748b;">點擊翻面</span>
+        </div>
+        <div style="font-weight: 700; color: #1e3a8a; font-size: 14.5px; margin-bottom: 10px;">${card.q}</div>
+        <div class="grid-card-ans" style="display: none; background: #f8fafc; border-left: 3px solid #10b981; padding: 10px 12px; border-radius: 6px; font-size: 13px; color: #1e293b; line-height: 1.5;">
+          ${card.a}
+        </div>
+      `;
+      cardEl.onclick = () => {
+        const ans = cardEl.querySelector('.grid-card-ans');
+        ans.style.display = (ans.style.display === 'none') ? 'block' : 'none';
+      };
+      grid.appendChild(cardEl);
+    });
+  }
 
   /* 切換第一次小考子頁籤 */
   function switchQuiz1Tab(tabKey, btn) {
@@ -2811,14 +3233,16 @@
     const target = document.getElementById('quiz1-tab-' + tabKey);
     if (target) target.style.display = 'block';
 
-    if (tabKey === 'choice' && !document.getElementById('quiz1-choice-list').hasChildNodes()) {
+    if (tabKey === 'flashcards') {
+      renderCurrentFlashcard();
+    } else if (tabKey === 'choice' && !document.getElementById('quiz1-choice-list').hasChildNodes()) {
       renderChoiceQuestions();
     } else if (tabKey === 'mock' && !document.getElementById('quiz1-mock-list').hasChildNodes()) {
       renderMockQuestions();
     }
   }
 
-  /* 渲染互動選擇題庫 */
+  /* 渲染互動選擇題庫（含考點思路提示） */
   function renderChoiceQuestions() {
     const container = document.getElementById('quiz1-choice-list');
     container.innerHTML = '';
@@ -2857,8 +3281,17 @@
           </div>
           <span id="choice-status-${q.id}" style="font-size: 13px; font-weight: 600;"></span>
         </div>
-        <div style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 12px; line-height: 1.5;">
+        <div style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 10px; line-height: 1.5;">
           ${q.q}
+        </div>
+        <!-- 考點思路提示按鈕與展開框 -->
+        <div>
+          <button class="hint-toggle-btn" onclick="toggleQuestionHint(${q.id})">
+            💡 考點提示 (點擊思考引導)
+          </button>
+          <div class="hint-box" id="hint-box-${q.id}">
+            ${q.hint}
+          </div>
         </div>
         <div class="options-container" id="opts-container-${q.id}">
           ${optsHtml}
@@ -2870,6 +3303,13 @@
       `;
       container.appendChild(card);
     });
+  }
+
+  /* 切換題目思路提示 */
+  function toggleQuestionHint(qid) {
+    const box = document.getElementById('hint-box-' + qid);
+    if (!box) return;
+    box.style.display = (box.style.display === 'block') ? 'none' : 'block';
   }
 
   /* 檢查單選答案 */
@@ -2895,7 +3335,6 @@
       btn.style.background = '#fef2f2';
       btn.style.opacity = '1';
       statusEl.innerHTML = '<span style="color:#dc2626;">❌ 答錯了！</span>';
-      // 高亮正解
       buttons.forEach(b => {
         if (b.innerText.includes(q.ans[0])) {
           b.style.border = '2px solid #10b981';
@@ -3016,13 +3455,14 @@
     showToast('模擬測驗已重置！');
   }
 
-  // 初始掛載第一次小考題庫
+  // 初始掛載第一次小考題庫與單字卡
   document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('quiz1-choice-list')) {
-      renderChoiceQuestions();
+    if (document.getElementById('current-flashcard')) {
+      renderCurrentFlashcard();
     }
   });
 </script>
+
 
 </body>
 </html>
