@@ -80,7 +80,46 @@
 
 ---
 
-## 🎯 二、 20 大財務比率逐題引導、推導與課本對照
+
+---
+
+## 🏫 三、 課堂板書代號速查（老師上課寫的英文縮寫大解密）
+
+> 💡 **課堂照片對照（IMG_6583 ～ IMG_6588）**：老師在黑板和投影幕上寫的這些英文縮寫，是財務管理與國際會計準則（IFRS）的通用標準簡稱，搞懂這些看公式秒懂：
+
+### 1. 會計基本恆等式與報表代號
+* **A = L + E**（會計第一恆等式）：
+  * **A (Assets)**：資產
+  * **L (Liabilities)**：負債
+  * **E (Equity)**：股東權益
+* **SFP (Statement of Financial Position)**：財務狀況表（即資產負債表 Balance Sheet，IFRS 正式名稱）。
+* **Dr. (Debit)**：借方（報表左邊，資產增加）。
+* **Cr. (Credit)**：貸方（報表右邊，負債與權益增加）。
+* **Treasury Bill (T-Bill)**：國庫券（零違約風險短期流動資產工具）。
+
+### 2. 營運資金與流動性比率代號
+* **CA (Current Assets)**：**流動資產**（一年內可變現之資產）。
+  * 老師課堂黑板列出的 6 大組成項目：
+    1. 現金 (Cash)
+    2. 有價證券 (Marketable Securities)
+    3. 應收帳款 (Accounts Receivable, **AR**)
+    4. 辦公用品 (Office Supplies)
+    5. 存貨 (Inventory, **INV**)
+    6. 預付款項 (Prepaid Expenses, 如「預付費用/租金」)
+* **CL (Current Liabilities)**：**流動負債**（一年內需清償之債務）。
+  * 包含應付帳款 (Accounts Payable, **AP**)、應計項目、預收租金 (Unearned Rent) 等。
+* **WC (Working Capital / 營運資金)**：
+  $$\text{WC} = \text{CA} - \text{CL} = \text{流動資產} - \text{流動負債}$$
+* **流動比率 (Current Ratio)**：
+  $$\text{Current Ratio} = \frac{\text{CA}}{\text{CL}} = \frac{\text{流動資產}}{\text{流動負債}} = \frac{2}{1} = 2 \text{ 倍 (老師黑板標註之安全經驗基準)}$$
+* **速動比率 (Quick Ratio / 酸性測驗 acid test)**：
+  $$\text{Quick Ratio} = \frac{\text{CA} - \text{存貨} - \text{預付}}{\text{CL}} = \frac{\text{現金} + \text{有價證券} + \text{AR}}{\text{CL}}$$
+* **Default (債務違約)**：
+  * 老師黑板特別標註紅字！短期債權人最關心企業是否有充足營運資金（CA - CL）；若比率過低，企業將面臨流動性枯竭與債務違約 (Default)。
+
+---
+
+## 🎯 四、 20 大財務比率逐題引導、推導與課本對照
 
 ### ▌類別一：流動性比率 (Liquidity Ratios) —— 短期償債能力
 
@@ -304,7 +343,7 @@
 
 ---
 
-## 📌 三、 助教檢核對照表（供組員自我核算檢視）
+## 📌 五、 助教檢核對照表（供組員自我核算檢視）
 
 | 題號 | 財務比率名稱 | 課本公式所在頁碼 | 核心輸入數值 | 標準參考答案 |
 | :---: | :--- | :---: | :--- | :--- |
