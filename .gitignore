@@ -5,3 +5,9 @@ __pycache__/
 .venv/
 *.log
 scratch/
+.env
+*.env
+*.session.json
+
+.taste-skill/
+*.zip

@@ -1,0 +1,823 @@
+/* ==========================================================================
+   115-1 財務管理｜小組知識庫與協同平台 核心樣式表
+   - 符合 tasteskill v2 (Achromatic Ledger) 與 Impeccable Craft 設計標準
+   - 杜絕 AI 模板味 (No-slop: 禁用無效漸層、重陰影、彩色泡泡框)
+   - 頂級字體排印系統 (Geist / Geist Mono / Tabular Numerals)
+   - 跨裝置響應式 (Desktop Adaptive & Mobile-First Touch-Friendly)
+   ========================================================================== */
+
+:root {
+  /* 基底與畫布 (Ground & Surfaces) */
+  --ground: #f8fafc;
+  --surface: #ffffff;
+  --surface-raised: #f1f5f9;
+  --surface-hover: #f8fafc;
+  
+  /* 線條與邊框 (Borders & Hairlines - 扁平實體邊框，不濫用陰影) */
+  --border: #e2e8f0;
+  --border-subtle: #edf2f7;
+  --border-focus: #1d4ed8;
+  
+  /* 側邊導航 (Sidebar - 深邃穩重行政海軍藍) */
+  --sidebar-bg: #090d16;
+  --sidebar-border: #172033;
+  --sidebar-text: #94a3b8;
+  --sidebar-hover: #172033;
+  --sidebar-active-bg: #1e293b;
+  --sidebar-active-text: #ffffff;
+  --sidebar-accent: #2563eb;
+
+  /* 文字層級 (Typography) */
+  --text: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --text-on-dark: #f8fafc;
+  
+  /* 品牌與數據點綴色 (Finance Accent Hue - 限制於 3% 像素內) */
+  --accent: #1e40af;
+  --accent-light: #2563eb;
+  --accent-subtle: #eff6ff;
+
+  /* 語義狀態 (Semantic Indicators - 低飽和冷靜指示色) */
+  --positive: #166534;
+  --positive-bg: #dcfce7;
+  --positive-border: #bbf7d0;
+
+  --negative: #991b1b;
+  --negative-bg: #fee2e2;
+  --negative-border: #fecaca;
+
+  --warning: #92400e;
+  --warning-bg: #fef3c7;
+  --warning-border: #fde68a;
+
+  /* 圓角階梯 (Bimodal Radius: 卡片 8px, 控制項 6px) */
+  --radius-sm: 4px;
+  --radius-control: 6px;
+  --radius-card: 8px;
+  --radius-full: 9999px;
+
+  /* 動態過渡 (明確指定屬性如 background, color 等) */
+  --transition-fast: 0.14s ease-out;
+  --transition-normal: 0.22s ease-out;
+
+  /* 數據與表格尺寸 */
+  --control-height: 38px;
+  --row-height: 42px;
+}
+
+/* ================= 全域重置與基礎排印 ================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--ground);
+  color: var(--text);
+  font-family: "Geist", sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 數字預設啟用等寬對齊 (Tabular figures) - 財務數據必備 */
+.tabular-nums, table, code, pre, .stat-value, .ratio-value {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* 瀏覽器原生表面自訂 (客製化選取反白與捲軸) */
+::selection {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ================= 側邊導航 (Sidebar) ================= */
+#sidebar {
+  width: 256px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  color: var(--sidebar-text);
+  padding: 16px 12px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 品牌標識 (Institutional Identity) */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 16px 10px;
+  border-bottom: 1px solid var(--sidebar-border);
+  margin-bottom: 8px;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #f8fafc;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 7px;
+  border-radius: var(--radius-sm);
+  font-family: "Geist Mono", monospace;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.brand-name {
+  font-size: 14px;
+  color: #f1f5f9;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.nav-group {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  padding: 12px 10px 4px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-family: "Geist Mono", monospace;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  min-height: var(--control-height);
+  border-radius: var(--radius-control);
+  color: #94a3b8;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  touch-action: manipulation;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  position: relative;
+}
+
+.nav-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke-width: 1.75;
+  color: #64748b;
+  transition: color var(--transition-fast);
+}
+
+.nav-item:hover {
+  background: var(--sidebar-hover);
+  color: #f1f5f9;
+}
+
+.nav-item:hover svg {
+  color: #cbd5e1;
+}
+
+.nav-item.active {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+  font-weight: 600;
+}
+
+.nav-item.active svg {
+  color: #38bdf8;
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--sidebar-accent);
+  border-radius: 2px;
+}
+
+/* 下拉選單結構 (HW Dropdown) */
+.dropdown-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  color: #64748b;
+  transition: transform var(--transition-fast);
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.dropdown-content {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 12px;
+  margin-top: 2px;
+  margin-bottom: 6px;
+  border-left: 1px solid #1e293b;
+  margin-left: 18px;
+}
+
+.dropdown-content.show {
+  display: flex;
+}
+
+.dropdown-sub-item {
+  padding: 6px 10px;
+  min-height: 32px;
+  border-radius: var(--radius-sm);
+  color: #94a3b8;
+  font-size: 12.5px;
+  cursor: pointer;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dropdown-sub-item:hover {
+  color: #ffffff;
+  background: #172033;
+}
+
+.dropdown-sub-item.active {
+  color: #38bdf8;
+  font-weight: 600;
+  background: #172033;
+}
+
+/* ================= 主內容容器 (Main Layout) ================= */
+#main {
+  flex: 1;
+  padding: 24px 32px;
+  max-width: 1200px;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+  animation: fadeIn 0.16s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= 統一卡片與面板 (Clean Flat Surfaces) ================= */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+/* 頁面權威頂部橫幅 (Executive Header Banner - 無漸層、冷靜嚴謹) */
+.page-header {
+  background: #0f172a;
+  border-radius: var(--radius-card);
+  border: 1px solid #1e293b;
+  color: #ffffff;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.page-header-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  font-family: "Geist Mono", monospace;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+}
+
+.page-desc {
+  font-size: 13.5px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 820px;
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--text);
+  margin-top: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 16px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ================= 萬用按鈕體系 (Controls) ================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: #334155;
+  padding: 6px 14px;
+  min-height: var(--control-height);
+  border-radius: var(--radius-control);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btn:hover {
+  background: var(--surface-raised);
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.btn:active {
+  background: #e2e8f0;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #1e293b;
+  border-color: #1e293b;
+  color: #ffffff;
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  min-height: 28px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* ================= 徽章與狀態標籤 (Pills) ================= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  line-height: 1.35;
+  font-family: "Geist Mono", monospace;
+}
+
+.badge-success {
+  background: var(--positive-bg);
+  color: var(--positive);
+  border-color: var(--positive-border);
+}
+
+.badge-danger {
+  background: var(--negative-bg);
+  color: var(--negative);
+  border-color: var(--negative-border);
+}
+
+.badge-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border-color: var(--warning-border);
+}
+
+.badge-ai {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+/* 即時動態連線綠點 */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  background-color: #16a34a;
+  display: inline-block;
+}
+
+/* ================= 表格系統 (Financial Tables) ================= */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 10px;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  background: #ffffff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th, td {
+  padding: 9px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* 財務數值靠右對齊 (Align numbers right) */
+td.num, th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: "Geist Mono", monospace;
+}
+
+/* ================= 抽屜 (Details / Summary) ================= */
+details {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  margin-bottom: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+details summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  background: #f8fafc;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: background var(--transition-fast);
+}
+
+details summary:hover {
+  background: #f1f5f9;
+}
+
+details[open] summary {
+  border-bottom: 1px solid var(--border);
+  background: #f8fafc;
+}
+
+/* ================= 自由認領卡片 (Claim Cards) ================= */
+.claim-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-left: 3px solid #cbd5e1;
+}
+
+.claim-card.claimed {
+  border-left-color: #16a34a;
+  background: #f8fdf9;
+}
+
+.claim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.claim-user-input {
+  padding: 6px 10px;
+  min-height: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  font-size: 13px;
+  width: 140px;
+  font-family: inherit;
+}
+
+.claim-user-input:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+/* ================= 表單與輸入框 ================= */
+textarea, input[type="text"], select {
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+}
+
+textarea:focus, input[type="text"]:focus, select:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.user-comment-box {
+  margin-top: 12px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-control);
+  padding: 14px;
+}
+
+/* ================= 提示彈窗 (Toast & Modal) ================= */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  display: none;
+  border: 1px solid #334155;
+  z-index: 9999;
+  font-size: 13px;
+  font-weight: 500;
+  pointer-events: none;
+  animation: toastFade 0.16s ease-out;
+}
+
+@keyframes toastFade {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.65);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ================= 📱 跨裝置極致 RWD (Mobile-Optimized) ================= */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  /* 行動端頂部吸頂導航列 */
+  #sidebar {
+    width: 100%;
+    padding: 8px 12px;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    gap: 6px;
+    background: #090d16;
+    border-right: none;
+    border-bottom: 1px solid #1e293b;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  #sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .brand {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding: 0 8px 0 0;
+    border-right: 1px solid #1e293b;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+
+  .nav-group {
+    display: none;
+  }
+
+  .nav-item {
+    padding: 6px 12px;
+    min-height: 34px;
+    font-size: 12.5px;
+    border-radius: var(--radius-full);
+    background: #172033;
+    color: #cbd5e1;
+    border: 1px solid #28354f;
+    flex-shrink: 0;
+  }
+
+  .nav-item.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+  }
+
+  .nav-item.active::before {
+    display: none;
+  }
+
+  .dropdown-wrapper {
+    display: contents;
+  }
+
+  .dropdown-btn {
+    display: none;
+  }
+
+  .dropdown-content {
+    display: contents;
+  }
+
+  .dropdown-sub-item {
+    padding: 6px 12px;
+    min-height: 34px;
+    font-size: 12.5px;
+    border-radius: var(--radius-full);
+    background: #172033;
+    color: #94a3b8;
+    border: 1px solid #28354f;
+    flex-shrink: 0;
+  }
+
+  .dropdown-sub-item.active {
+    background: #1d4ed8;
+    color: #ffffff;
+    border-color: #1d4ed8;
+    font-weight: 600;
+  }
+
+  #main {
+    padding: 16px 14px;
+  }
+
+  .card {
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+
+  .page-header {
+    padding: 16px;
+  }
+
+  table {
+    min-width: 480px;
+  }
+}
