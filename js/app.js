@@ -705,6 +705,241 @@ function filterRatioCategory(cat, btn) {
   }
  }
 
+ /* ================= 動態後端 CMS 渲染引擎 (Dynamic CMS Engine) ================= */
+ let globalSiteConfig = null;
+
+ async function initDynamicCms() {
+  try {
+   const local = localStorage.getItem('site_config_override');
+   if (local) {
+    globalSiteConfig = JSON.parse(local);
+    console.log("已載入本地自訂設定 (site_config_override)");
+   } else {
+    const res = await fetch('data/site_config.json?t=' + Date.now());
+    if (res.ok) {
+     globalSiteConfig = await res.json();
+    }
+   }
+  } catch (err) {
+   console.warn("載入 site_config.json 失敗，保持原有靜態排版", err);
+  }
+
+  if (globalSiteConfig && globalSiteConfig.assignments) {
+   renderDynamicAssignments();
+  }
+ }
+
+ function renderDynamicAssignments() {
+  const assignments = globalSiteConfig.assignments || [];
+  const dropdownMenu = document.getElementById('hw-dropdown-menu');
+  const drawerNav = document.querySelector('.mobile-drawer-nav');
+
+  assignments.forEach(hw => {
+   // 1. 更新麵包屑對照表
+   SECTION_TITLES[hw.id] = hw.title;
+
+   // 2. 更新或建立側邊欄下拉選單
+   let subItem = document.getElementById('sub-' + hw.id);
+   if (!subItem && dropdownMenu) {
+    subItem = document.createElement('a');
+    subItem.className = 'dropdown-sub-item';
+    subItem.id = 'sub-' + hw.id;
+    subItem.onclick = () => switchHw(hw.id);
+    dropdownMenu.appendChild(subItem);
+   }
+   if (subItem) {
+    subItem.innerHTML = `▸ ${hw.id.toUpperCase()} ${hw.chapter || ''} <span class="badge" style="font-size:10px; margin-left:auto;">${hw.badge || ''}</span>`;
+   }
+
+   // 3. 更新或建立手機抽屜作業項目
+   let drawerItem = document.getElementById('mob-drawer-' + hw.id);
+   if (!drawerItem && drawerNav) {
+    drawerItem = document.createElement('a');
+    drawerItem.className = 'nav-item';
+    drawerItem.id = 'mob-drawer-' + hw.id;
+    drawerItem.onclick = () => switchHwFromDrawer(hw.id);
+    drawerNav.appendChild(drawerItem);
+   }
+   if (drawerItem) {
+    drawerItem.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>${hw.title.length > 18 ? hw.title.substring(0, 18) + '...' : hw.title}</span>
+      <span class="badge" style="font-size:10px; margin-left:auto;">${hw.badge || ''}</span>
+    `;
+   }
+
+   // 4. 更新首頁折疊抽屜
+   let homeDetails = document.getElementById(`home-${hw.id}-details`);
+   if (homeDetails && !hw.isStatic) {
+    if (hw.status === 'active') homeDetails.setAttribute('open', '');
+    homeDetails.innerHTML = `
+      <summary style="font-size: 14px; font-weight: 600; color: var(--text); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+        <span>📁 ${hw.title}</span>
+        <span class="badge ${hw.status === 'active' ? 'badge-primary' : ''}">${hw.badge || ''}</span>
+      </summary>
+      <div style="padding-top: 12px; font-size: 13px; color: var(--text); line-height: 1.6;">
+        <p style="margin: 0 0 8px 0;"><b>題目來源：</b>${hw.source || '授課教材與習題'}</p>
+        <p style="margin: 0 0 10px 0;"><b>核心任務：</b>${hw.summary || ''}</p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-sm" onclick="switchHw('${hw.id}')">前往 ${hw.id.toUpperCase()} 完整專區</button>
+        </div>
+      </div>
+    `;
+   }
+
+   // 5. 若非手刻靜態頁面（例如 HW3 或後台新建立的作業），動態渲染整頁 Section
+   if (!hw.isStatic) {
+    let sec = document.getElementById('sec-' + hw.id);
+    if (!sec) {
+     sec = document.createElement('section');
+     sec.id = 'sec-' + hw.id;
+     sec.className = 'content-section';
+     const wrapper = document.querySelector('.content-wrapper');
+     if (wrapper) wrapper.appendChild(sec);
+    }
+    renderDynamicSectionContent(sec, hw);
+   }
+  });
+
+  // 更新首頁 Hero 數據
+  const statHwCount = document.getElementById('hero-kpi-hw-count');
+  if (statHwCount) {
+   statHwCount.innerText = `${assignments.length} 週`;
+  }
+ }
+
+ function renderDynamicSectionContent(container, hw) {
+  const modules = hw.modules || [];
+  let html = `
+    <div class="page-header">
+      <div class="page-header-meta">
+        <span class="meta-chip">${hw.id.toUpperCase()} ASSIGNMENT</span>
+        <span class="meta-chip">${hw.chapter || ''}</span>
+        <span class="meta-chip">截止：${hw.dueDate || '未定'}</span>
+      </div>
+      <h1 class="page-title">${hw.title}</h1>
+      <p class="page-desc">${hw.summary || ''}</p>
+    </div>
+  `;
+
+  modules.forEach(mod => {
+   if (mod.type === 'banner') {
+    html += `
+      <div class="card" style="background: var(--positive-bg); border-color: var(--positive-border); padding: 12px 18px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="font-size: 13.5px; color: var(--success);">
+          <b>${mod.title}：</b>${mod.content}
+        </div>
+        ${mod.linkUrl ? `<a href="${mod.linkUrl}" target="_blank" class="btn" style="font-size: 12px; padding: 5px 12px; background: var(--surface); color: var(--success); border-color: var(--positive-border); font-weight: 600; text-decoration: none;">${mod.linkText || '前往連結 ↗'}</a>` : ''}
+      </div>
+    `;
+   }
+
+   if (mod.type === 'claims') {
+    html += `
+      <div class="card" style="margin-bottom: 20px;">
+        <h2 style="font-size: 17px; margin-top: 0; display:flex; align-items:center; gap:8px;">
+          <span>👥</span> ${mod.title || '小組分工與解題認領'}
+        </h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">${mod.description || '請組員登記負責題目或草稿撰寫：'}</p>
+
+        <div class="perspective-grid">
+    `;
+
+    (mod.roles || []).forEach(r => {
+     const saved = localStorage.getItem('claim_' + r.id) || '';
+     const isClaimed = !!saved;
+     html += `
+       <div class="perspective-card ${isClaimed ? 'claimed' : ''}" id="card-${r.id}">
+         <div class="perspective-title">${r.name}</div>
+         <div class="perspective-desc">${r.desc}</div>
+         <div class="claim-status" id="label-${r.id}" style="${isClaimed ? 'display:inline-block;' : 'display:none;'}">
+           ${isClaimed ? `已由 ${saved} 認領` : ''}
+         </div>
+         <div class="claim-input-box" style="margin-top:10px;">
+           <input type="text" id="name-${r.id}" class="claim-user-input" placeholder="輸入姓名認領" value="${saved}">
+           <button class="btn btn-primary" onclick="saveDynamicClaim('${r.id}')">登記</button>
+         </div>
+       </div>
+     `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+   }
+
+   if (mod.type === 'cards_grid') {
+    html += `
+      <div class="card" style="margin-bottom: 20px;">
+        <h2 style="font-size: 17px; margin-top: 0;">${mod.title || '核心公式與重點指引'}</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
+    `;
+
+    (mod.cards || []).forEach(c => {
+     html += `
+       <div style="background: var(--surface-raised); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 8px; padding: 14px;">
+         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+           <b style="font-size: 15px; color: var(--primary);">${c.title}</b>
+           ${c.tag ? `<span class="badge">${c.tag}</span>` : ''}
+         </div>
+         <div style="font-size: 13px; color: var(--text); line-height: 1.6;">
+           ${c.content}
+         </div>
+       </div>
+     `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+   }
+
+   if (mod.type === 'markdown') {
+    html += `
+      <div class="card" style="margin-bottom: 20px;">
+        <h2 style="font-size: 17px; margin-top: 0;">${mod.title || '研討指引與題目詳解'}</h2>
+        <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13.5px; line-height: 1.7; color: var(--text); white-space: pre-wrap;">${mod.content}</div>
+      </div>
+    `;
+   }
+  });
+
+  container.innerHTML = html;
+ }
+
+ function saveDynamicClaim(roleId) {
+  const input = document.getElementById('name-' + roleId);
+  const name = input ? input.value.trim() : '';
+  if (!name) {
+   alert("請輸入組員姓名！");
+   return;
+  }
+
+  localStorage.setItem('claim_' + roleId, name);
+  updateDynamicClaimUI(roleId, name);
+  showToast("登記成功：" + name);
+
+  postToSheet({
+   type: "claim",
+   role: roleId,
+   name: name,
+   time: new Date().toLocaleString()
+  });
+ }
+
+ function updateDynamicClaimUI(roleId, name) {
+  const card = document.getElementById('card-' + roleId);
+  const label = document.getElementById('label-' + roleId);
+  if (card) card.classList.add('claimed');
+  if (label) {
+   label.innerText = `已由 ${name} 認領`;
+   label.style.display = 'inline-block';
+  }
+ }
+
  document.addEventListener('DOMContentLoaded', () => {
   fetchIlearningHomeworks();
+  initDynamicCms();
  });

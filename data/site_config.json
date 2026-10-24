@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "siteName": "115-1 財務管理｜小組知識庫與協同平台",
+    "semester": "115-1",
+    "course": "財務管理 (Financial Management)",
+    "instructor": "李顯儀 教授",
+    "lastUpdated": "2026-10-24T14:50:00+08:00",
+    "githubRepo": "KalmanGoose/1151-financial-management",
+    "adminPass": "admin1151"
+  },
+  "navigation": [
+    { "id": "home", "title": "首頁即時進度", "icon": "home", "type": "builtin", "showInSidebar": true, "showInMobileDock": true, "badge": "" },
+    { "id": "hw1", "title": "HW1 日矽案史料庫", "icon": "file-text", "type": "assignment", "showInSidebar": true, "showInMobileDock": true, "badge": "已發布" },
+    { "id": "hw2", "title": "HW2 財務比率分析 (第5題)", "icon": "bar-chart-2", "type": "assignment", "showInSidebar": true, "showInMobileDock": true, "badge": "進行中" },
+    { "id": "hw3", "title": "HW3 貨幣時間價值", "icon": "folder", "type": "assignment", "showInSidebar": true, "showInMobileDock": false, "badge": "待發布" },
+    { "id": "ai-lab", "title": "AI 助教 (Gemma 4-E2B)", "icon": "cpu", "type": "builtin", "showInSidebar": true, "showInMobileDock": true, "badge": "" },
+    { "id": "md-viewer", "title": "原始 Markdown 檢視器", "icon": "book-open", "type": "builtin", "showInSidebar": true, "showInMobileDock": false, "badge": "" }
+  ],
+  "assignments": [
+    {
+      "id": "hw1",
+      "title": "HW1：日矽案全景背景史料庫與實證數據檔案館",
+      "chapter": "第 1 章",
+      "status": "completed",
+      "badge": "已發布",
+      "isStatic": true,
+      "dueDate": "2026-09-28 23:59",
+      "source": "課本第一章「公司理財的內容架構（表 1-1）與代理問題」",
+      "summary": "客觀個案文獻、歷史攻防與財務數據檔案館。完整收錄 2014–2018 年日月光與矽品真實財報指標、全球半導體三大外部巨浪、四幕攻防戰史料與公司治理六大漏洞。"
+    },
+    {
+      "id": "hw2",
+      "title": "HW2：第二章 課後習題 簡答與計算題第 5 題（成功公司 20 大財務比率）",
+      "chapter": "第 2 章",
+      "status": "active",
+      "badge": "進行中",
+      "isStatic": true,
+      "dueDate": "2026-10-31 23:59",
+      "source": "《財務管理》（第六版，李顯儀 著）第二章 課後習題 pp. 2-38 簡答與計算題 第 5 題",
+      "summary": "由「成功公司」資產負債表與綜合損益表推導 20 個必考財務比率（涵蓋流動能力、資產管理、長期償債、獲利能力、市場價值五大構面）。"
+    },
+    {
+      "id": "hw3",
+      "title": "HW3：第三章 貨幣時間價值與折現現金流量",
+      "chapter": "第 3 章",
+      "status": "upcoming",
+      "badge": "待發布",
+      "isStatic": false,
+      "dueDate": "2026-11-07 23:59",
+      "source": "《財務管理》（第六版，李顯儀 著）第三章「貨幣時間價值」",
+      "summary": "本週題目聚焦於貨幣時間價值（TVM），涵蓋單筆現金流複利現值/終值、普通年金與到期年金、實質有效年利率 (EAR) 與分期償還試算。",
+      "modules": [
+        {
+          "type": "banner",
+          "title": "HW3 課本理論對照教材",
+          "content": "《財務管理》（第六版，李顯儀 著）第三章「貨幣時間價值（Time Value of Money）」。",
+          "linkText": "前往興大圖書館電子書 ↗",
+          "linkUrl": "https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST"
+        },
+        {
+          "type": "claims",
+          "title": "HW3 小組分工與題組認領",
+          "description": "組員可登記認領負責題組或撰寫題目白話推導與 Excel 試算表驗證：",
+          "roles": [
+            { "id": "hw3_role1", "name": "單筆現金流與複利現值終值 (題組一)", "desc": "負責 PV/FV 概念推導、折現率對現值敏感度分析與基礎計算題。" },
+            { "id": "hw3_role2", "name": "普通年金與到期年金計算 (題組二)", "desc": "負責 PVA/FVA 公式推導、退休金與房貸定額年金試算。" },
+            { "id": "hw3_role3", "name": "永續年金與有效年利率 EAR (題組三)", "desc": "負責名目利率 APR 轉實質年利率 EAR 與永續成長年金推導。" },
+            { "id": "hw3_role4", "name": "貸款分期償還表與 Excel 驗證 (題組四)", "desc": "負責貸款本利攤還試算表（Amortization Schedule）建立與防呆驗算。" }
+          ]
+        },
+        {
+          "type": "cards_grid",
+          "title": "第三章 核心公式與解題關鍵指引",
+          "cards": [
+            {
+              "title": "複利終值與現值公式",
+              "tag": "FV / PV",
+              "content": "<b>終值：</b>$$FV_n = PV \\times (1 + r)^n$$<br><b>現值：</b>$$PV = \\frac{FV_n}{(1 + r)^n}$$<br>掌握折現因子（Discount Factor）隨期數增加而遞減之特性。"
+            },
+            {
+              "title": "普通年金現值 (PVA)",
+              "tag": "Ordinary Annuity",
+              "content": "<b>公式：</b>$$PVA_n = PMT \\times \\left[\\frac{1 - (1+r)^{-n}}{r}\\right]$$<br>每期期末發生定額現金流之折現總和，為房屋貸款與債券評價基石。"
+            },
+            {
+              "title": "有效年利率 (EAR)",
+              "tag": "Compounding Frequency",
+              "content": "<b>公式：</b>$$EAR = \\left(1 + \\frac{APR}{m}\\right)^m - 1$$<br>年複利次數 $m$ 愈多，實質利率愈高；連續複利時極限為 $e^{APR} - 1$。"
+            }
+          ]
+        },
+        {
+          "type": "markdown",
+          "title": "助教解題思路與注意事項",
+          "content": "### HW3 研討指南與防呆提醒\n\n1. **期初付款 vs 期末付款**：\n   - 普通年金（Ordinary Annuity）：現金流發生於期末。\n   - 到期年金（Annuity Due）：現金流發生於期初，終值與現值均等於普通年金乘上 $(1 + r)$。\n2. **利率與期數單位必須完全對齊**：\n   - 若為「月繳房貸」，名目年利率必須除以 12，期數 $n$ 必須乘以 12。\n3. **Excel 實用函數速查**：\n   - 現值：`=PV(rate, nper, pmt, [fv], [type])`\n   - 終值：`=FV(rate, nper, pmt, [pv], [type])`\n   - 每期付款：`=PMT(rate, nper, pv, [fv], [type])`\n   *(註：type=0 為期末付款，type=1 為期初付款)*"
+        }
+      ]
+    }
+  ]
+}

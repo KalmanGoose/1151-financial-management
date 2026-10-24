@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>115-1 財務管理｜線上後端管理系統 (Admin Studio)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%3E<text y=%2226%22 font-size=%2224%22>⚡</text></svg>">
+</head>
+<body class="admin-body">
+
+  <!-- 安全驗證鎖定 Modal -->
+  <div id="admin-auth-overlay" class="admin-auth-overlay" style="display: flex;">
+    <div class="admin-auth-box">
+      <span style="font-size: 36px; display: block; margin-bottom: 12px;">🔐</span>
+      <h2 style="margin: 0 0 8px 0; font-size: 20px; color: var(--text);">管理員身分驗證</h2>
+      <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 20px 0; line-height: 1.5;">
+        此處為 115-1 財務管理小組後端管理系統。<br>請輸入管理密碼以佈局新週次作業或調整頁面。
+      </p>
+
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group" style="text-align: left;">
+          <input type="password" id="admin-pass-input" class="form-input" placeholder="請輸入管理密碼 (預設: admin1151)" autofocus required>
+          <div id="admin-auth-error" style="display: none; color: var(--danger); font-size: 12.5px; margin-top: 6px; font-weight: 600;">❌ 密碼錯誤，請重新輸入！</div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="index.html" class="btn" style="flex: 1; text-align: center; text-decoration: none; padding: 10px;">返回首頁</a>
+          <button type="submit" class="btn btn-primary" style="flex: 2; padding: 10px;">解鎖進入後台 →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 後台頂部 Navbar -->
+  <header class="admin-navbar">
+    <div class="admin-brand">
+      <span class="admin-badge">ADMIN STUDIO</span>
+      <div class="admin-title">
+        <span>115-1 財務管理</span>
+        <span style="color: var(--text-muted); font-size: 13px;">｜ 線上後端管理系統</span>
+      </div>
+    </div>
+
+    <div class="admin-actions">
+      <span class="pulse-dot" style="background: var(--success);" title="系統正常連線中"></span>
+      <button id="admin-theme-btn" class="topbar-btn" onclick="toggleAdminTheme()">☀️ 亮色</button>
+      <a href="index.html" class="topbar-btn" style="text-decoration: none;">🌐 查看前端</a>
+      <button class="topbar-btn" onclick="handleLogout()" title="登出">🚪 登出</button>
+    </div>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main class="admin-container">
+
+    <!-- 頁籤選單 -->
+    <nav class="admin-tabs">
+      <button id="tab-btn-assignments" class="admin-tab-btn active" onclick="switchAdminTab('assignments')">
+        📁 週次作業管理
+      </button>
+      <button id="tab-btn-editor" class="admin-tab-btn" onclick="switchAdminTab('editor')">
+        ✏️ 視覺化佈局工作室
+      </button>
+      <button id="tab-btn-navigation" class="admin-tab-btn" onclick="switchAdminTab('navigation')">
+        🧭 全站導航與分頁增減
+      </button>
+      <button id="tab-btn-publish" class="admin-tab-btn" onclick="switchAdminTab('publish')">
+        ☁️ 雲端發布與同步中樞
+      </button>
+    </nav>
+
+    <!-- Panel 1: 週次作業管理 -->
+    <section id="panel-assignments" class="admin-panel active">
+      <!-- 數據指標概覽 -->
+      <div class="admin-stat-grid">
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">週次作業總數</span>
+          <span class="admin-stat-value" id="stat-total-hw">0</span>
+          <span class="admin-stat-sub">本學期規劃中與已發布</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">進行中作業</span>
+          <span class="admin-stat-value" id="stat-active-hw" style="color: var(--primary);">0</span>
+          <span class="admin-stat-sub">組員本週主要研討任務</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">待發布作業</span>
+          <span class="admin-stat-value" id="stat-upcoming-hw" style="color: var(--warning);">0</span>
+          <span class="admin-stat-sub">已預先排版或等待出題</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">已截止作業</span>
+          <span class="admin-stat-value" id="stat-completed-hw" style="color: var(--success);">0</span>
+          <span class="admin-stat-sub">已歸檔作為期末複習史料</span>
+        </div>
+      </div>
+
+      <!-- 操作頂部工具列 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 700; margin: 0; color: var(--text);">週次作業列表與狀態控制</h2>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 4px 0 0 0;">可在此直接調整每週作業開放狀態，或點擊「編輯佈局」新增模組與題意說明：</p>
+        </div>
+        <button class="btn btn-primary" onclick="openNewAssignmentModal()">
+          ＋ 新增週次作業 (Add HW)
+        </button>
+      </div>
+
+      <!-- 作業卡片清單 -->
+      <div id="assignment-list-container" class="assignment-grid">
+        <!-- 由 js 動態產生 -->
+      </div>
+    </section>
+
+    <!-- Panel 2: 視覺化佈局工作室 -->
+    <section id="panel-editor" class="admin-panel">
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+          <h2 id="editor-title" style="margin: 0; font-size: 18px; color: var(--text);">✏️ 視覺化佈局工作室</h2>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn" onclick="switchAdminTab('assignments')">取消返回</button>
+            <button class="btn btn-primary" onclick="saveAssignmentLayout()">💾 儲存作業佈局</button>
+          </div>
+        </div>
+
+        <!-- 區塊 1: 基本資訊 -->
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 14px;">📌 1. 作業基礎設定</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">週次代號 (ID，如 hw3, hw4)</label>
+              <input type="text" id="hw-edit-id" class="form-input" placeholder="hw3" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">所屬章節標籤</label>
+              <input type="text" id="hw-edit-chapter" class="form-input" placeholder="第 3 章">
+            </div>
+            <div class="form-group">
+              <label class="form-label">目前狀態</label>
+              <select id="hw-edit-status" class="form-select">
+                <option value="active">進行中 (Active)</option>
+                <option value="upcoming" selected>待發布 (Upcoming)</option>
+                <option value="completed">已完成 / 歷史歸檔 (Completed)</option>
+                <option value="hidden">隱藏不顯示 (Hidden)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">截止日期與時間</label>
+              <input type="text" id="hw-edit-due" class="form-input" placeholder="2026-11-07 23:59">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">作業完整標題</label>
+            <input type="text" id="hw-edit-title" class="form-input" placeholder="HW3：第三章 貨幣時間價值與折現現金流量" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">教科書出處 / 題目來源</label>
+            <input type="text" id="hw-edit-source" class="form-input" placeholder="《財務管理》（第六版，李顯儀 著）第三章課後習題">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">本週作業核心任務概述 (出現在首頁抽屜與頁面頂部)</label>
+            <textarea id="hw-edit-summary" class="form-textarea" placeholder="輸入本週的核心任務、理論對照與重要注意事項..."></textarea>
+          </div>
+        </div>
+
+        <!-- 區塊 2: 模組化佈局開關與內容 -->
+        <div>
+          <h3 style="font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 14px;">🧩 2. 頁面內容模組佈局 (可自由勾選啟用)</h3>
+
+          <!-- Module A: Banner -->
+          <div class="module-box">
+            <div class="module-box-header">
+              <div class="module-box-title">
+                <input type="checkbox" id="mod-banner-toggle" checked style="width: 18px; height: 18px; accent-color: var(--primary);">
+                <span>📢 助教引導與教材參照橫幅 (Banner Module)</span>
+              </div>
+              <span class="badge" style="background: var(--positive-bg); color: var(--success);">推薦啟用</span>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">橫幅標題</label>
+                <input type="text" id="mod-banner-title" class="form-input" value="HW3 課本理論對照教材">
+              </div>
+              <div class="form-group">
+                <label class="form-label">連結文字</label>
+                <input type="text" id="mod-banner-link-text" class="form-input" value="前往興大圖書館電子書 ↗">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">橫幅說明內容</label>
+              <input type="text" id="mod-banner-content" class="form-input" value="《財務管理》（第六版，李顯儀 著）第三章「貨幣時間價值」。">
+            </div>
+            <div class="form-group">
+              <label class="form-label">連結網址 (URL)</label>
+              <input type="text" id="mod-banner-link-url" class="form-input" value="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST">
+            </div>
+          </div>
+
+          <!-- Module B: Claims -->
+          <div class="module-box">
+            <div class="module-box-header">
+              <div class="module-box-title">
+                <input type="checkbox" id="mod-claims-toggle" checked style="width: 18px; height: 18px; accent-color: var(--primary);">
+                <span>👥 四構面分工認領模組 (Claims Module)</span>
+              </div>
+              <span class="badge" style="background: var(--primary-light); color: var(--primary);">支援 Google Sheet 同步</span>
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">啟用後將自動建立 4 張組員分工認領卡片，每位組員可於前端直接填寫名字登記，並支援即時連動 Google 試算表：</p>
+            
+            <div class="form-row" style="margin-bottom: 10px;">
+              <div class="form-group">
+                <label class="form-label">角色 1 題組名稱</label>
+                <input type="text" id="claim-role1-name" class="form-input" value="單筆現金流與複利現值終值 (題組一)">
+                <input type="text" id="claim-role1-desc" class="form-input" style="margin-top: 6px; font-size: 12.5px;" value="負責 PV/FV 概念推導、折現率對現值敏感度分析。">
+              </div>
+              <div class="form-group">
+                <label class="form-label">角色 2 題組名稱</label>
+                <input type="text" id="claim-role2-name" class="form-input" value="普通年金與到期年金計算 (題組二)">
+                <input type="text" id="claim-role2-desc" class="form-input" style="margin-top: 6px; font-size: 12.5px;" value="負責 PVA/FVA 公式推導、退休金與房貸定額年金試算。">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">角色 3 題組名稱</label>
+                <input type="text" id="claim-role3-name" class="form-input" value="永續年金與有效年利率 EAR (題組三)">
+                <input type="text" id="claim-role3-desc" class="form-input" style="margin-top: 6px; font-size: 12.5px;" value="負責名目利率 APR 轉實質年利率 EAR 與永續年金推導。">
+              </div>
+              <div class="form-group">
+                <label class="form-label">角色 4 題組名稱</label>
+                <input type="text" id="claim-role4-name" class="form-input" value="貸款分期償還表與 Excel 驗證 (題組四)">
+                <input type="text" id="claim-role4-desc" class="form-input" style="margin-top: 6px; font-size: 12.5px;" value="負責貸款本利攤還試算表（Amortization Schedule）與防呆驗算。">
+              </div>
+            </div>
+          </div>
+
+          <!-- Module C: Cards Grid -->
+          <div class="module-box">
+            <div class="module-box-header">
+              <div class="module-box-title">
+                <input type="checkbox" id="mod-cards-toggle" checked style="width: 18px; height: 18px; accent-color: var(--primary);">
+                <span>📊 核心公式與關鍵指引網格 (Cards Grid Module)</span>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">自動以 3 欄式卡片呈現公式與重點，支援 LaTeX KaTeX 數學符號（如 <code>$$FV = PV(1+r)^n$$</code>）。</p>
+          </div>
+
+          <!-- Module D: Data Table -->
+          <div class="module-box">
+            <div class="module-box-header">
+              <div class="module-box-title">
+                <input type="checkbox" id="mod-table-toggle" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                <span>📑 資料數據表格模組 (Data Table Module)</span>
+              </div>
+              <span class="badge">支援手機凍結第一欄</span>
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">啟用後可在頁面加入財報指標對照表或數值表，手機瀏覽自動啟用左側欄位凍結與滑動提示。</p>
+          </div>
+
+          <!-- Module E: Markdown -->
+          <div class="module-box">
+            <div class="module-box-header">
+              <div class="module-box-title">
+                <input type="checkbox" id="mod-md-toggle" checked style="width: 18px; height: 18px; accent-color: var(--primary);">
+                <span>📝 Markdown 研討指引與題目詳解 (Markdown Document)</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Markdown 內文（支援標題、列表、程式碼、公式）</label>
+              <textarea id="mod-md-content" class="form-textarea" style="min-height: 160px; font-family: monospace;" placeholder="### 研討指引&#10;1. 請參閱教科書..."></textarea>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+          <button class="btn" onclick="switchAdminTab('assignments')">取消返回</button>
+          <button class="btn btn-primary" onclick="saveAssignmentLayout()">💾 儲存作業佈局</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 3: 導航選單與分頁增減 -->
+    <section id="panel-navigation" class="admin-panel">
+      <div class="card" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <h2 style="margin: 0; font-size: 18px; color: var(--text);">🧭 全站導航項目與分頁顯示控制</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 4px 0 0 0;">自由勾選各分頁要在桌面側邊欄或手機底部 Dock 顯示，亦可建立全新自訂分頁：</p>
+          </div>
+          <button class="btn btn-primary" onclick="addNewCustomPage()">
+            ＋ 新增自訂分頁 (Add Page)
+          </button>
+        </div>
+
+        <div id="nav-list-container">
+          <!-- 由 js 動態產生 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Panel 4: 雲端發布中樞 -->
+    <section id="panel-publish" class="admin-panel">
+      <div class="card" style="margin-bottom: 20px;">
+        <h2 style="font-size: 18px; margin: 0 0 6px 0; color: var(--text);">☁️ 雲端發布與全組即時連動中樞</h2>
+        <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 20px 0; line-height: 1.5;">
+          你在本管理後台所做的任何作業新增、狀態調整或佈局變更，可透過以下方式一鍵發布，讓全組同學立即在線上看見最新內容！
+        </p>
+
+        <!-- 發布方式 A: GitHub REST API -->
+        <div style="background: var(--surface-raised); border: 1.5px solid var(--primary-border); border-radius: var(--radius-card); padding: 20px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <b style="font-size: 16px; color: var(--primary);">🚀 推薦方式一：GitHub REST API 線上一鍵發布 (全組自動連動)</b>
+            <span class="badge" style="background: var(--primary); color: #fff;">免開終端機</span>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;">
+            透過 GitHub API，管理系統會直接將更新後的 <code>data/site_config.json</code> commit 到本專案的 GitHub 倉庫（<code>KalmanGoose/1151-financial-management</code>），GitHub Pages 會在 30 秒內自動發布，全組同學開啟網頁立即看見最新作業與排版！
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">GitHub Personal Access Token (PAT)</label>
+            <input type="password" id="github-pat-input" class="form-input" placeholder="輸入具備 Contents 權限的 GitHub Token (ghp_...)" style="max-width: 540px;">
+            <div class="form-help">Token 僅安全存放於你的瀏覽器本機端（localStorage），絕不會外流至任何第三方伺服器。</div>
+          </div>
+
+          <div id="github-publish-status" class="publish-alert" style="display: none;"></div>
+
+          <button class="btn btn-primary" onclick="publishToGitHub()" style="padding: 10px 20px; font-weight: 700;">
+            🚀 一鍵推送發布至 GitHub 雲端 (Commit & Push)
+          </button>
+        </div>
+
+        <!-- 發布方式 B: 本地即時預覽 -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px; margin-bottom: 20px;">
+          <b style="font-size: 15px; color: var(--text);">⚡ 方式二：本機即時預覽 (Instant Local Test)</b>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 12px 0;">
+            將修改直接存入當前瀏覽器的 localStorage 快取，無需等待 GitHub 部署，可立即開啟前端網頁檢視效果：
+          </p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="previewInFrontend()">在新分頁開啟前端首頁預覽 ↗</button>
+            <button class="btn" onclick="resetToDefaultConfig()">清空本機暫存並恢復預設</button>
+          </div>
+        </div>
+
+        <!-- 發布方式 C: 匯出與備份 -->
+        <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px;">
+          <b style="font-size: 15px; color: var(--text);">💾 方式三：手動備份與 JSON 匯出</b>
+          <p style="font-size: 13px; color: var(--text-muted); margin: 6px 0 12px 0;">
+            將當前的全站作業與佈局設定下載為 <code>site_config.json</code>，或複製 JSON 內容：
+          </p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn" onclick="downloadConfigFile()">💾 下載 site_config.json 檔案</button>
+            <button class="btn" onclick="copyConfigJson()">📋 複製完整 Config JSON</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
