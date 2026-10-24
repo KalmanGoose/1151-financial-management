@@ -2,6 +2,97 @@
  * 115-1 財務管理 全站交互核心邏輯 app.js
  */
 
+/* ================= 雙主題切換引擎 (Dual Theme Engine) ================= */
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeBtnUI(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  updateThemeBtnUI(next);
+  showToast(next === 'dark' ? '已切換為：彭博終端深色模式' : '已切換為：經典商務淺色模式');
+}
+
+function updateThemeBtnUI(theme) {
+  const btns = document.querySelectorAll('.theme-toggle-btn');
+  btns.forEach(btn => {
+    if (btn.classList.contains('mobile-icon-btn')) {
+      btn.innerHTML = theme === 'dark' ? '☀️' : '🌙';
+    } else {
+      btn.innerHTML = theme === 'dark' ? '☀️ 淺色模式' : '🌙 深色模式';
+    }
+  });
+}
+
+/* ================= 頂欄動態麵包屑導航 ================= */
+const SECTION_TITLES = {
+  'home': '首頁與協同看板',
+  'hw1': 'HW1 日矽案史料庫',
+  'hw2': 'HW2 財務比率分析 (成功公司20題)',
+  'hw3': 'HW3 作業專區',
+  'gemma-lab': 'AI 助教實驗室 (Gemma 4-E2B)',
+  'md-viewer': '原始 Markdown 檢視器'
+};
+
+function updateBreadcrumbs(targetId) {
+  const el = document.getElementById('topbar-breadcrumb-current');
+  if (el && SECTION_TITLES[targetId]) {
+    el.textContent = SECTION_TITLES[targetId];
+  }
+}
+
+/* ================= 行動端專屬交互邏輯 ================= */
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('mobile-drawer-overlay');
+  if (drawer && overlay) {
+    drawer.classList.toggle('open');
+    overlay.classList.toggle('open');
+  }
+}
+
+function closeMobileDrawer() {
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('mobile-drawer-overlay');
+  if (drawer && overlay) {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+}
+
+function switchSectionFromDrawer(targetId) {
+  closeMobileDrawer();
+  const navEl = document.getElementById('nav-' + (targetId === 'gemma-lab' ? 'ai' : targetId));
+  switchSection(navEl, targetId);
+}
+
+function switchHwFromDrawer(hwId) {
+  closeMobileDrawer();
+  switchHw(hwId);
+}
+
+function switchSectionMobileNav(el, targetId) {
+  const navEl = document.getElementById('nav-' + (targetId === 'gemma-lab' ? 'ai' : targetId));
+  switchSection(navEl, targetId);
+}
+
+function switchHwMobileNav(el, hwId) {
+  switchHw(hwId);
+}
+
+function updateMobileNavState(id) {
+  document.querySelectorAll('.mobile-nav-item').forEach(item => item.classList.remove('active'));
+  document.querySelectorAll('.mobile-drawer .nav-item').forEach(item => item.classList.remove('active'));
+  const mobItem = document.getElementById('mob-nav-' + id);
+  if (mobItem) mobItem.classList.add('active');
+  const drawerItem = document.getElementById('mob-drawer-' + id);
+  if (drawerItem) drawerItem.classList.add('active');
+}
 
  /* 導航切換邏輯 */
  function switchSection(el, targetId) {
@@ -18,6 +109,9 @@
   }
   const sec = document.getElementById('sec-' + targetId);
   if (sec) sec.classList.add('active');
+
+  updateBreadcrumbs(targetId);
+  updateMobileNavState(targetId);
 
   // 切換後自動平滑置頂
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -49,6 +143,9 @@
   
   const sec = document.getElementById('sec-' + hwId);
   if (sec) sec.classList.add('active');
+
+  updateBreadcrumbs(hwId);
+  updateMobileNavState(hwId);
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
   const main = document.getElementById('main');
@@ -137,10 +234,13 @@
 
  function updateSyncStatus() {
   const el = document.getElementById('sync-status');
+  const topbarPill = document.getElementById('topbar-sync-pill');
   if (googleSheetApiUrl) {
-   el.innerHTML = `<span style="color:#15803d;"><span class="pulse-dot"></span> 已連線小組 Google 試算表（即時秒級推播）</span>`;
+   if (el) el.innerHTML = `<span style="color:var(--positive); font-weight:600;"><span class="pulse-dot"></span> 已連線小組 Google 試算表（即時秒級推播）</span>`;
+   if (topbarPill) topbarPill.innerHTML = `<span class="pulse-dot"></span> 雲端連線中`;
   } else {
-   el.innerHTML = `<span>本地離線保存中</span>`;
+   if (el) el.innerHTML = `<span>本地離線保存中</span>`;
+   if (topbarPill) topbarPill.innerHTML = `本地離線`;
   }
  }
 
@@ -263,18 +363,25 @@
   });
 
   const summaryBadge = document.getElementById('claim-summary-badge');
+  const progressBar = document.getElementById('claim-progress-bar');
   if (summaryBadge) {
    summaryBadge.textContent = `已認領 ${claimedCount} / 4 視角`;
    if (claimedCount === 4) {
-    summaryBadge.style.background = "#dcfce7";
-    summaryBadge.style.color = "#15803d";
+    summaryBadge.style.background = "var(--positive-bg)";
+    summaryBadge.style.color = "var(--positive-text)";
+    summaryBadge.style.borderColor = "var(--positive-border)";
    } else if (claimedCount > 0) {
-    summaryBadge.style.background = "#e0e7ff";
-    summaryBadge.style.color = "#3730a3";
+    summaryBadge.style.background = "var(--primary-light)";
+    summaryBadge.style.color = "var(--primary)";
+    summaryBadge.style.borderColor = "var(--primary-border)";
    } else {
-    summaryBadge.style.background = "#f1f5f9";
-    summaryBadge.style.color = "#64748b";
+    summaryBadge.style.background = "var(--surface-raised)";
+    summaryBadge.style.color = "var(--text-muted)";
+    summaryBadge.style.borderColor = "var(--border)";
    }
+  }
+  if (progressBar) {
+   progressBar.style.width = (claimedCount / 4 * 100) + '%';
   }
  }
 
@@ -302,14 +409,14 @@
   const container = document.getElementById('saved-thoughts-list');
   if (container) {
    if (!list.length) {
-    container.innerHTML = '<p style="font-size:13px; color:#475569;">尚無觀點紀錄，組員可在上方輸入後點擊保存！</p>';
+    container.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">尚無觀點紀錄，組員可在上方輸入後點擊保存！</p>';
    } else {
-    container.innerHTML = '<h4 style="margin: 10px 0 6px 0;">已保存的觀點筆記：</h4>' + list.map(item => `
-     <div style="background: white; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 8px;">
-      <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted);">
-       <b>${item.name} (${item.topic || '觀點'})</b> <span>${item.time}</span>
+    container.innerHTML = '<h4 style="margin: 12px 0 8px 0; color:var(--text);">已保存的觀點筆記：</h4>' + list.map(item => `
+     <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-control); padding: 12px 14px; margin-bottom: 8px; box-shadow: var(--shadow-xs);">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:4px;">
+       <b style="color:var(--text);">${item.name} <span class="badge" style="margin-left:4px;">${item.topic || '觀點'}</span></b> <span>${item.time}</span>
       </div>
-      <p style="margin: 6px 0 0 0; font-size: 13px; color: #334155; white-space: pre-wrap;">${item.thought}</p>
+      <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-secondary); white-space: pre-wrap; line-height:1.6;">${item.thought}</p>
      </div>
     `).join('');
    }
@@ -319,18 +426,18 @@
   const homeStream = document.getElementById('home-thoughts-stream');
   if (homeStream) {
    if (!list.length) {
-    homeStream.innerHTML = '<p style="font-size:13px; color:#475569; text-align:center; padding:12px;">目前小組尚無留言，歡迎組員前往 HW1 頁面寫下心得觀點！</p>';
+    homeStream.innerHTML = '<p style="font-size:13px; color:var(--text-muted); text-align:center; padding:16px;">目前小組尚無留言，歡迎組員前往 HW1 頁面寫下心得觀點！</p>';
    } else {
     homeStream.innerHTML = list.map(item => `
-     <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 4px solid var(--primary-light); border-radius: 8px; padding: 12px; margin-bottom: 10px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom: 6px;">
-       <div>
-        <b style="color:var(--primary); font-size:14px;">${item.name}</b>
-        <span class="badge" style="margin-left: 6px;">${item.topic || '觀點分享'}</span>
+     <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: var(--radius-control); padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow-xs);">
+      <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom: 8px; flex-wrap:wrap; gap:6px;">
+       <div style="display:flex; align-items:center; gap:8px;">
+        <b style="color:var(--text); font-size:14px;">${item.name}</b>
+        <span class="badge badge-ai">${item.topic || '觀點分享'}</span>
        </div>
-       <span style="color:var(--text-muted);">${item.time}</span>
+       <span style="color:var(--text-muted); font-size:11.5px; font-family:'Geist Mono', monospace;">${item.time}</span>
       </div>
-      <div style="font-size: 13px; color: #334155; line-height: 1.5; white-space: pre-wrap;">${item.thought}</div>
+      <div style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap;">${item.thought}</div>
      </div>
     `).join('');
    }
@@ -504,7 +611,22 @@
   }
  }
 
+/* ================= HW2 20大財務比率分類篩選 ================= */
+function filterRatioCategory(cat, btn) {
+  document.querySelectorAll('.ratio-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const rows = document.querySelectorAll('.ratio-row');
+  rows.forEach(row => {
+    if (cat === 'all' || row.getAttribute('data-cat') === cat) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
  window.onload = function() {
+  initTheme();
   updateSyncStatus();
   updateClaimUI();
   renderThoughts();

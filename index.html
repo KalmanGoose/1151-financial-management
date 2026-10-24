@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>115-1 財務管理｜小組知識庫與協同平台</title>
 
 <!-- 頂級字體排印系統 (Geist / Geist Mono) -->
@@ -14,6 +14,88 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<!-- 行動端專屬頂欄 (Mobile App Header) -->
+<header class="mobile-header">
+ <div class="mobile-header-brand" onclick="switchSection(document.getElementById('nav-home'), 'home')">
+  <span class="brand-badge">NCHU</span>
+  <span class="mobile-brand-title">財管協同庫</span>
+ </div>
+ <div class="mobile-header-actions">
+  <span id="mobile-sync-dot" class="pulse-dot" title="雲端即時連線中"></span>
+  <button class="mobile-icon-btn theme-toggle-btn" onclick="toggleTheme()" aria-label="切換深淺色">🌙</button>
+  <button class="mobile-icon-btn" onclick="toggleMobileDrawer()" aria-label="開啟功能選單">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="20" height="20">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+   </svg>
+  </button>
+ </div>
+</header>
+
+<!-- 行動端抽屜導航遮罩與側滑選單 -->
+<div id="mobile-drawer-overlay" class="mobile-drawer-overlay" onclick="toggleMobileDrawer()"></div>
+<aside id="mobile-drawer" class="mobile-drawer">
+ <div class="mobile-drawer-header">
+  <div class="brand" style="border:none; padding:0; margin:0;">
+   <span class="brand-badge">NCHU</span>
+   <div class="brand-text">
+    <span class="brand-sub">國立中興大學 財務金融</span>
+    <span class="brand-name">財務管理協同庫</span>
+   </div>
+  </div>
+  <button class="mobile-drawer-close" onclick="toggleMobileDrawer()" aria-label="關閉選單">✕</button>
+ </div>
+
+ <div class="mobile-drawer-body">
+  <div class="nav-group">導航總覽</div>
+  <a class="nav-item active" id="mob-drawer-home" onclick="switchSectionFromDrawer('home')">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+   <span>首頁與協同看板</span>
+  </a>
+
+  <div class="nav-group">學期作業 (HW)</div>
+  <a class="nav-item" id="mob-drawer-hw1" onclick="switchHwFromDrawer('hw1')">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+   <span>HW1 日矽案史料庫</span>
+   <span class="badge badge-success" style="margin-left:auto;">已發布</span>
+  </a>
+  <a class="nav-item" id="mob-drawer-hw2" onclick="switchHwFromDrawer('hw2')">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+   <span>HW2 財務比率分析 (20題)</span>
+   <span class="badge" style="background:var(--primary); color:#fff; margin-left:auto;">進行中</span>
+  </a>
+  <a class="nav-item" id="mob-drawer-hw3" onclick="switchHwFromDrawer('hw3')">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+   <span>HW3 (待發布)</span>
+   <span class="badge" style="margin-left:auto;">待發布</span>
+  </a>
+
+  <div class="nav-group">AI 輔助</div>
+  <a class="nav-item" id="mob-drawer-gemma-lab" onclick="switchSectionFromDrawer('gemma-lab')">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 9h6v6H9z"/><path d="M15 3v3M9 3v3M15 18v3M9 18v3M3 15h3M3 9h3M18 15h3M18 9h3"/></svg>
+   <span>AI 助教 (Gemma 4-E2B)</span>
+   <span class="badge badge-ai" style="margin-left:auto;">端側</span>
+  </a>
+
+  <div class="nav-group">教材與文獻</div>
+  <a class="nav-item" href="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST" target="_blank" style="text-decoration: none;">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+   <span>興大圖書館電子書 (李顯儀)</span>
+   <span class="badge" style="margin-left:auto;">100冊</span>
+  </a>
+  <a class="nav-item" id="mob-drawer-md-viewer" onclick="switchSectionFromDrawer('md-viewer')">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+   <span>原始 Markdown 檢視器</span>
+   <span class="badge" style="margin-left:auto;">MD</span>
+  </a>
+ </div>
+
+ <div class="mobile-drawer-footer">
+  <button class="sidebar-theme-toggle theme-toggle-btn" onclick="toggleTheme()" style="width:100%; justify-content:center;">
+   🌙 切換深淺色模式
+  </button>
+ </div>
+</aside>
 
 <!-- 頂部與側邊統一導航列 -->
 <nav id="sidebar">
@@ -68,9 +150,37 @@
  <span>原始 Markdown 檢視器</span>
  <span class="badge">MD</span>
  </a>
+
+ <div class="sidebar-footer">
+  <button class="sidebar-theme-toggle theme-toggle-btn" onclick="toggleTheme()">
+   🌙 深色模式
+  </button>
+ </div>
 </nav>
 
 <main id="main">
+
+<!-- 頂部懸浮導航列 -->
+<header class="topbar">
+ <div class="topbar-left">
+  <div class="topbar-breadcrumb">
+   <span class="univ">國立中興大學 115-1 財務管理</span>
+   <span class="sep">/</span>
+   <span class="current" id="topbar-breadcrumb-current">首頁與協同看板</span>
+  </div>
+ </div>
+ <div class="topbar-right">
+  <span id="topbar-sync-pill" class="topbar-pill"><span class="pulse-dot"></span> 雲端連線中</span>
+  <button class="topbar-btn topbar-btn-primary" onclick="switchHw('hw2')">
+   ⚡️ HW2 進行中
+  </button>
+  <button class="topbar-btn theme-toggle-btn" onclick="toggleTheme()">
+   🌙 深色模式
+  </button>
+ </div>
+</header>
+
+<div class="content-wrapper">
 
 
 <section id="sec-home" class="content-section active">
@@ -83,36 +193,55 @@
  </div>
  <h1 class="page-title">財務管理小組協同作業與知識庫</h1>
  <p class="page-desc">以全體協作取代單一分配。提供課堂核心理論對照、日矽案併購攻防文獻、財務比率分析演算，組員可自由展開抽屜認領研討視角並即時同步觀點。</p>
+ 
+ <div class="hero-kpis">
+  <div class="hero-kpi-item">
+   <span class="hero-kpi-val">20 個</span>
+   <span class="hero-kpi-label">HW2 財務比率詳解</span>
+  </div>
+  <div class="hero-kpi-item">
+   <span class="hero-kpi-val">4 大視角</span>
+   <span class="hero-kpi-label">組員自由研討認領</span>
+  </div>
+  <div class="hero-kpi-item">
+   <span class="hero-kpi-val">Gemma 4-E2B</span>
+   <span class="hero-kpi-label">端側 AI 助教推論</span>
+  </div>
+  <div class="hero-kpi-item">
+   <span class="hero-kpi-val">100 冊充裕</span>
+   <span class="hero-kpi-label">興大圖書館電子書</span>
+  </div>
+ </div>
  </div>
 
  <div id="ilearning-radar-card" class="card" style="margin-bottom: 16px;">
- <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
- <div style="display: flex; align-items: center; gap: 8px;">
- <span style="font-size: 24px;"></span>
+ <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+ <div style="display: flex; align-items: center; gap: 10px;">
+ <span style="font-size: 24px;">📡</span>
  <div>
- <h2 style="margin: 0; font-size: 16px; color: #1e3a8a; font-weight: 700;">中興大學 iLearning 3.0 即時作業雷達</h2>
- <div id="ilearning-sync-time" style="font-size: 12px; color: #64748b; margin-top: 2px;">同步狀態：載入中...</div>
+ <h2 style="margin: 0; font-size: 16px; color: var(--primary); font-weight: 700; border-bottom: none; padding-bottom: 0;">中興大學 iLearning 3.0 即時作業雷達</h2>
+ <div id="ilearning-sync-time" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">同步狀態：載入中...</div>
  </div>
  </div>
- <button class="btn" onclick="fetchIlearningHomeworks()" style="font-size: 12px; padding: 6px 12px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-weight: 600; cursor: pointer; border-radius: 6px;">
- 重新整理
+ <button class="btn" onclick="fetchIlearningHomeworks()" style="font-size: 12px; padding: 6px 12px; background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); font-weight: 600; cursor: pointer; border-radius: var(--radius-control);">
+ 🔄 重新整理
  </button>
  </div>
  <div id="ilearning-hw-container">
- <div style="text-align: center; color: #475569; font-size: 13px; padding: 12px 0;">正在讀取 iLearning 最新作業資料...</div>
+ <div style="text-align: center; color: var(--text-muted); font-size: 13px; padding: 12px 0;">正在讀取 iLearning 最新作業資料...</div>
  </div>
  </div>
 
 <!-- 課程指定教科書與興大圖書館線上借閱卡片 -->
- <div class="card" style="background: var(--surface); border-left: 3px solid #1e40af; margin-bottom: 14px;">
- <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+ <div class="card" style="background: var(--surface); border-left: 4px solid var(--primary); margin-bottom: 16px;">
+ <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
  <div style="max-width: 680px;">
  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
- <span class="badge">課程指定教科書</span>
+ <span class="badge badge-ai">課程指定教科書</span>
  <span style="font-size: 12px; color: var(--text-muted);">全華圖書 2023 年版</span>
  </div>
- <h3 style="margin: 2px 0 6px 0; font-size: 15px; color: var(--text); font-weight: 700;">《財務管理》（第六版）李顯儀 編著</h3>
- <p style="margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.55;">
+ <h3 style="margin: 2px 0 6px 0; font-size: 16px; color: var(--text); font-weight: 700;">📖 《財務管理》（第六版）李顯儀 編著</h3>
+ <p style="margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
  本學期核心理論對照教材。國立中興大學圖書館已典藏 <b>udn 讀書館線上電子書（複本 100 冊充裕）</b>，修課同學可透過興大單簽帳號直接免費借閱與線上閱讀。
  </p>
  </div>
@@ -128,27 +257,31 @@
  </div>
 
  <!-- 雲端試算表連線狀態欄 -->
- <div class="card" style="background: #f0fdf4; border-color: #bbf7d0; padding: 10px 16px; margin-bottom: 14px;">
+ <div class="card" style="background: var(--positive-bg); border-color: var(--positive-border); padding: 12px 18px; margin-bottom: 16px;">
  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
- <span style="font-size: 13px; color: #166534; font-weight: 500;">
- ️ <b>小組試算表雲端同步：</b> <span id="sync-status"><span style="color:#15803d;"> 已自動連線至小組試算表</span></span>
+ <span style="font-size: 13px; color: var(--positive-text); font-weight: 500;">
+ ⚡️ <b>小組試算表雲端同步：</b> <span id="sync-status"><span style="color:var(--positive); font-weight:600;"><span class="pulse-dot"></span> 已自動連線至小組試算表</span></span>
  </span>
  <div style="display: flex; gap: 6px;">
- <button class="btn" style="font-size: 12px; padding: 4px 10px;" onclick="syncFromCloud()"> 立即從雲端拉取最新進度</button>
- <button class="btn" style="font-size: 12px; padding: 4px 8px; color: #64748b;" onclick="promptSheetApi()">️</button>
+ <button class="btn btn-sm" onclick="syncFromCloud()">🔄 立即從雲端拉取最新進度</button>
+ <button class="btn btn-sm" style="color: var(--text-muted);" onclick="promptSheetApi()">⚙️</button>
  </div>
  </div>
  </div>
 
  <!-- 【收合抽屜 1】：觀點自由認領看板 -->
  <details id="drawer-claim-board" open class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px;">
- <summary style="padding: 14px 18px; cursor: pointer; background: #f8fafc; font-size: 15px; font-weight: 700; color: #1e3a8a; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; user-select: none;">
- <span> 組員觀點自由認領看板（點擊展開 / 收合抽屜）</span>
- <span id="claim-summary-badge" class="badge" style="background: #e0e7ff; color: #3730a3; font-weight: 600;">載入認領狀態中...</span>
+ <summary style="padding: 14px 18px; cursor: pointer; background: var(--surface-raised); font-size: 15px; font-weight: 700; color: var(--primary); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; user-select: none;">
+ <span>👥 組員觀點自由認領看板（點擊展開 / 收合抽屜）</span>
+ <span id="claim-summary-badge" class="badge" style="background: var(--primary-light); color: var(--primary); font-weight: 600;">載入認領狀態中...</span>
  </summary>
  
  <div style="padding: 16px 18px;">
  <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">大家自行輸入姓名點「登記認領」，資料會同步到雲端試算表與其他組員裝置：</p>
+ 
+ <div class="claim-progress-wrap">
+  <div id="claim-progress-bar" class="claim-progress-bar" style="width: 0%;"></div>
+ </div>
  
  <div id="claim-list">
  <div class="claim-card" id="card-role-1">
@@ -215,34 +348,34 @@
  </details>
 
  <!-- 【收合抽屜 2】：學期作業 (HW) 快速速查與精華導覽抽屜 -->
- <div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border); margin-bottom: 14px;">
- <div style="padding: 14px 18px; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
- <span style="font-size: 15px; font-weight: 700; color: #0284c7;"> 學期作業 (HW) 速查抽屜</span>
+ <div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border); margin-bottom: 16px;">
+ <div style="padding: 14px 18px; background: var(--surface-raised); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+ <span style="font-size: 15px; font-weight: 700; color: var(--primary);">📚 學期作業 (HW) 速查抽屜</span>
  <div style="display: flex; gap: 6px;">
- <button class="btn" style="font-size: 12px; padding: 4px 8px;" onclick="toggleHomeHw('home-hw1-details')">切換 HW1 展開/收合</button>
- <button class="btn btn-primary" style="font-size: 12px; padding: 4px 10px;" onclick="switchHw('hw1')"> 前往 HW1 完整專區</button>
+ <button class="btn btn-sm" onclick="toggleHomeHw('home-hw1-details')">切換 HW1 展開/收合</button>
+ <button class="btn btn-primary btn-sm" onclick="switchHw('hw1')">前往 HW1 完整專區</button>
  </div>
  </div>
 
  <div style="padding: 16px 18px;">
  <!-- HW1 抽屜 -->
- <details id="home-hw1-details" open style="background: white; border: 1px solid var(--border); margin-bottom: 10px;">
- <summary style="font-size: 14px; font-weight: 600; color: #1e3a8a; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
- <span> HW1：日矽案全景背景史料與課本四大功能</span>
+ <details id="home-hw1-details" open style="background: var(--surface); border: 1px solid var(--border); margin-bottom: 12px;">
+ <summary style="font-size: 14px; font-weight: 600; color: var(--text); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+ <span>📑 HW1：日矽案全景背景史料與課本四大功能</span>
  <span class="badge badge-success">已發布</span>
  </summary>
  <div style="padding-top: 10px; font-size: 13px; line-height: 1.6; color: #334155;">
  <p style="margin-top: 4px;">本週題目聚焦於<b>日月光併購矽品案（日矽案）</b>對照課本第一章四大財務功能（資金投資、資金募集、資金管理、股利分配）與代理問題。</p>
  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 10px 0;">
- <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 3px solid #1e3a8a; border-radius: 6px; padding: 10px;">
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-left: 3px solid var(--primary); border-radius: 6px; padding: 10px;">
  <b style="color: #1e3a8a;"> 雙雄對決真實數據</b>
  <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">日月光市佔 18.6% vs 矽品 9.8%；矽品毛利率 26.8% 高於日月光 17.7%；矽品董監持股僅 4.68% 成為敵意收購破口。</p>
  </div>
- <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 3px solid #0284c7; border-radius: 6px; padding: 10px;">
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-left: 3px solid var(--accent-cyan); border-radius: 6px; padding: 10px;">
  <b style="color: #0284c7;">️ 四幕攻防戰全史實</b>
  <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">突襲收購 24.99% 規避審查 → 鴻海白衣騎士被外資否決 → 紫光 568 億引爆國安 → 君悅破冰共組控股公司。</p>
  </div>
- <div style="background: #f8fafc; border: 1px solid var(--border); border-left: 3px solid #15803d; border-radius: 6px; padding: 10px;">
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-left: 3px solid var(--success); border-radius: 6px; padding: 10px;">
  <b style="color: #15803d;"> 課本第一章核心探討</b>
  <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">探討經理人代理問題、併購綜效 vs 溢價風險、增資換股對既有股東權益之稀釋代價。</p>
  </div>
@@ -255,29 +388,29 @@
  </details>
 
  <!-- HW2 抽屜 -->
- <details id="home-hw2-details" style="background: #f8fafc; border: 1px solid var(--border); margin-bottom: 10px;" open>
- <summary style="font-size: 14px; font-weight: 600; color: #0284c7; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
- <span> HW2：第二章 課後習題 簡答與計算題第 5 題（成功公司 20 大財務比率）</span>
- <span class="badge" style="background:#0284c7; color:#ffffff;">進行中</span>
+ <details id="home-hw2-details" style="background: var(--surface); border: 1px solid var(--border); margin-bottom: 10px;" open>
+ <summary style="font-size: 14px; font-weight: 600; color: var(--text); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+ <span>📊 HW2：第二章 課後習題 簡答與計算題第 5 題（成功公司 20 大財務比率）</span>
+ <span class="badge" style="background:var(--primary); color:#ffffff;">進行中</span>
  </summary>
- <div style="padding-top: 12px; font-size: 13px; color: var(--text-main); line-height: 1.6;">
- <p style="margin: 0 0 8px 0;"><b> 題目來源：</b>《財務管理》（第六版，李顯儀 著）第二章 課後習題 <b>pp. 2-38</b> 簡答與計算題 第 5 題。</p>
- <p style="margin: 0 0 8px 0;"><b> 核心任務：</b>由「成功公司」資產負債表與綜合損益表推導 20 個必考財務比率（涵蓋流動能力、資產管理、長期償債、獲利能力、市場價值五大構面）。</p>
- <div style="background: #e0f2fe; border-left: 4px solid #0284c7; padding: 8px 12px; border-radius: 4px; margin-bottom: 10px; font-size: 12px;">
+ <div style="padding-top: 12px; font-size: 13px; color: var(--text); line-height: 1.6;">
+ <p style="margin: 0 0 8px 0;"><b>題目來源：</b>《財務管理》（第六版，李顯儀 著）第二章 課後習題 <b>pp. 2-38</b> 簡答與計算題 第 5 題。</p>
+ <p style="margin: 0 0 8px 0;"><b>核心任務：</b>由「成功公司」資產負債表與綜合損益表推導 20 個必考財務比率（涵蓋流動能力、資產管理、長期償債、獲利能力、市場價值五大構面）。</p>
+ <div style="background: var(--primary-light); border-left: 4px solid var(--primary); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 12px; font-size: 12.5px;">
  <b>助教引導手冊已就緒：</b>包含 20 大比率逐題課本頁碼（p.2-10 ~ p.2-23）、白話意涵、推導式與防呆驗算，組員可前往 HW2 專區或原始 Markdown 檢視器一鍵查閱！
  </div>
  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
- <button class="btn btn-primary" style="font-size: 12px; padding: 4px 10px;" onclick="switchHw('hw2')"> 前往 HW2 完整專區</button>
- <button class="btn" style="font-size: 12px; padding: 4px 10px;" onclick="switchSection(document.getElementById('nav-md-viewer'), 'md-viewer'); loadMarkdownDoc('hw2_collab');"> 開啟 HW2 助教指引 Markdown</button>
+ <button class="btn btn-primary btn-sm" onclick="switchHw('hw2')">前往 HW2 完整專區</button>
+ <button class="btn btn-sm" onclick="switchSection(document.getElementById('nav-md-viewer'), 'md-viewer'); loadMarkdownDoc('hw2_collab');">開啟 HW2 助教指引 Markdown</button>
  </div>
  </div>
  </details>
 
  <!-- HW3 抽屜 -->
- <details style="background: #f8fafc; border: 1px solid var(--border);">
- <summary style="font-size: 14px; font-weight: 600; color: #64748b; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
- <span> HW3：第 3 週作業專區</span>
- <span class="badge" style="background:#e2e8f0; color:#64748b;">待發布</span>
+ <details style="background: var(--surface); border: 1px solid var(--border);">
+ <summary style="font-size: 14px; font-weight: 600; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+ <span>📁 HW3：第 3 週作業專區</span>
+ <span class="badge">待發布</span>
  </summary>
  <div style="padding-top: 10px; font-size: 13px; color: var(--text-muted);">
  本週題目尚未發布。等出題後，資料與背景將同步更新！亦可點選側邊欄直達 HW3 專屬頁面。
@@ -318,7 +451,7 @@
  </div>
 
  <!-- 手機端禁用告示 -->
- <div id="mobile-warning-card" class="card" style="display:none; background: #fffbeb; border-color: #fde68a;">
+ <div id="mobile-warning-card" class="card" style="display:none; background: var(--warning-bg); border-color: var(--warning-border);">
  <div style="display:flex; gap:12px; align-items:center;">
  <span style="font-size: 28px;"></span>
  <div>
@@ -332,7 +465,7 @@
  </div>
 
  <!-- Mac Apple Silicon MLX 原生推薦橫幅 -->
- <div class="card" style="background: #f0fdf4; border: 1.5px solid #86efac; margin-bottom: 16px;">
+ <div class="card" style="background: var(--positive-bg); border: 1px solid var(--positive-border); margin-bottom: 16px;">
  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
  <div style="display: flex; align-items: center; gap: 10px;">
  <span style="font-size: 26px;"></span>
@@ -353,7 +486,7 @@
  設備支援良好！已鎖定使用 <b>Google Gemma 4-E2B</b> 旗艦端側模型（約 1.3GB），首次載入寫入快取後，永久秒開零流量。
  </p>
  
- <div id="llm-status-box" style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
+ <div id="llm-status-box" style="background: var(--surface-raised); border: 1px solid var(--border); padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 14px; color: var(--text);">
  <span id="llm-status">模型規格：Google Gemma 4-E2B (財管特化版) ｜ 狀態：尚未掛載</span>
  <div id="progress-bar-bg" style="display:none; width: 100%; background: #cbd5e1; height: 8px; border-radius: 4px; margin-top: 8px; overflow: hidden;">
  <div id="progress-bar" style="width: 0%; background: #2563eb; height: 100%; transition: width 0.2s;"></div>
@@ -403,27 +536,30 @@
  </div>
 
  <!-- 教科書理論對照提示條 -->
- <div class="card" style="background: #f0fdf4; border-color: #bbf7d0; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+ <div class="card" style="background: var(--positive-bg); border: 1px solid var(--positive-border); padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
  <div style="font-size: 13.5px; color: #166534;">
  <b>HW1 課本理論對照教材：</b>《財務管理》（第六版，李顯儀 著）第一章「公司理財的內容架構（表 1-1）與代理問題」。
  </div>
- <a href="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST" target="_blank" class="btn" style="font-size: 12px; padding: 5px 12px; border-color: #15803d; color: #166534; font-weight: 600; text-decoration: none; background: white;">
+ <a href="https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST" target="_blank" class="btn" style="font-size: 12px; padding: 5px 12px; border-color: #15803d; color: #166534; font-weight: 600; text-decoration: none; background: var(--surface); color: var(--success); border-color: var(--positive-border);">
  ️ 前往興大圖書館電子書 ↗
  </a>
  </div>
 
  <!-- 模組 1：兩強對決關鍵財務指標與股權結構極致對照看板 -->
  <details open>
- <summary> 模組一：雙雄關鍵財務與股權結構極致對比（2014–2015 併購前夕真實數據）</summary>
- <div style="padding-top: 12px; font-size: 13.5px; line-height: 1.6; color: #334155;">
+ <summary>🏛️ 模組一：雙雄關鍵財務與股權結構極致對比（2014–2015 併購前夕真實數據）</summary>
+ <div style="padding-top: 12px; font-size: 13.5px; line-height: 1.6; color: var(--text-secondary);">
  <p style="margin-top: 0;">以下整理自兩家公司 2014–2015 年度公開年報、公開資訊觀測站及產業市調（Gartner / Prismark）之真實客觀數據：</p>
+ 
+ <div class="mobile-table-hint"><span>👉 左右滑動可查看完整數據與背景分析</span></div>
+
  <div class="table-responsive">
  <table>
  <thead>
- <tr style="background: #f8fafc;">
+ <tr>
  <th style="width: 22%;">指標項目 (Metric)</th>
- <th style="width: 28%; color: #1e3a8a;"> 日月光半導體 (ASE, 2311)</th>
- <th style="width: 28%; color: #0284c7;">️ 矽品精密 (SPIL, 2325)</th>
+ <th style="width: 28%;"><span style="color:var(--primary); font-weight:700;">日月光半導體 (ASE, 2311)</span></th>
+ <th style="width: 28%;"><span style="color:var(--accent-cyan); font-weight:700;">矽品精密 (SPIL, 2325)</span></th>
  <th style="width: 22%;">個案戰略意涵與關鍵背景</th>
  </tr>
  </thead>
@@ -499,32 +635,32 @@
  <div style="padding-top: 12px; font-size: 13.5px; line-height: 1.6; color: #334155;">
  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
  
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 14px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 14px;">
  <b style="color: #d97706; font-size: 15px;"> 巨浪 1：台積電 InFO 跨界震撼（代工巨頭踩過界）</b>
  <p style="margin: 6px 0; font-size: 13px;">
  <b>關鍵轉折：</b>2015 年底，台積電董事長張忠謀主導開發的整合型扇出型封裝（InFO-WLP）獲突破性成功，以此技術完勝三星，<b>獨家吃下 2016 年 Apple iPhone 7 A10 處理器全數訂單</b>！
  </p>
- <div style="background: #fffbeb; padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: #92400e;">
+ <div style="background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--warning);">
  <b>封測危機：</b>以往晶圓代工與封測涇渭分明；台積電向下垂直整合高階封裝，傳統 OSAT 廠若不抱團衝刺 SiP（系統級封裝）與 2.5D/3D 異質整合，未來極可能被邊緣化淪為二線低階代工。
  </div>
  </div>
 
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #ef4444; border-radius: 8px; padding: 14px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid #ef4444; border-radius: 8px; padding: 14px;">
  <b style="color: #dc2626; font-size: 15px;"> 巨浪 2：中國國家大基金與紫光「紅色獵殺」</b>
  <p style="margin: 6px 0; font-size: 13px;">
  <b>關鍵轉折：</b>2014 年底中國成立首期千億規模「國家集成電路產業投資基金」（大基金）。2015 年江蘇長電在國家資本注資下，以 7.8 億美元「蛇吞象」收購全球第 4 大封測廠新加坡星科金朋（STATS ChipPAC）。
  </p>
- <div style="background: #fef2f2; padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: #991b1b;">
+ <div style="background: var(--danger-bg); border: 1px solid var(--danger-border); padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--danger);">
  <b>紫光狂飆：</b>紫光集團董事長趙偉國四處揮舞支票，大舉併購展訊、銳迪科，揚言入股聯發科，並在 2015 年 12 月向矽品開出 568 億元私募大單，紅色供應鏈直逼台灣核心命脈。
  </div>
  </div>
 
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #334155; border-radius: 8px; padding: 14px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--border-strong); border-radius: 8px; padding: 14px;">
  <b style="color: #1e40af; font-size: 15px;"> 巨浪 3：千億美元併購海嘯與手機高原期</b>
  <p style="margin: 6px 0; font-size: 13px;">
  <b>關鍵轉折：</b>2015 年全球智慧型手機出貨年增率從昔日 30%+ 驟降至個位數，終端紅利見頂。上游 IC 設計客戶展開巨型整併（Avago 370 億美元併購 Broadcom、NXP 118 億美元併 Freescale、Intel 167 億美元併 Altera）。
  </p>
- <div style="background: #f1f5f9; padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: #1e3a8a;">
+ <div style="background: var(--primary-light); border: 1px solid var(--primary-border); padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--primary);">
  <b>議價力失衡：</b>合併後的大客戶採購體積暴增，單一封測廠若無相應量體，只能被客戶單方面砍價。半導體產業徹底進入「大者恆大、無規模即淘汰」殘酷洗牌期。
  </div>
  </div>
@@ -539,7 +675,7 @@
  <div style="padding-top: 12px; font-size: 13.5px; line-height: 1.6; color: #334155;">
  
  <!-- Act 1 -->
- <div style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
  <b style="color: #1e3a8a; font-size: 15px;"> 第一幕：無預警敵意突襲——非合意公開收購（2015.08.21 – 2015.09.22）</b>
  <span class="badge" style="background: #dbeafe; color: #1e40af;">突襲階段</span>
@@ -554,7 +690,7 @@
  </div>
 
  <!-- Act 2 -->
- <div style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
  <b style="color: #0284c7; font-size: 15px;">️ 第二幕：白衣騎士郭台銘進場 vs 外資巨頭大造反（2015.08.28 – 2015.10.15）</b>
  <span class="badge" style="background: #e0f2fe; color: #0369a1;">白騎士攻防</span>
@@ -568,7 +704,7 @@
  </div>
 
  <!-- Act 3 -->
- <div style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px;">
  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
  <b style="color: #dc2626; font-size: 15px;"> 第三幕：險棋紫光 568 億私募案與國安風暴海嘯（2015.12.11 – 2016.03.17）</b>
  <span class="badge" style="background: #fee2e2; color: #b91c1c;">國安爭議</span>
@@ -582,7 +718,7 @@
  </div>
 
  <!-- Act 4 -->
- <div style="background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
  <b style="color: #15803d; font-size: 15px;"> 第四幕：君悅密室破冰與制度創新——日月光投控誕生（2016.05.26 – 2018.04.30）</b>
  <span class="badge" style="background: #dcfce7; color: #15803d;">合意成立</span>
@@ -616,49 +752,49 @@
  <div style="padding-top: 12px; font-size: 13.5px; line-height: 1.6; color: #334155;">
  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
  
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #1e3a8a; border-radius: 8px; padding: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 8px; padding: 12px;">
  <b style="color: #1e3a8a;"> 張虔生（日月光董事長）</b>
- <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid #cbd5e1; font-style: italic; color: #475569; font-size: 13px;">
+ <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid var(--border-strong); font-style: italic; color: var(--text-secondary); font-size: 13px;">
  「面臨全球巨型併購浪潮與紅色供應鏈崛起，台灣封測產業必須組隊打世界盃！如果我們內部還在互相殺價內耗，只會一起被淘汰。」
  </blockquote>
  <span style="font-size: 12px; color: var(--text-muted);">立場：以國家級產業資本出發，透過高槓桿資本運作強行推動產業整合。</span>
  </div>
 
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #0284c7; border-radius: 8px; padding: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent-cyan); border-radius: 8px; padding: 12px;">
  <b style="color: #0284c7;">️ 林文伯（矽品董事長，圍棋九段）</b>
- <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid #cbd5e1; font-style: italic; color: #475569; font-size: 13px;">
+ <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid var(--border-strong); font-style: italic; color: var(--text-secondary); font-size: 13px;">
  「日月光是突襲的野蠻人！以低價掠奪矽品股權。矽品是我一手帶大的孩子，雙方客戶高度重疊，強行結合只會造成轉單外流，損害台灣利益！」
  </blockquote>
  <span style="font-size: 12px; color: var(--text-muted);">立場：捍衛三十年創立之自主經營權，視敵意併購為產業災難與道德掠奪。</span>
  </div>
 
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 12px;">
  <b style="color: #d97706;"> 郭台銘（鴻海科技集團董事長）</b>
- <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid #cbd5e1; font-style: italic; color: #475569; font-size: 13px;">
+ <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid var(--border-strong); font-style: italic; color: var(--text-secondary); font-size: 13px;">
  「矽品是底片、鴻海是相機！兩家是垂直整合的長遠戰略夥伴。日月光那種跑進資本市場買股票的做法叫做投機，不是做產業！」
  </blockquote>
  <span style="font-size: 12px; color: var(--text-muted);">立場：扮演白衣騎士角色，試圖以換股增資取得半導體後端關鍵切入點。</span>
  </div>
 
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #dc2626; border-radius: 8px; padding: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid #dc2626; border-radius: 8px; padding: 12px;">
  <b style="color: #dc2626;"> 趙偉國（中國紫光集團前董事長）</b>
- <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid #cbd5e1; font-style: italic; color: #475569; font-size: 13px;">
+ <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid var(--border-strong); font-style: italic; color: var(--text-secondary); font-size: 13px;">
  「台灣若不對大陸資本開放，我們就自己花錢幹！紫光有的是資金，既然不能買展訊代工，我們就直接買下你們的封測廠！」
  </blockquote>
  <span style="font-size: 12px; color: var(--text-muted);">立場：國家資本意志代言人，趁台灣兩強相爭之際強行跨海插旗。</span>
  </div>
 
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #1e40af; border-radius: 8px; padding: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid #1e40af; border-radius: 8px; padding: 12px;">
  <b style="color: #1e40af;">️ ISS（全球最大機構股東代理投票顧問報告）</b>
- <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid #cbd5e1; font-style: italic; color: #475569; font-size: 13px;">
+ <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid var(--border-strong); font-style: italic; color: var(--text-secondary); font-size: 13px;">
  「矽品提出之折價增資換股案嚴重稀釋全體股東每股價值與獲利。管理階層顯係為抵禦收購而行使防禦，損害股東利益，建議全數投反對票。」
  </blockquote>
  <span style="font-size: 12px; color: var(--text-muted);">立場：嚴格維護股東財富最大化原則，對經理人個人自肥防衛予以否決。</span>
  </div>
 
- <div style="background: white; border: 1px solid var(--border); border-left: 4px solid #059669; border-radius: 8px; padding: 12px;">
+ <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--success); border-radius: 8px; padding: 12px;">
  <b style="color: #059669;"> 中國商務部（2017 年第 77 號公告限制性條件）</b>
- <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid #cbd5e1; font-style: italic; color: #475569; font-size: 13px;">
+ <blockquote style="margin: 8px 0; padding-left: 10px; border-left: 3px solid var(--border-strong); font-style: italic; color: var(--text-secondary); font-size: 13px;">
  「本案具有排除限制競爭效果。核准但附帶條件：雙方須自本決定生效日起 24 個月內，保持獨立法人、獨立定價、各自行銷採購，不得互換定價敏感資訊。」
  </blockquote>
  <span style="font-size: 12px; color: var(--text-muted);">立場：防範雙雄合併後對中國境內 IC 設計客戶進行價格壟斷。</span>
@@ -674,43 +810,43 @@
  <div style="padding-top: 12px; font-size: 13.5px; line-height: 1.6; color: #334155;">
  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px;">
  
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <b style="color: #0f172a;">1. 董監持股過低（4.68%）的「門戶洞開」漏洞</b>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+ <b style="color: var(--text);">1. 董監持股過低（4.68%）的「門戶洞開」漏洞</b>
  <p style="margin: 6px 0 0 0; font-size: 13px;">
  矽品董事會持股僅 4.68%，卻實質掌控逾 800 億營收與千億市值企業。在股權極度分散且由外資主導的結構下，若經營層未建立控股防火牆，公開收購方只要端出足夠現金溢價，便能直接越過管理階層接管股權。
  </p>
  </div>
 
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <b style="color: #0f172a;">2. 「24.99% 收購上限」的法規技術巧門</b>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+ <b style="color: var(--text);">2. 「24.99% 收購上限」的法規技術巧門</b>
  <p style="margin: 6px 0 0 0; font-size: 13px;">
  日月光將收購上限嚴格鎖定在 24.99%，精準避開《公平交易法》結合申報門檻（持有或取得他事業股份超過三分之一或達 25%）。日月光法務團隊利用此一法規真空，迅速完成籌碼鎖定，造成實質第一大股東既成事實。
  </p>
  </div>
 
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <b style="color: #0f172a;">3. 台灣企業缺乏「毒藥丸（Poison Pill）」合法防禦武器</b>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+ <b style="color: var(--text);">3. 台灣企業缺乏「毒藥丸（Poison Pill）」合法防禦武器</b>
  <p style="margin: 6px 0 0 0; font-size: 13px;">
  美國常見的「毒藥丸計畫」（股東認股權計畫，在遭遇惡意併購時允許原股東折價認購新股以稀釋進攻者）在台灣《公司法》下受到「股份平等原則」與「資本確定原則」限制而無法實行，迫使矽品只能採取折價換股鴻海或引進紫光等極端險招。
  </p>
  </div>
 
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <b style="color: #0f172a;">4. 外資持股近 60% 帶來的股東行動主義（Shareholder Activism）</b>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+ <b style="color: var(--text);">4. 外資持股近 60% 帶來的股東行動主義（Shareholder Activism）</b>
  <p style="margin: 6px 0 0 0; font-size: 13px;">
  過去台灣企業多以家族派系或人情動員掌控委託書；但日矽案見證了外資機構（ISS / Glass Lewis 指引）主導股東會決策。外資嚴格遵循財務模型與價值最大化，直接在臨時股東會否決了經營層自保的換股案。
  </p>
  </div>
 
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <b style="color: #0f172a;">5. 審計委員會與獨立董事之「信賴義務（Fiduciary Duty）」困境</b>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+ <b style="color: var(--text);">5. 審計委員會與獨立董事之「信賴義務（Fiduciary Duty）」困境</b>
  <p style="margin: 6px 0 0 0; font-size: 13px;">
  面對公開收購，獨立董事應當維護誰的利益？若收購方溢價 34%，拒絕收購是否損害股東利益？若接受收購是否背叛了多年委任其職位之現有經營團隊？日矽案成為台灣日後推動《企併法》強化審審會查核規範的重要教材。
  </p>
  </div>
 
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <b style="color: #0f172a;">6. 平行兄弟控股（Dual-operating Holding Structure）的創新與成本</b>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+ <b style="color: var(--text);">6. 平行兄弟控股（Dual-operating Holding Structure）的創新與成本</b>
  <p style="margin: 6px 0 0 0; font-size: 13px;">
  以新設控股公司（3711）作為上市載體，原兩家公司平行存續。這化解了消滅合併帶來的團隊反彈與自尊受挫；但其代價是維持兩套獨立後台與法規遵循成本，且兩年間受限於中國反壟斷條款無法直接合併定價。
  </p>
@@ -729,7 +865,7 @@
  <div class="table-responsive">
  <table>
  <thead>
- <tr style="background: #f8fafc;">
+ <tr>
  <th style="width: 18%;">課本四大財務功能</th>
  <th style="width: 28%;">課本理論核心概念</th>
  <th style="width: 30%;">日矽案真實客觀實務對照</th>
@@ -855,7 +991,7 @@
  </div>
  </div>
 
- <pre id="md-raw-display" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; max-height: 520px; overflow: auto; white-space: pre-wrap; word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"></pre>
+ <pre id="md-raw-display" style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; max-height: 520px; overflow: auto; white-space: pre-wrap; word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: var(--text);"></pre>
  </div>
 
  <!-- 原生純文字資料區塊 (Zero JS Syntax Risk) -->
@@ -1727,47 +1863,47 @@
  <!-- 原始資料快速卡 -->
  <div class="card" style="margin-bottom: 20px;">
  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
- <h3 style="margin: 0; font-size: 17px; color: #0369a1;"> 成功公司原始財務報表（單位：萬元）</h3>
- <span class="badge" style="background:#e0f2fe; color:#0369a1;">課本 pp. 2-38 基礎題第 5 題</span>
+ <h3 style="margin: 0; font-size: 17px; color: var(--primary);">📊 成功公司原始財務報表（單位：萬元）</h3>
+ <span class="badge badge-ai">課本 pp. 2-38 基礎題第 5 題</span>
  </div>
- <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+ <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
  <!-- 資產負債表 -->
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #334155;">️ 資產負債表（存量觀念）</h4>
- <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">現金 / 應收 / 存貨</td><td style="text-align: right;">650 / 1,250 / 850</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #0284c7;"><td style="padding: 3px;">流動資產合計</td><td style="text-align: right;">2,750</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">固定資產 / 其它資產</td><td style="text-align: right;">750 / 250</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700;"><td style="padding: 3px;">非流動資產合計</td><td style="text-align: right;">1,000</td></tr>
- <tr style="border-bottom: 2px solid #0284c7; font-weight: 800; background: #f0fdf4;"><td style="padding: 4px;">資產總計</td><td style="text-align: right;">3,750</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">應付帳款 / 應計項目</td><td style="text-align: right;">450 / 600</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #ef4444;"><td style="padding: 3px;">流動負債合計</td><td style="text-align: right;">1,050</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">非流動負債合計</td><td style="text-align: right;">550</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700;"><td style="padding: 3px;">負債總計</td><td style="text-align: right;">1,600</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">普通股 (面額10元) / 保留盈餘</td><td style="text-align: right;">950 / 1,200</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #10b981;"><td style="padding: 3px;">權益合計</td><td style="text-align: right;">2,150</td></tr>
- <tr style="border-bottom: 2px solid #0284c7; font-weight: 800; background: #f0fdf4;"><td style="padding: 4px;">負債與權益合計</td><td style="text-align: right;">3,750</td></tr>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-control); padding: 14px;">
+ <h4 style="margin: 0 0 10px 0; font-size: 14px; color: var(--text);">🏛️ 資產負債表（存量觀念）</h4>
+ <table style="width: 100%; font-size: 12.5px; border-collapse: collapse;">
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">現金 / 應收 / 存貨</td><td style="text-align: right;" class="num">650 / 1,250 / 850</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700; color: var(--primary);"><td style="padding: 5px 3px;">流動資產合計</td><td style="text-align: right;" class="num">2,750</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">固定資產 / 其它資產</td><td style="text-align: right;" class="num">750 / 250</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700;"><td style="padding: 5px 3px;">非流動資產合計</td><td style="text-align: right;" class="num">1,000</td></tr>
+ <tr style="border-bottom: 2px solid var(--primary); font-weight: 800; background: var(--positive-bg); color: var(--positive-text);"><td style="padding: 6px 3px;">資產總計</td><td style="text-align: right;" class="num">3,750</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">應付帳款 / 應計項目</td><td style="text-align: right;" class="num">450 / 600</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700; color: var(--negative);"><td style="padding: 5px 3px;">流動負債合計</td><td style="text-align: right;" class="num">1,050</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">非流動負債合計</td><td style="text-align: right;" class="num">550</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700;"><td style="padding: 5px 3px;">負債總計</td><td style="text-align: right;" class="num">1,600</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">普通股 (面額10元) / 保留盈餘</td><td style="text-align: right;" class="num">950 / 1,200</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700; color: var(--positive);"><td style="padding: 5px 3px;">權益合計</td><td style="text-align: right;" class="num">2,150</td></tr>
+ <tr style="border-bottom: 2px solid var(--primary); font-weight: 800; background: var(--positive-bg); color: var(--positive-text);"><td style="padding: 6px 3px;">負債與權益合計</td><td style="text-align: right;" class="num">3,750</td></tr>
  </table>
  </div>
  <!-- 損益表與市場資訊 -->
- <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
- <h4 style="margin: 0 0 8px 0; font-size: 14px; color: #334155;"> 綜合損益表（流量觀念）</h4>
- <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">銷貨淨額 (營收)</td><td style="text-align: right;">5,800</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">銷貨成本</td><td style="text-align: right;">3,900</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #0284c7;"><td style="padding: 3px;">營業毛利</td><td style="text-align: right;">1,900</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">營業費用</td><td style="text-align: right;">1,050</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #f59e0b;"><td style="padding: 3px;">營業利益 (EBIT)</td><td style="text-align: right;">850</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">利息費用</td><td style="text-align: right;">250</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; font-weight: 700;"><td style="padding: 3px;">稅前收益</td><td style="text-align: right;">600</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 3px;">所得稅 (20%)</td><td style="text-align: right;">120</td></tr>
- <tr style="border-bottom: 2px solid #10b981; font-weight: 800; color: #047857; background: #ecfdf5;"><td style="padding: 4px;">稅後淨利</td><td style="text-align: right;">480</td></tr>
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-control); padding: 14px;">
+ <h4 style="margin: 0 0 10px 0; font-size: 14px; color: var(--text);">📈 綜合損益表（流量觀念）</h4>
+ <table style="width: 100%; font-size: 12.5px; border-collapse: collapse;">
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">銷貨淨額 (營收)</td><td style="text-align: right;" class="num">5,800</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">銷貨成本</td><td style="text-align: right;" class="num">3,900</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700; color: var(--primary);"><td style="padding: 5px 3px;">營業毛利</td><td style="text-align: right;" class="num">1,900</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">營業費用</td><td style="text-align: right;" class="num">1,050</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700; color: var(--warning);"><td style="padding: 5px 3px;">營業利益 (EBIT)</td><td style="text-align: right;" class="num">850</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">利息費用</td><td style="text-align: right;" class="num">250</td></tr>
+ <tr style="border-bottom: 1px solid var(--border); font-weight: 700;"><td style="padding: 5px 3px;">稅前收益</td><td style="text-align: right;" class="num">600</td></tr>
+ <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 5px 3px;">所得稅 (20%)</td><td style="text-align: right;" class="num">120</td></tr>
+ <tr style="border-bottom: 2px solid var(--positive); font-weight: 800; color: var(--positive-text); background: var(--positive-bg);"><td style="padding: 6px 3px;">稅後淨利</td><td style="text-align: right;" class="num">480</td></tr>
  </table>
- <div style="margin-top: 10px; padding: 8px; background: #fff; border: 1px dashed #cbd5e1; border-radius: 6px; font-size: 11px;">
- <b> 股本與市場行情推算：</b><br>
- • 普通股市價： 元 ｜ 每股面額： 元<br>
+ <div style="margin-top: 12px; padding: 10px 12px; background: var(--surface); border: 1px dashed var(--border-hover); border-radius: var(--radius-control); font-size: 11.5px; color: var(--text-secondary); line-height: 1.6;">
+ <b style="color:var(--text);">📌 股本與市場行情推算：</b><br>
+ • 普通股市價：<b>120</b> 元 ｜ 每股面額：<b>10</b> 元<br>
  • 流通股數 ＝ 950 萬 / 10 ＝ <b>95 萬股</b><br>
- • 每股現金股利： 元 ｜ 所得稅率：20%
+ • 每股現金股利：<b>3</b> 元 ｜ 所得稅率：<b>20%</b>
  </div>
  </div>
  </div>
@@ -1779,43 +1915,53 @@
  <h3 style="margin: 0; font-size: 17px;"> 20 大財務比率：課本頁碼、公式與推導速查</h3>
  <div style="display: flex; gap: 8px;">
  <button class="btn btn-primary" onclick="switchSection(document.getElementById('nav-md-viewer'), 'md-viewer'); loadMarkdownDoc('hw2_collab');"> 開啟 Markdown 完整指引手冊</button>
-
  </div>
+ </div>
+
+ <div class="ratio-filter-bar">
+  <button class="ratio-filter-btn active" onclick="filterRatioCategory('all', this)">全部 20 大比率</button>
+  <button class="ratio-filter-btn" onclick="filterRatioCategory('liquidity', this)">1. 短期償債能力 (2)</button>
+  <button class="ratio-filter-btn" onclick="filterRatioCategory('activity', this)">2. 資產營運效率 (6)</button>
+  <button class="ratio-filter-btn" onclick="filterRatioCategory('debt', this)">3. 長期財務槓桿 (2)</button>
+  <button class="ratio-filter-btn" onclick="filterRatioCategory('profit', this)">4. 企業獲利能力 (5)</button>
+  <button class="ratio-filter-btn" onclick="filterRatioCategory('market', this)">5. 市場評價指標 (5)</button>
  </div>
  
- <div style="overflow-x: auto;">
+ <div class="mobile-table-hint"><span>👉 左右滑動可查看完整推導公式與數值代入</span></div>
+
+ <div class="table-responsive">
  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
  <thead>
- <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; text-align: left;">
- <th style="padding: 8px;">題號</th>
- <th style="padding: 8px;">比率名稱</th>
- <th style="padding: 8px;">課本頁碼</th>
- <th style="padding: 8px;">推導計算公式</th>
- <th style="padding: 8px;">成功公司代入值</th>
- <th style="padding: 8px;">標準答案</th>
+ <tr>
+ <th style="padding: 10px 12px; width: 60px;">題號</th>
+ <th style="padding: 10px 12px; width: 160px;">比率名稱</th>
+ <th style="padding: 10px 12px; width: 120px;">課本頁碼</th>
+ <th style="padding: 10px 12px;">推導計算公式</th>
+ <th style="padding: 10px 12px;">成功公司代入值</th>
+ <th style="padding: 10px 12px; width: 180px;">標準答案</th>
  </tr>
  </thead>
  <tbody>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(1)</td><td><b>流動比率</b></td><td>p. 2-10</td><td><code>CA / CL</code> (流動資產 / 流動負債)</td><td>2,750 / 1,050</td><td><b>2.62 倍 (261.90%)</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(2)</td><td><b>速動比率</b></td><td>pp. 2-10~11</td><td><code>(CA - INV) / CL</code> 即 <code>(現金 + AR) / CL</code></td><td>(2,750 - 850) / 1,050</td><td><b>1.81 倍 (180.95%)</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(3)</td><td><b>存貨週轉率</b></td><td>p. 2-12</td><td><code>COGS / INV</code> (銷貨成本 / 存貨)</td><td>3,900 / 850</td><td><b>4.59 次</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(4)</td><td><b>存貨平均銷貨天數</b></td><td>pp. 2-12~13</td><td><code>365 / 存貨週轉率</code> (DSI)</td><td>365 / 4.588</td><td><b>79.55 天</b> (360天為 78.46天)</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(5)</td><td><b>應收帳款週轉率</b></td><td>p. 2-13</td><td><code>Sales / AR</code> (銷貨淨額 / 應收帳款)</td><td>5,800 / 1,250</td><td><b>4.64 次</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(6)</td><td><b>應收帳款回收天數</b></td><td>p. 2-13</td><td><code>365 / 應收週轉率</code> (DSO)</td><td>365 / 4.64</td><td><b>78.66 天</b> (360天為 77.59天)</td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(7)</td><td><b>固定資產週轉率</b></td><td>p. 2-14</td><td><code>Sales / FA</code> (銷貨淨額 / 固定資產)</td><td>5,800 / 750</td><td><b>7.73 次</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(8)</td><td><b>總資產週轉率</b></td><td>pp. 2-14~15</td><td><code>Sales / A</code> (銷貨淨額 / 資產總計)</td><td>5,800 / 3,750</td><td><b>1.55 次</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(9)</td><td><b>負債比率</b></td><td>p. 2-16</td><td><code>L / A</code> (負債合計 / 資產總計)</td><td>1,600 / 3,750</td><td><b>42.67%</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(10)</td><td><b>利息賺得倍數</b></td><td>pp. 2-16~17</td><td><code>EBIT / Interest</code> (息稅前利益 / 利息)</td><td>850 / 250</td><td><b>3.40 倍</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(11)</td><td><b>營業毛利率</b></td><td>p. 2-18</td><td><code>Gross Profit / Sales</code> (營業毛利 / 銷貨淨額)</td><td>1,900 / 5,800</td><td><b>32.76%</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(12)</td><td><b>營業利益率</b></td><td>p. 2-18</td><td><code>EBIT / Sales</code> (營業利益 / 銷貨淨額)</td><td>850 / 5,800</td><td><b>14.66%</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(13)</td><td><b>營業淨利率</b></td><td>pp. 2-18~19</td><td><code>Net Income / Sales</code> (稅後淨利 / 銷貨淨額)</td><td>480 / 5,800</td><td><b>8.28%</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(14)</td><td><b>總資產報酬率 (ROA)</b></td><td>p. 2-20</td><td><code>NI / A</code> (稅後淨利 / 資產總計)</td><td>480 / 3,750</td><td><b>12.80%</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(15)</td><td><b>權益報酬率 (ROE)</b></td><td>pp. 2-20~21</td><td><code>NI / E</code> (稅後淨利 / 權益合計)</td><td>480 / 2,150</td><td><b>22.33%</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(16)</td><td><b>每股盈餘 (EPS)</b></td><td>p. 2-22</td><td><code>NI / Shares</code> (稅後淨利 / 普通股數)</td><td>480 / 95</td><td><b>5.05 元/股</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(17)</td><td><b>本益比 (P/E)</b></td><td>pp. 2-22~23</td><td><code>Price / EPS</code> (每股市價 / 每股盈餘)</td><td>120 / 5.0526</td><td><b>23.75 倍</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;"><td>(18)</td><td><b>每股帳面金額</b></td><td>p. 2-23</td><td><code>E / Shares</code> (權益合計 / 普通股數)</td><td>2,150 / 95</td><td><b>22.63 元/股</b></td></tr>
- <tr style="border-bottom: 1px solid #e2e8f0;"><td>(19)</td><td><b>市價淨值比 (P/B)</b></td><td>p. 2-23</td><td><code>Price / BVPS</code> (每股市價 / 每股帳面)</td><td>120 / 22.6316</td><td><b>5.30 倍</b></td></tr>
- <tr style="background: #f8fafc;"><td>(20)</td><td><b>現金股利殖利率</b></td><td>p. 2-23</td><td><code>DPS / Price</code> (每股股利 / 每股市價)</td><td>3 / 120</td><td><b>2.50%</b></td></tr>
+ <tr class="ratio-row" data-cat="liquidity"><td>(1)</td><td><b>流動比率</b></td><td>p. 2-10</td><td><code>CA / CL</code> (流動資產 / 流動負債)</td><td>2,750 / 1,050</td><td><span class="badge badge-success">2.62 倍 (261.90%)</span></td></tr>
+ <tr class="ratio-row" data-cat="liquidity"><td>(2)</td><td><b>速動比率</b></td><td>pp. 2-10~11</td><td><code>(CA - INV) / CL</code> 即 <code>(現金 + AR) / CL</code></td><td>(2,750 - 850) / 1,050</td><td><span class="badge badge-success">1.81 倍 (180.95%)</span></td></tr>
+ <tr class="ratio-row" data-cat="activity"><td>(3)</td><td><b>存貨週轉率</b></td><td>p. 2-12</td><td><code>COGS / INV</code> (銷貨成本 / 存貨)</td><td>3,900 / 850</td><td><span class="badge badge-success">4.59 次</span></td></tr>
+ <tr class="ratio-row" data-cat="activity"><td>(4)</td><td><b>存貨平均銷貨天數</b></td><td>pp. 2-12~13</td><td><code>365 / 存貨週轉率</code> (DSI)</td><td>365 / 4.588</td><td><span class="badge badge-success">79.55 天 (360天為 78.46天)</span></td></tr>
+ <tr class="ratio-row" data-cat="activity"><td>(5)</td><td><b>應收帳款週轉率</b></td><td>p. 2-13</td><td><code>Sales / AR</code> (銷貨淨額 / 應收帳款)</td><td>5,800 / 1,250</td><td><span class="badge badge-success">4.64 次</span></td></tr>
+ <tr class="ratio-row" data-cat="activity"><td>(6)</td><td><b>應收帳款回收天數</b></td><td>p. 2-13</td><td><code>365 / 應收週轉率</code> (DSO)</td><td>365 / 4.64</td><td><span class="badge badge-success">78.66 天 (360天為 77.59天)</span></td></tr>
+ <tr class="ratio-row" data-cat="activity"><td>(7)</td><td><b>固定資產週轉率</b></td><td>p. 2-14</td><td><code>Sales / FA</code> (銷貨淨額 / 固定資產)</td><td>5,800 / 750</td><td><span class="badge badge-success">7.73 次</span></td></tr>
+ <tr class="ratio-row" data-cat="activity"><td>(8)</td><td><b>總資產週轉率</b></td><td>pp. 2-14~15</td><td><code>Sales / A</code> (銷貨淨額 / 資產總計)</td><td>5,800 / 3,750</td><td><span class="badge badge-success">1.55 次</span></td></tr>
+ <tr class="ratio-row" data-cat="debt"><td>(9)</td><td><b>負債比率</b></td><td>p. 2-16</td><td><code>L / A</code> (負債合計 / 資產總計)</td><td>1,600 / 3,750</td><td><span class="badge badge-success">42.67%</span></td></tr>
+ <tr class="ratio-row" data-cat="debt"><td>(10)</td><td><b>利息賺得倍數</b></td><td>pp. 2-16~17</td><td><code>EBIT / Interest</code> (息稅前利益 / 利息)</td><td>850 / 250</td><td><span class="badge badge-success">3.40 倍</span></td></tr>
+ <tr class="ratio-row" data-cat="profit"><td>(11)</td><td><b>營業毛利率</b></td><td>p. 2-18</td><td><code>Gross Profit / Sales</code> (營業毛利 / 銷貨淨額)</td><td>1,900 / 5,800</td><td><span class="badge badge-success">32.76%</span></td></tr>
+ <tr class="ratio-row" data-cat="profit"><td>(12)</td><td><b>營業利益率</b></td><td>p. 2-18</td><td><code>EBIT / Sales</code> (營業利益 / 銷貨淨額)</td><td>850 / 5,800</td><td><span class="badge badge-success">14.66%</span></td></tr>
+ <tr class="ratio-row" data-cat="profit"><td>(13)</td><td><b>營業淨利率</b></td><td>pp. 2-18~19</td><td><code>Net Income / Sales</code> (稅後淨利 / 銷貨淨額)</td><td>480 / 5,800</td><td><span class="badge badge-success">8.28%</span></td></tr>
+ <tr class="ratio-row" data-cat="profit"><td>(14)</td><td><b>總資產報酬率 (ROA)</b></td><td>p. 2-20</td><td><code>NI / A</code> (稅後淨利 / 資產總計)</td><td>480 / 3,750</td><td><span class="badge badge-success">12.80%</span></td></tr>
+ <tr class="ratio-row" data-cat="profit"><td>(15)</td><td><b>權益報酬率 (ROE)</b></td><td>pp. 2-20~21</td><td><code>NI / E</code> (稅後淨利 / 權益合計)</td><td>480 / 2,150</td><td><span class="badge badge-success">22.33%</span></td></tr>
+ <tr class="ratio-row" data-cat="market"><td>(16)</td><td><b>每股盈餘 (EPS)</b></td><td>p. 2-22</td><td><code>NI / Shares</code> (稅後淨利 / 普通股數)</td><td>480 / 95</td><td><span class="badge badge-success">5.05 元/股</span></td></tr>
+ <tr class="ratio-row" data-cat="market"><td>(17)</td><td><b>本益比 (P/E)</b></td><td>pp. 2-22~23</td><td><code>Price / EPS</code> (每股市價 / 每股盈餘)</td><td>120 / 5.0526</td><td><span class="badge badge-success">23.75 倍</span></td></tr>
+ <tr class="ratio-row" data-cat="market"><td>(18)</td><td><b>每股帳面金額</b></td><td>p. 2-23</td><td><code>E / Shares</code> (權益合計 / 普通股數)</td><td>2,150 / 95</td><td><span class="badge badge-success">22.63 元/股</span></td></tr>
+ <tr class="ratio-row" data-cat="market"><td>(19)</td><td><b>市價淨值比 (P/B)</b></td><td>p. 2-23</td><td><code>Price / BVPS</code> (每股市價 / 每股帳面)</td><td>120 / 22.6316</td><td><span class="badge badge-success">5.30 倍</span></td></tr>
+ <tr class="ratio-row" data-cat="market"><td>(20)</td><td><b>現金股利殖利率</b></td><td>p. 2-23</td><td><code>DPS / Price</code> (每股股利 / 每股市價)</td><td>3 / 120</td><td><span class="badge badge-success">2.50%</span></td></tr>
  </tbody>
  </table>
  </div>
@@ -1829,24 +1975,24 @@
  </div>
  </section>
 
-
+</div> <!-- .content-wrapper -->
 </main>
 
 <!-- Safari 友善引導 Modal -->
 <div id="safari-modal" class="modal-overlay" onclick="closeSafariModal(event)">
- <div class="modal-content" onclick="event.stopPropagation()" style="background: #fff; padding: 20px; border-radius: 12px; max-width: 500px; border: 1px solid var(--border);">
+ <div class="modal-content" onclick="event.stopPropagation()" style="background: var(--surface); color: var(--text); padding: 20px; border-radius: 12px; max-width: 500px; border: 1px solid var(--border); box-shadow: var(--shadow-lg);">
  <h3 style="margin-top: 0; color: var(--primary);"> 為什麼 Safari 顯示不支援 WebGPU？</h3>
- <p style="font-size: 14px; color: #334155; line-height: 1.6;">
+ <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
  這是 Apple 的預設限制！蘋果在 Safari 中將 WebGPU 歸類為實驗功能，因此預設關閉。
  </p>
  
- <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
+ <div style="background: var(--surface-raised); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
  <b> 最無腦解法（強烈推薦）：</b><br>
  請直接複製本網址，改用 <b>Google Chrome</b> 或 <b>Microsoft Edge</b> 打開，點擊即可直接執行 Gemma 4-E2B 助教，無需任何設定！
  </div>
 
  <p style="font-size: 13px; font-weight: 600; margin: 10px 0 4px 0;">如果你一定要在 Safari 使用，請依以下步驟開啟：</p>
- <ul style="font-size: 13px; color: #475569; padding-left: 20px; line-height: 1.6; margin: 0;">
+ <ul style="font-size: 13px; color: var(--text-muted); padding-left: 20px; line-height: 1.6; margin: 0;">
  <li><b>Mac Safari：</b>點左上角 Safari -> 設定 -> 進階 -> 勾選「為網頁開發者顯示功能」-> 上方「開發」選單 -> 功能旗標 (Feature Flags) -> 搜尋並勾選 <b>WebGPU</b>。</li>
  <li><b>iPhone / iPad：</b>打開「設定」->「Safari」-> 滑到最底「進階」->「功能旗標」-> 找到 <b>WebGPU</b> 並開啟。</li>
  </ul>
@@ -1856,6 +2002,33 @@
 </div>
 
 <div id="toast">操作成功！</div>
+
+<!-- 行動端底部原生導航列 (iOS / Android Bottom Dock) -->
+<nav class="mobile-bottom-nav">
+ <a class="mobile-nav-item active" id="mob-nav-home" onclick="switchSectionMobileNav(this, 'home')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  <span>首頁看板</span>
+ </a>
+ <a class="mobile-nav-item" id="mob-nav-hw1" onclick="switchHwMobileNav(this, 'hw1')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+  <span>HW1 史料</span>
+ </a>
+ <a class="mobile-nav-item" id="mob-nav-hw2" onclick="switchHwMobileNav(this, 'hw2')">
+  <div class="mobile-nav-icon-wrap">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+   <span class="mobile-nav-dot"></span>
+  </div>
+  <span>HW2 比率</span>
+ </a>
+ <a class="mobile-nav-item" id="mob-nav-gemma-lab" onclick="switchSectionMobileNav(this, 'gemma-lab')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+  <span>AI 助教</span>
+ </a>
+ <a class="mobile-nav-item" id="mob-nav-md-viewer" onclick="switchSectionMobileNav(this, 'md-viewer')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+  <span>原始筆記</span>
+ </a>
+</nav>
 
 <!-- 外部模組化邏輯與資料分離架構 (便於日後維護擴充) -->
 <script src="js/app.js"></script>
