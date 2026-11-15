@@ -12,7 +12,7 @@
     { "id": "home", "title": "首頁即時進度", "icon": "home", "type": "builtin", "showInSidebar": true, "showInMobileDock": true, "badge": "" },
     { "id": "hw1", "title": "HW1 日矽案史料庫", "icon": "file-text", "type": "assignment", "showInSidebar": true, "showInMobileDock": true, "badge": "已發布" },
     { "id": "hw2", "title": "HW2 財務比率分析 (第5題)", "icon": "bar-chart-2", "type": "assignment", "showInSidebar": true, "showInMobileDock": true, "badge": "進行中" },
-    { "id": "hw3", "title": "HW3 貨幣時間價值", "icon": "folder", "type": "assignment", "showInSidebar": true, "showInMobileDock": false, "badge": "待發布" },
+    { "id": "hw3", "title": "HW3 第17題 (有效年利率與複利)", "icon": "folder", "type": "assignment", "showInSidebar": true, "showInMobileDock": true, "badge": "進行中" },
     { "id": "ai-lab", "title": "AI 助教 (Gemma 4-E2B)", "icon": "cpu", "type": "builtin", "showInSidebar": true, "showInMobileDock": true, "badge": "" },
     { "id": "md-viewer", "title": "原始 Markdown 檢視器", "icon": "book-open", "type": "builtin", "showInSidebar": true, "showInMobileDock": false, "badge": "" }
   ],
@@ -41,58 +41,74 @@
     },
     {
       "id": "hw3",
-      "title": "HW3：第三章 貨幣時間價值與折現現金流量",
+      "title": "HW3：第三章 問答及計算題 第 17 題（有效年利率 EAR 與連續複利）",
       "chapter": "第 3 章",
-      "status": "upcoming",
-      "badge": "待發布",
+      "status": "active",
+      "badge": "進行中",
       "isStatic": false,
-      "dueDate": "2026-11-07 23:59",
-      "source": "《財務管理》（第六版，李顯儀 著）第三章「貨幣時間價值」",
-      "summary": "本週題目聚焦於貨幣時間價值（TVM），涵蓋單筆現金流複利現值/終值、普通年金與到期年金、實質有效年利率 (EAR) 與分期償還試算。",
+      "dueDate": "2026-11-16 23:59",
+      "source": "《財務管理》（第六版，李顯儀 著）第三章〈貨幣之時間價值〉：3-4 一年多次計息 (pp. 3-22 ~ 3-23)、3-4 有效年利率與連續複利 (pp. 3-24 ~ 3-25)、章末習題 p. 3-41 第 17 題（2007 年高考）",
+      "summary": "比較高雄、臺北、彰化與花旗四家銀行在相同名目年利率 8%、不同複利頻率（每年／每半年／每季／連續複利）下的有效年利率（EAR）與三年後存款餘額，並附上課本對應頁碼與組員心得填寫區。",
       "modules": [
         {
           "type": "banner",
-          "title": "HW3 課本理論對照教材",
-          "content": "《財務管理》（第六版，李顯儀 著）第三章「貨幣時間價值（Time Value of Money）」。",
+          "title": "對應課本頁碼",
+          "content": "<b>3-4 一年多次計息：pp. 3-22 ~ 3-23</b> ｜ <b>3-4 有效年利率 (EAR) 與連續複利：pp. 3-24 ~ 3-25</b> ｜ <b>題目出處：第三章習題 p. 3-41 第 17 題</b>",
           "linkText": "前往興大圖書館電子書 ↗",
           "linkUrl": "https://nchu.primo.exlibrisgroup.com/discovery/fulldisplay/alma9973925559607976/886NCHU_INST:886NCHU_INST"
         },
         {
           "type": "claims",
           "title": "HW3 小組分工與題組認領",
-          "description": "組員可登記認領負責題組或撰寫題目白話推導與 Excel 試算表驗證：",
+          "description": "組員可登記認領負責小題、課本頁碼核對或撰寫心得：",
           "roles": [
-            { "id": "hw3_role1", "name": "單筆現金流與複利現值終值 (題組一)", "desc": "負責 PV/FV 概念推導、折現率對現值敏感度分析與基礎計算題。" },
-            { "id": "hw3_role2", "name": "普通年金與到期年金計算 (題組二)", "desc": "負責 PVA/FVA 公式推導、退休金與房貸定額年金試算。" },
-            { "id": "hw3_role3", "name": "永續年金與有效年利率 EAR (題組三)", "desc": "負責名目利率 APR 轉實質年利率 EAR 與永續成長年金推導。" },
-            { "id": "hw3_role4", "name": "貸款分期償還表與 Excel 驗證 (題組四)", "desc": "負責貸款本利攤還試算表（Amortization Schedule）建立與防呆驗算。" }
+            { "id": "hw3_role1", "name": "第 (1)~(2) 小題：三家銀行 EAR 與終值計算", "desc": "負責高雄(年)、臺北(半年)、彰化(季)有效年利率與三年後存款餘額驗算（對應 pp. 3-22 ~ 3-25）。" },
+            { "id": "hw3_role2", "name": "第 (3)~(4) 小題：銀行選擇與花旗連續複利", "desc": "負責比較複利頻率對實質報酬的影響，推導連續複利 EAR = e^r - 1（對應 pp. 3-24 ~ 3-25）。" },
+            { "id": "hw3_role3", "name": "課本理論與頁碼對照整理", "desc": "核對課本第三章 3-4 節頁碼（pp. 3-22 ~ 3-25）及 p. 3-41 題目原文。" },
+            { "id": "hw3_role4", "name": "組員心得統整與最終交件排版", "desc": "彙整組員下方填寫的心得觀點，完成作業排版與 AI 揭露表。" }
           ]
         },
         {
           "type": "cards_grid",
-          "title": "第三章 核心公式與解題關鍵指引",
+          "title": "四家銀行計算結果總覽（本金 100,000 元、3 年、名目利率 8%）",
           "cards": [
             {
-              "title": "複利終值與現值公式",
-              "tag": "FV / PV",
-              "content": "<b>終值：</b>$$FV_n = PV \\times (1 + r)^n$$<br><b>現值：</b>$$PV = \\frac{FV_n}{(1 + r)^n}$$<br>掌握折現因子（Discount Factor）隨期數增加而遞減之特性。"
+              "title": "高雄銀行（每年複利 1 次，m = 1）",
+              "tag": "pp. 3-22 ~ 3-25",
+              "content": "<b>有效年利率 (EAR)：</b>(1 + 0.08/1)<sup>1</sup> - 1 = <b>8.00%</b><br><b>三年後餘額 (FV)：</b>100,000 × (1.08)<sup>3</sup> = <b>125,971.20 元</b>"
             },
             {
-              "title": "普通年金現值 (PVA)",
-              "tag": "Ordinary Annuity",
-              "content": "<b>公式：</b>$$PVA_n = PMT \\times \\left[\\frac{1 - (1+r)^{-n}}{r}\\right]$$<br>每期期末發生定額現金流之折現總和，為房屋貸款與債券評價基石。"
+              "title": "臺北銀行（每半年複利 1 次，m = 2）",
+              "tag": "pp. 3-22 ~ 3-25",
+              "content": "<b>有效年利率 (EAR)：</b>(1 + 0.08/2)<sup>2</sup> - 1 = (1.04)<sup>2</sup> - 1 = <b>8.16%</b><br><b>三年後餘額 (FV)：</b>100,000 × (1.04)<sup>6</sup> ≈ <b>126,531.90 元</b>"
             },
             {
-              "title": "有效年利率 (EAR)",
-              "tag": "Compounding Frequency",
-              "content": "<b>公式：</b>$$EAR = \\left(1 + \\frac{APR}{m}\\right)^m - 1$$<br>年複利次數 $m$ 愈多，實質利率愈高；連續複利時極限為 $e^{APR} - 1$。"
+              "title": "彰化銀行（每季複利 1 次，m = 4）",
+              "tag": "pp. 3-22 ~ 3-25",
+              "content": "<b>有效年利率 (EAR)：</b>(1 + 0.08/4)<sup>4</sup> - 1 = (1.02)<sup>4</sup> - 1 ≈ <b>8.24%</b><br><b>三年後餘額 (FV)：</b>100,000 × (1.02)<sup>12</sup> ≈ <b>126,824.18 元</b>"
+            },
+            {
+              "title": "花旗銀行（連續複利，m → ∞）",
+              "tag": "pp. 3-24 ~ 3-25",
+              "content": "<b>有效年利率 (EAR)：</b>e<sup>0.08</sup> - 1 ≈ <b>8.33%</b><br><b>三年後餘額 (FV)：</b>100,000 × e<sup>0.08 × 3</sup> = 100,000 × e<sup>0.24</sup> ≈ <b>127,124.92 元</b>"
             }
           ]
         },
         {
           "type": "markdown",
-          "title": "助教解題思路與注意事項",
-          "content": "### HW3 研討指南與防呆提醒\n\n1. **期初付款 vs 期末付款**：\n   - 普通年金（Ordinary Annuity）：現金流發生於期末。\n   - 到期年金（Annuity Due）：現金流發生於期初，終值與現值均等於普通年金乘上 $(1 + r)$。\n2. **利率與期數單位必須完全對齊**：\n   - 若為「月繳房貸」，名目年利率必須除以 12，期數 $n$ 必須乘以 12。\n3. **Excel 實用函數速查**：\n   - 現值：`=PV(rate, nper, pmt, [fv], [type])`\n   - 終值：`=FV(rate, nper, pmt, [pv], [type])`\n   - 每期付款：`=PMT(rate, nper, pv, [fv], [type])`\n   *(註：type=0 為期末付款，type=1 為期初付款)*"
+          "title": "第 17 題 完整題目、解答與課本頁碼對照",
+          "content": "【題目原文】（課本第 3-41 頁，2007 年高考）\n假設張三有 100,000 元想存入一家銀行，預計存款三年之久。經上網搜尋，張三發現高雄銀行的計息採每年複利一次，臺北銀行的計息採每半年複利一次，彰化銀行的計息採每季複利一次。這三家銀行的名目年利率均為 8%，則：\n(1) 請分別計算這三家銀行的有效年利率？\n(2) 若張三將 100,000 元存入這三家銀行的某一家銀行，請分別計算三年後，三家銀行的存款餘額分別有多少？\n(3) 依上述資料，張三會選擇那家銀行？\n(4) 經同學介紹，得知花旗銀行的計息採連續複利，名目年利率也是 8%，則在高雄、臺北、彰化及花旗四家銀行當中，張三會選擇那家銀行存入？為什麼？\n\n【詳細解答與結論】\n• (1) 有效年利率 EAR = (1 + r/m)^m - 1（課本 pp. 3-24 ~ 3-25）\n  - 高雄銀行 (m=1)：8.00%\n  - 臺北銀行 (m=2)：8.16%\n  - 彰化銀行 (m=4)：8.2432%（約 8.24%）\n\n• (2) 三年後存款餘額 FV = PV × (1 + r/m)^(m×n)（課本 pp. 3-22 ~ 3-23）\n  - 高雄銀行：125,971.20 元（約 125,971 元）\n  - 臺北銀行：126,531.90 元（約 126,532 元）\n  - 彰化銀行：126,824.18 元（約 126,824 元）\n\n• (3) 三家比較結論：\n  張三會選擇「彰化銀行」。因為名目年利率同為 8% 時，每年複利次數越多（每季複利 m=4），有效年利率越高（8.24%），三年後存款餘額也最多。\n\n• (4) 加入花旗銀行（連續複利）後結論：\n  張三會選擇「花旗銀行」。因為連續複利相當於每年複利無限多次（m → ∞），有效年利率 EAR = e^0.08 - 1 ≈ 8.33%，三年後餘額 FV = 100,000 × e^0.24 ≈ 127,124.92 元（約 127,125 元），四家當中實質報酬率與期末餘額均最高。\n\n【課本頁碼對照表】\n• 一年多次計息原理（期利率 r/m、總期數 n×m）：第 3 章 3-4 節，pp. 3-22 ~ 3-23\n• 有效年利率 (EAR) 與連續複利公式：第 3 章 3-4 節，pp. 3-24 ~ 3-25\n• 本題出處（問答及計算題 第 17 題）：第 3 章習題，p. 3-41"
+        },
+        {
+          "type": "thought_box",
+          "title": "組員個人心得與觀點填寫區（自由填寫並保存）",
+          "description": "大家可以在手機或電腦上直接填寫對第 17 題的心得（例如：名目利率與有效年利率的陷阱、信用卡／房貸複利頻率聯想、連續複利在金融實務上的意義），點擊「保存心得」後將同步雲端與本地：",
+          "placeholder": "在此寫下你的作業心得或生活聯想（例如：以前看銀行或信用卡寫年利率 8% 以為都一樣，學完 pp. 3-24 ~ 3-25 才知道複利頻率會影響實際拿到的利息...）",
+          "topics": [
+            "HW3 第17題 個人心得與反思",
+            "HW3 課本頁碼對照與公式理解",
+            "HW3 實務聯想（定存/房貸/信用卡）"
+          ]
         }
       ]
     }

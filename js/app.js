@@ -422,27 +422,45 @@ function updateMobileNavState(id) {
    }
   }
 
-  // 渲染首頁「即時小組討論與觀點動態牆」
-  const homeStream = document.getElementById('home-thoughts-stream');
-  if (homeStream) {
-   if (!list.length) {
-    homeStream.innerHTML = '<p style="font-size:13px; color:var(--text-muted); text-align:center; padding:16px;">目前小組尚無留言，歡迎組員前往 HW1 頁面寫下心得觀點！</p>';
-   } else {
-    homeStream.innerHTML = list.map(item => `
-     <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: var(--radius-control); padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow-xs);">
-      <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom: 8px; flex-wrap:wrap; gap:6px;">
-       <div style="display:flex; align-items:center; gap:8px;">
-        <b style="color:var(--text); font-size:14px;">${item.name}</b>
-        <span class="badge badge-ai">${item.topic || '觀點分享'}</span>
+   // 渲染首頁「即時小組討論與觀點動態牆」
+   const homeStream = document.getElementById('home-thoughts-stream');
+   if (homeStream) {
+    if (!list.length) {
+     homeStream.innerHTML = '<p style="font-size:13px; color:var(--text-muted); text-align:center; padding:16px;">目前小組尚無留言，歡迎組員前往 HW1 頁面寫下心得觀點！</p>';
+    } else {
+     homeStream.innerHTML = list.map(item => `
+      <div style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: var(--radius-control); padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow-xs);">
+       <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom: 8px; flex-wrap:wrap; gap:6px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+         <b style="color:var(--text); font-size:14px;">${item.name}</b>
+         <span class="badge badge-ai">${item.topic || '觀點分享'}</span>
+        </div>
+        <span style="color:var(--text-muted); font-size:11.5px; font-family:'Geist Mono', monospace;">${item.time}</span>
        </div>
-       <span style="color:var(--text-muted); font-size:11.5px; font-family:'Geist Mono', monospace;">${item.time}</span>
+       <div style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap;">${item.thought}</div>
       </div>
-      <div style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap;">${item.thought}</div>
-     </div>
-    `).join('');
+     `).join('');
+    }
    }
+
+   // 渲染各動態作業頁面（例如 HW3）的心得清單
+   document.querySelectorAll('.dynamic-thoughts-list').forEach(dynContainer => {
+    const hwPrefix = (dynContainer.dataset.hwId || '').toUpperCase();
+    const filtered = hwPrefix ? list.filter(item => (item.topic || '').toUpperCase().startsWith(hwPrefix)) : list;
+    if (!filtered.length) {
+     dynContainer.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">尚無心得紀錄，組員可在上方空格輸入後點擊保存！</p>';
+    } else {
+     dynContainer.innerHTML = '<h4 style="margin: 12px 0 8px 0; color:var(--text);">已保存的心得筆記：</h4>' + filtered.map(item => `
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-control); padding: 12px 14px; margin-bottom: 8px; box-shadow: var(--shadow-xs);">
+       <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:4px; flex-wrap:wrap; gap:4px;">
+        <b style="color:var(--text);">${item.name} <span class="badge" style="margin-left:4px;">${item.topic || '心得'}</span></b> <span>${item.time}</span>
+       </div>
+       <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-secondary); white-space: pre-wrap; line-height:1.6;">${item.thought}</p>
+      </div>
+     `).join('');
+    }
+   });
   }
- }
 
  function copyThought() {
   const thought = document.getElementById('my-thought').value.trim();
@@ -904,9 +922,65 @@ function filterRatioCategory(cat, btn) {
       </div>
     `;
    }
+
+   if (mod.type === 'thought_box') {
+    const topics = mod.topics || [`${hw.id.toUpperCase()} 個人心得與反思`, `${hw.id.toUpperCase()} 補充資料`];
+    const optionsHtml = topics.map(t => `<option value="${t}">${t}</option>`).join('');
+    html += `
+      <div class="card" style="margin-top: 20px;">
+        <h2 style="font-size: 17px; margin-top: 0;">${mod.title || '組員個人心得與觀點填寫區（自由填寫並保存）'}</h2>
+        <p style="font-size: 13px; color: var(--text-muted);">${mod.description || '組員可以在此填寫自己的解題心得、課本頁碼對照感想或實務連結，點擊「保存心得」後將同步記錄：'}</p>
+        <div class="user-comment-box">
+          <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+            <input type="text" id="dyn-name-${hw.id}" placeholder="輸入你的名字" style="padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; width: 150px;">
+            <select id="dyn-topic-${hw.id}" style="padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; max-width: 100%;">
+              ${optionsHtml}
+            </select>
+          </div>
+          <textarea id="dyn-thought-${hw.id}" placeholder="${mod.placeholder || '在此寫下你的心得或觀點...'}"></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
+            <button class="btn btn-primary" onclick="saveDynamicThought('${hw.id}')">保存心得（同步雲端與本地）</button>
+            <button class="btn" onclick="copyDynamicThought('${hw.id}')">複製我的文字</button>
+          </div>
+        </div>
+        <div id="saved-thoughts-list-${hw.id}" class="dynamic-thoughts-list" data-hw-id="${hw.id}" style="margin-top: 14px;"></div>
+      </div>
+    `;
+   }
   });
 
   container.innerHTML = html;
+  renderThoughts();
+ }
+
+ function saveDynamicThought(hwId) {
+  const nameEl = document.getElementById('dyn-name-' + hwId);
+  const topicEl = document.getElementById('dyn-topic-' + hwId);
+  const thoughtEl = document.getElementById('dyn-thought-' + hwId);
+  const name = nameEl ? nameEl.value.trim() : '';
+  const topic = topicEl ? topicEl.value : `${hwId.toUpperCase()} 心得`;
+  const thought = thoughtEl ? thoughtEl.value.trim() : '';
+  if (!name || !thought) {
+   alert("請填寫名字與心得內容！");
+   return;
+  }
+
+  const record = { name, topic, thought, time: new Date().toLocaleString() };
+  const list = JSON.parse(localStorage.getItem('my_saved_thoughts') || '[]');
+  list.unshift(record);
+  localStorage.setItem('my_saved_thoughts', JSON.stringify(list));
+  if (thoughtEl) thoughtEl.value = '';
+  renderThoughts();
+  showToast("心得已保存！");
+
+  postToSheet({ type: "thought", ...record });
+ }
+
+ function copyDynamicThought(hwId) {
+  const thoughtEl = document.getElementById('dyn-thought-' + hwId);
+  const thought = thoughtEl ? thoughtEl.value.trim() : '';
+  if (!thought) { alert("內容為空！"); return; }
+  navigator.clipboard.writeText(thought).then(() => showToast("已複製心得草稿到剪貼簿！"));
  }
 
  function saveDynamicClaim(roleId) {
